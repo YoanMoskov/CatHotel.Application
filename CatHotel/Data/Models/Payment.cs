@@ -10,7 +10,7 @@
         public string PaymentId { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        [Column(TypeName="money")]
+        [Column(TypeName="MONEY")]
         public decimal TotalPrice { get; set; }
     }
 }

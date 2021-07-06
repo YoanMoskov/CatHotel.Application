@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using static DataConstants.Room;
+    using static DataConstants.RoomType;
 
     public class RoomType
     {
@@ -18,7 +18,7 @@
         public string Description { get; set; }
 
         [Required]
-        [Column(TypeName = "money")]
+        [Column(TypeName = "MONEY")]
         public decimal PricePerDay { get; set; }
     }
 }

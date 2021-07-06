@@ -47,7 +47,7 @@
             public const int MaxBreedLength = 50;
         }
 
-        public static class Room
+        public static class RoomType
         {
             public const int MaxTypeNameLength = 50;
         }
