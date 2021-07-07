@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model IEnumerable<CatHotel.Controllers.ViewModels.Cat.CatViewModel>
+
+@{
+    ViewData["Title"] = "All";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>All</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table-primary">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Age</th>
+            <th scope="col">Photo URL</th>
+            <th scope="col">Breed</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var cat in Model) {
+        <tr class="list-group-horizontal-md">
+            <td>@cat.Name</td>
+            <td>@cat.Age</td>
+            <td class="row-cols-4">
+                <img src="@cat.PhotoUrl" class="row-cols-auto">
+            </td>
+            <td>@cat.Breed.Name</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@cat.CatId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@cat.CatId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@cat.CatId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

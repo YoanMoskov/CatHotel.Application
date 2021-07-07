@@ -8,6 +8,8 @@ namespace CatHotel
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Services.CatService;
+    using Services.UserServices;
 
     public class Startup
     {
@@ -30,6 +32,9 @@ namespace CatHotel
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICatService, CatService>();
+
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
         }
@@ -49,6 +54,7 @@ namespace CatHotel
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

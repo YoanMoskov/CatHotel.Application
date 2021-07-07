@@ -1,14 +1,5 @@
 ﻿namespace CatHotel.Areas.Identity.Pages.Account
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
-    using System.Text.Encodings.Web;
-    using System.Threading.Tasks;
-    using Controllers.Models.User;
     using Controllers.ViewModels.User;
     using Data.Models;
     using Microsoft.AspNetCore.Authentication;
@@ -19,9 +10,11 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
-
-    using static Data.DataConstants.User;
-    using static Data.ErrorMessageConstants.ClientErrorMessages;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel
@@ -49,7 +42,6 @@
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
 
         public async Task OnGetAsync(string returnUrl = null)
         {

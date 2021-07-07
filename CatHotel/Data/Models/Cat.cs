@@ -24,5 +24,9 @@
         public int BreedId { get; set; }
 
         public Breed Breed { get; set; }
+
+        public string UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

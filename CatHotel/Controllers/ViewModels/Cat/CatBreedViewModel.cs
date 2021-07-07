@@ -1,6 +1,6 @@
 ﻿namespace CatHotel.Controllers.ViewModels.Cat
 {
-    public class BreedViewModel
+    public class CatBreedViewModel
     {
         public string Name { get; set; }
     }
