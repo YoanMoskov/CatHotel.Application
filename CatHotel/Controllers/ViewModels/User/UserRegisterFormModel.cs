@@ -39,7 +39,5 @@
         [DisplayName("Phone number")]
         [StringLength(MaxPhoneNumberLength, MinimumLength = MinPhoneNumberLength, ErrorMessage = PhoneNumberError)]
         public string PhoneNumber { get; set; }
-
-        public AddressFormModel AddressFormViewModel { get; set; }
     }
 }

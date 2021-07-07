@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
+    using Controllers.Models.User;
     using Data.Models;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,7 @@
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public UserLoginFormModel Input { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -37,17 +38,6 @@
 
         [TempData]
         public string ErrorMessage { get; set; }
-
-        public class InputModel
-        {
-            public string Username { get; set; }
-
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
-        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {

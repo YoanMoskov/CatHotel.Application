@@ -10,8 +10,6 @@
             : base(options)
         { }
 
-        public DbSet<Address> Addresses { get; set; }
-
         public DbSet<Cat> Cats { get; set; }
 
         public DbSet<Breed> Breeds { get; set; }

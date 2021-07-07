@@ -9,6 +9,7 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Controllers.Models.User;
+    using Controllers.ViewModels.User;
     using Data.Models;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
@@ -43,45 +44,12 @@
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public UserRegisterFormModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        public class InputModel
-        {
-            [DisplayName("First name")]
-            [StringLength(MaxNameLength, MinimumLength = MinNameLength, ErrorMessage = FullNameError)]
-            public string FirstName { get; set; }
-
-            [DisplayName("Last name")]
-            [StringLength(MaxNameLength, MinimumLength = MinNameLength, ErrorMessage = FullNameError)]
-            public string LastName { get; set; }
-
-            [StringLength(MaxUsernameLength, MinimumLength = MinUsernameLength, ErrorMessage = UsernameError)]
-            public string Username { get; set; }
-
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-
-            [DisplayName("Confirm password")]
-            [DataType(DataType.Password)]
-            public string ConfirmPassword { get; set; }
-
-            [DisplayName("Date of birth")]
-            [BindProperty, DataType(DataType.Date)]
-            public DateTime BirthDate { get; set; }
-
-            [RegularExpression(EmailRegex, ErrorMessage = EmailError)]
-            public string Email { get; set; }
-
-            [DisplayName("Phone number")]
-            [StringLength(MaxPhoneNumberLength, MinimumLength = MinPhoneNumberLength, ErrorMessage = PhoneNumberError)]
-            public string PhoneNumber { get; set; }
-
-            public AddressFormModel AddressFormViewModel { get; set; }
-        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -102,13 +70,7 @@
                     UserName = Input.Username,
                     BirthDate = Input.BirthDate,
                     Email = Input.Email,
-                    PhoneNumber = Input.PhoneNumber,
-                    Address = new Address()
-                    {
-                        Country = Input.AddressFormViewModel.Country,
-                        City = Input.AddressFormViewModel.City,
-                        FullAddress = Input.AddressFormViewModel.FullAddress
-                    }
+                    PhoneNumber = Input.PhoneNumber
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

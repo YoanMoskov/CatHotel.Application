@@ -18,13 +18,8 @@
         public string LastName { get; set; }
 
         [Required]
-        public string AddressId { get; set; }
-
-        [Required]
         [Column(TypeName = "DATE")]
         public DateTime BirthDate { get; set; }
-
-        public Address Address { get; set; }
 
         public ICollection<Cat> Cats { get; set; } = new List<Cat>();
 
