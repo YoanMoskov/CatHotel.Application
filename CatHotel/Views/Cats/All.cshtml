@@ -1,38 +1,54 @@
-﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
-@model IEnumerable<CatHotel.Controllers.ViewModels.Cat.CatViewModel>
+﻿@model IEnumerable<CatHotel.Controllers.ViewModels.Cat.CatViewModel>
 
 @{
     ViewData["Title"] = "All";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>All</h1>
+<h1 style="margin: auto">All cats</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p style="margin: auto">
+    <a class="btn btn-secondary" asp-action="Create">Add New</a>
 </p>
-<table class="table-primary">
+<table class="table" style="margin: auto; width: fit-content">
     <thead>
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Age</th>
-            <th scope="col">Photo URL</th>
-            <th scope="col">Breed</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhotoUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Breed)
+            </th>
+            <th>
+                Options
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var cat in Model) {
-        <tr class="list-group-horizontal-md">
-            <td>@cat.Name</td>
-            <td>@cat.Age</td>
-            <td class="row-cols-4">
-                <img src="@cat.PhotoUrl" class="row-cols-auto">
-            </td>
-            <td>@cat.Breed.Name</td>
+        <tr>
             <td>
-                <a asp-action="Edit" asp-route-id="@cat.CatId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@cat.CatId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@cat.CatId">Delete</a>
+                @Html.DisplayFor(modelItem => cat.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => cat.Age)
+            </td>
+            <td>
+                <img src="@cat.PhotoUrl" style="width: 150px; height: auto">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => cat.Breed.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-primary" style="padding: .20rem 1.5rem" asp-route-id="@cat.CatId">Edit</a>
+                <a asp-action="Details" class="btn btn-primary" style="padding: .20rem 1.5rem " asp-route-id="@cat.CatId">Details</a>
+                <a asp-action="Delete" class="btn btn-danger" style="padding: .20rem 1.5rem " asp-route-id="@cat.CatId">Delete</a>
             </td>
         </tr>
 }
