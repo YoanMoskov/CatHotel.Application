@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace CatHotel.Data.Migrations
+﻿namespace CatHotel.Data.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class CatHotel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

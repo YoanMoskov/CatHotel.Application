@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CatHotel.Controllers.ViewModels.Cat.CatViewModel>
+﻿@model IEnumerable<CatHotel.Models.Cat.CatViewModel>
 
 @{
     ViewData["Title"] = "All";
@@ -31,26 +31,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var cat in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => cat.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => cat.Age)
-            </td>
-            <td>
-                <img src="@cat.PhotoUrl" style="width: 150px; height: auto">
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => cat.Breed.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" class="btn btn-primary" style="padding: .20rem 1.5rem" asp-route-id="@cat.CatId">Edit</a>
-                <a asp-action="Details" class="btn btn-primary" style="padding: .20rem 1.5rem " asp-route-id="@cat.CatId">Details</a>
-                <a asp-action="Delete" class="btn btn-danger" style="padding: .20rem 1.5rem " asp-route-id="@cat.CatId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var cat in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => cat.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => cat.Age)
+                </td>
+                <td>
+                    <img src="@cat.PhotoUrl" style="width: 150px; height: auto">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => cat.Breed.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-primary" style="padding: .20rem 1.5rem" asp-route-id="@cat.CatId">Edit</a>
+                    <a asp-action="Details" class="btn btn-primary" style="padding: .20rem 1.5rem " asp-route-id="@cat.CatId">Details</a>
+                    <a asp-action="Delete" class="btn btn-danger" style="padding: .20rem 1.5rem " asp-route-id="@cat.CatId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

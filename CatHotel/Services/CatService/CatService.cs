@@ -4,8 +4,8 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using System.Collections.Generic;
     using System.Linq;
-    using Controllers.ViewModels.Cat;
     using Data.Models;
+    using Models.Cat;
 
     public class CatService : ICatService
     {
@@ -16,28 +16,8 @@
             this.data = data;
         }
 
-        public List<SelectListItem> BreedsAsSelectListItems()
-        {
-            var result = data.Breeds
-                .Select(b => new SelectListItem()
-                {
-                    Text = b.Name,
-                    Value = b.BreedId.ToString()
-                })
-                .ToList();
-            return result;
-        }
 
-        public void InsertOptionSelectBreed(List<SelectListItem> breedList)
-        {
-            breedList.Insert(0, new SelectListItem()
-            {
-                Text = "Select breed",
-                Value = string.Empty
-            });
-        }
-
-        public void AddCat(CatFormModel c, User user)
+        public void AddCat(AddCatFormModel c, User user)
         {
             var cat = new Cat()
             {

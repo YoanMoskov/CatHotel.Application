@@ -1,6 +1,5 @@
 ﻿namespace CatHotel.Areas.Identity.Pages.Account
 {
-    using Controllers.ViewModels.User;
     using Data.Models;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
@@ -15,6 +14,7 @@
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
+    using Models.User;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel

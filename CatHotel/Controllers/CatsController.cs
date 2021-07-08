@@ -1,6 +1,6 @@
 ﻿namespace CatHotel.Controllers
 {
-    using System.Linq;
+    using CatHotel.Models.Cat;
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Authorization;
@@ -8,47 +8,46 @@
     using Microsoft.AspNetCore.Mvc;
     using Services.CatService;
     using Services.UserServices;
-    using ViewModels.Cat;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class CatsController : Controller
     {
         private readonly ApplicationDbContext data;
-        private readonly UserManager<User> userManager;
         private readonly IUserService userService;
         private readonly ICatService catService;
 
-        public CatsController(ApplicationDbContext data, IUserService userService, ICatService catService, UserManager<User> userManager)
+        public CatsController(ApplicationDbContext data, IUserService userService, ICatService catService)
         {
             this.data = data;
             this.userService = userService;
             this.catService = catService;
-            this.userManager = userManager;
         }
 
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Add() => View(new AddCatFormModel()
         {
-            var breedList = catService.BreedsAsSelectListItems();
-
-            catService.InsertOptionSelectBreed(breedList);
-
-            ViewBag.BreedList = breedList;
-
-            return View();
-        }
+            Breeds = this.GetCatBreeds()
+        });
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create(CatFormModel c)
+        public IActionResult Add(AddCatFormModel cat)
         {
+            if (!this.data.Breeds.Any(b => b.BreedId == cat.BreedId))
+            {
+                this.ModelState.AddModelError(nameof(cat.BreedId), "Breed does not exist.");
+            }
+
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                cat.Breeds = GetCatBreeds();
+                return View(cat);
             }
 
             var loggedUser = userService.CurrentlyLoggedUser(User);
 
-            catService.AddCat(c, loggedUser);
+            catService.AddCat(cat, loggedUser);
 
             return RedirectToAction("All");
         }
@@ -72,5 +71,15 @@
 
             return View(userCats);
         }
+
+        private IEnumerable<CatBreedViewModel> GetCatBreeds()
+            => this.data
+                .Breeds
+                .Select(c => new CatBreedViewModel()
+                {
+                    Id = c.BreedId,
+                    Name = c.Name
+                })
+                .ToList();
     }
 }

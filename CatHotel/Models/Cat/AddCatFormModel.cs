@@ -1,23 +1,25 @@
-﻿namespace CatHotel.Controllers.ViewModels.Cat
+﻿namespace CatHotel.Models.Cat
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-
     using static Data.DataConstants.Cat;
 
-    public class CatFormModel
+    public class AddCatFormModel
     {
         [StringLength(MaxNameLength, MinimumLength = MinNameLength)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [Range(MinAge, MaxAge, ErrorMessage = "Age can be between 1 and 20 years.")]
-        public int Age { get; set; }
+        public int Age { get; init; }
 
         [Url(ErrorMessage = "Please provide a valid URL.")]
         [DisplayName("Picture Url")]
-        public string PhotoUrl { get; set; }
+        public string PhotoUrl { get; init; }
 
-        [DisplayName("Specify breed")]
-        public int BreedId { get; set; }
+        [Display(Name = "Breed")]
+        public int BreedId { get; init; }
+
+        public IEnumerable<CatBreedViewModel> Breeds { get; set; }
     }
 }
