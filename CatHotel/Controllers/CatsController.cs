@@ -26,7 +26,6 @@
         public IActionResult Add() => View(new AddCatFormModel()
         {
             Breeds = this.GetCatBreeds(),
-            SpecialNeeds = this.GetCatSpecialNeeds()
         });
 
         [HttpPost]
