@@ -16,8 +16,6 @@
 
         public DbSet<SpecialNeed> SpecialNeeds { get; set; }
 
-        public DbSet<CatSpecialNeed> CatsSpecialNeeds { get; set; }
-
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Reservation> Reservations { get; set; }
@@ -39,9 +37,6 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<CatSpecialNeed>()
-                .HasKey(cs => new { cs.CatId, cs.SpecialNeedId });
         }
     }
 }

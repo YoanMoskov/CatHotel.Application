@@ -1,10 +1,8 @@
 ﻿namespace CatHotel.Controllers
 {
-    using CatHotel.Models.Cat;
+    using Models.Cat;
     using Data;
-    using Data.Models;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.CatService;
     using Services.UserServices;
@@ -27,7 +25,8 @@
         [Authorize]
         public IActionResult Add() => View(new AddCatFormModel()
         {
-            Breeds = this.GetCatBreeds()
+            Breeds = this.GetCatBreeds(),
+            SpecialNeeds = this.GetCatSpecialNeeds()
         });
 
         [HttpPost]

@@ -1,6 +1,7 @@
 ﻿namespace CatHotel.Data.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using static DataConstants.Cat;
@@ -25,6 +26,7 @@
 
         public Breed Breed { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
         public User User { get; set; }

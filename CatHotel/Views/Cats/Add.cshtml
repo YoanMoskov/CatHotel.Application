@@ -14,23 +14,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="Age"></label>
-                <input asp-for="Age" class="form-control" placeholder="640D, S-Class, etc...">
+                <input asp-for="Age" class="form-control" placeholder="">
                 <span asp-validation-for="Age" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhotoUrl"></label>
-                <input asp-for="PhotoUrl" class="form-control" placeholder="Your fine URL here...">
+                <input asp-for="PhotoUrl" class="form-control" placeholder="">
                 <span asp-validation-for="PhotoUrl" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BreedId"></label>
                 <select asp-for="BreedId" class="form-control">
-                    @foreach (var cat in Model.Breeds)
+                    @foreach (var breed in Model.Breeds)
                     {
-        <option value="@cat.Id">@cat.Name</option>}
+                        <option value="@breed.Id">@breed.Name</option>
+                    }
                 </select>
             </div>
-
             <input class="btn btn-primary" type="submit" value="Save" />
         </form>
     </div>
