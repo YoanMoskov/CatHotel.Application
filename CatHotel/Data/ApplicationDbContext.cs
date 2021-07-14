@@ -35,6 +35,9 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Cat>()
+                .HasOne(c => c.Reservation)
+                .WithMany(r => r.Cats);
         }
     }
 }

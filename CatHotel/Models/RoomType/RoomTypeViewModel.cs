@@ -1,13 +1,12 @@
-﻿namespace CatHotel.Data.Models
+﻿namespace CatHotel.Models.RoomType
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using static DataConstants.RoomType;
+    using static Data.DataConstants.RoomType;
 
-    public class RoomType
+    public class RoomTypeViewModel
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]

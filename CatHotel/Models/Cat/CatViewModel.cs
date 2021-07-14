@@ -4,7 +4,7 @@
 
     public class CatViewModel
     {
-        public string CatId { get; init; }
+        public string Id { get; init; }
 
         public string Name { get; init; }
 

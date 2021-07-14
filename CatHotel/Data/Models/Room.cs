@@ -5,7 +5,7 @@
     public class Room
     {
         [Key]
-        public int RoomId { get; set; }
+        public int Id { get; set; }
 
         public bool IsTaken { get; set; }
 

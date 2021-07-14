@@ -7,7 +7,7 @@
     public class Payment
     {
         [Key]
-        public string PaymentId { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [Column(TypeName="MONEY")]

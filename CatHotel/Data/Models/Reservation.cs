@@ -13,18 +13,25 @@
         public DateTime DateOfReservation { get; set; }
 
         [Required]
-        public DateTime CheckInDate { get; set; }
+        public DateTime Arrival { get; set; }
 
         [Required]
-        public DateTime CheckOutDate { get; set; }
+        public DateTime Departure { get; set; }
 
-        [Required]
         public string PaymentId { get; set; }
 
         public Payment Payment { get; set; }
 
-        public ICollection<Cat> Cats { get; set; }
+        public int RoomTypeId { get; set; }
 
-        public ICollection<Room> Rooms { get; set; }
+        public string UserId { get; set; }
+
+        public User User { get; set; }
+
+        public RoomType RoomType { get; set; }
+
+        public ICollection<Cat> Cats { get; set; } = new List<Cat>();
+
+        public ICollection<Room> Rooms { get; set; } = new List<Room>();
     }
 }

@@ -4,16 +4,14 @@ using CatHotel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CatHotel.Data.Migrations
+namespace CatHotel.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210707164819_CatHotel")]
-    partial class CatHotel
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +21,7 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Breed", b =>
                 {
-                    b.Property<int>("BreedId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -33,14 +31,14 @@ namespace CatHotel.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("BreedId");
+                    b.HasKey("Id");
 
                     b.ToTable("Breeds");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Cat", b =>
                 {
-                    b.Property<string>("CatId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Age")
@@ -65,9 +63,10 @@ namespace CatHotel.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("CatId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BreedId");
 
@@ -80,24 +79,9 @@ namespace CatHotel.Data.Migrations
                     b.ToTable("Cats");
                 });
 
-            modelBuilder.Entity("CatHotel.Data.Models.CatSpecialNeed", b =>
-                {
-                    b.Property<string>("CatId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SpecialNeedId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CatId", "SpecialNeedId");
-
-                    b.HasIndex("SpecialNeedId");
-
-                    b.ToTable("CatsSpecialNeeds");
-                });
-
             modelBuilder.Entity("CatHotel.Data.Models.Employee", b =>
                 {
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
@@ -126,20 +110,20 @@ namespace CatHotel.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("Id");
 
                     b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Payment", b =>
                 {
-                    b.Property<string>("PaymentId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("MONEY");
 
-                    b.HasKey("PaymentId");
+                    b.HasKey("Id");
 
                     b.ToTable("Payments");
                 });
@@ -149,18 +133,20 @@ namespace CatHotel.Data.Migrations
                     b.Property<string>("ReservationId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CheckInDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckOutDate")
+                    b.Property<DateTime>("Arrival")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateOfReservation")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("Departure")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PaymentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -169,6 +155,8 @@ namespace CatHotel.Data.Migrations
 
                     b.HasIndex("PaymentId");
 
+                    b.HasIndex("RoomTypeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
@@ -176,7 +164,7 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Room", b =>
                 {
-                    b.Property<int>("RoomId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -190,7 +178,7 @@ namespace CatHotel.Data.Migrations
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
 
-                    b.HasKey("RoomId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ReservationId");
 
@@ -201,7 +189,7 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.RoomType", b =>
                 {
-                    b.Property<int>("RoomTypeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -218,25 +206,9 @@ namespace CatHotel.Data.Migrations
                     b.Property<decimal>("PricePerDay")
                         .HasColumnType("MONEY");
 
-                    b.HasKey("RoomTypeId");
+                    b.HasKey("Id");
 
                     b.ToTable("RoomTypes");
-                });
-
-            modelBuilder.Entity("CatHotel.Data.Models.SpecialNeed", b =>
-                {
-                    b.Property<int>("SpecialNeedId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SpecialNeedId");
-
-                    b.ToTable("SpecialNeeds");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.User", b =>
@@ -464,49 +436,44 @@ namespace CatHotel.Data.Migrations
                         .WithMany("Cats")
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("CatHotel.Data.Models.Reservation", null)
+                    b.HasOne("CatHotel.Data.Models.Reservation", "Reservation")
                         .WithMany("Cats")
                         .HasForeignKey("ReservationId");
 
-                    b.HasOne("CatHotel.Data.Models.User", null)
+                    b.HasOne("CatHotel.Data.Models.User", "User")
                         .WithMany("Cats")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Breed");
-                });
 
-            modelBuilder.Entity("CatHotel.Data.Models.CatSpecialNeed", b =>
-                {
-                    b.HasOne("CatHotel.Data.Models.Cat", "Cat")
-                        .WithMany()
-                        .HasForeignKey("CatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Reservation");
 
-                    b.HasOne("CatHotel.Data.Models.SpecialNeed", "SpecialNeed")
-                        .WithMany()
-                        .HasForeignKey("SpecialNeedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cat");
-
-                    b.Navigation("SpecialNeed");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
                 {
                     b.HasOne("CatHotel.Data.Models.Payment", "Payment")
                         .WithMany()
-                        .HasForeignKey("PaymentId")
+                        .HasForeignKey("PaymentId");
+
+                    b.HasOne("CatHotel.Data.Models.RoomType", "RoomType")
+                        .WithMany()
+                        .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CatHotel.Data.Models.User", null)
+                    b.HasOne("CatHotel.Data.Models.User", "User")
                         .WithMany("Reservations")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Payment");
+
+                    b.Navigation("RoomType");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Room", b =>

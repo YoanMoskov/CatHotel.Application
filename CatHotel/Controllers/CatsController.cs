@@ -32,7 +32,7 @@
         [Authorize]
         public IActionResult Add(AddCatFormModel cat)
         {
-            if (!this.data.Breeds.Any(b => b.BreedId == cat.BreedId))
+            if (!this.data.Breeds.Any(b => b.Id == cat.BreedId))
             {
                 this.ModelState.AddModelError(nameof(cat.BreedId), "Breed does not exist.");
             }
@@ -57,7 +57,7 @@
                 .Where(c => c.UserId == userService.CurrentlyLoggedUser(User).Id)
                 .Select(c => new CatViewModel()
                 {
-                    CatId = c.CatId,
+                    Id = c.Id,
                     Name = c.Name,
                     Age = c.Age,
                     PhotoUrl = c.PhotoUrl,
@@ -75,7 +75,7 @@
                 .Breeds
                 .Select(c => new CatBreedViewModel()
                 {
-                    Id = c.BreedId,
+                    Id = c.Id,
                     Name = c.Name
                 })
                 .ToList();

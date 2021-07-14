@@ -7,7 +7,7 @@
     public class Breed
     {
         [Key]
-        public int BreedId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(MaxBreedLength)]

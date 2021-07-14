@@ -9,7 +9,7 @@
     public class Employee
     {
         [Key]
-        public string EmployeeId { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(MaxNameLength)]

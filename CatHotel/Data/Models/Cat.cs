@@ -9,7 +9,7 @@
     public class Cat
     {
         [Key]
-        public string CatId { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(MaxNameLength)]
@@ -30,5 +30,9 @@
         public string UserId { get; set; }
 
         public User User { get; set; }
+
+        public string ReservationId { get; set; }
+
+        public Reservation Reservation { get; set; }
     }
 }
