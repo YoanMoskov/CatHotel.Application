@@ -1,15 +1,15 @@
 ﻿namespace CatHotel.Controllers
 {
     using Data;
+    using Data.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Models.Reservation;
     using Models.RoomType;
     using Services.UserServices;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Data.Models;
-    using Models.Cat;
 
     public class ReservationController : Controller
     {
@@ -33,10 +33,10 @@
         {
             var newReservation = new Reservation()
             {
-                DateOfReservation = res.DateOfReservation,
+                DateOfReservation = DateTime.UtcNow.ToLocalTime(),
                 Arrival = res.Arrival,
                 Departure = res.Departure,
-                RoomTypeId = res.RoomTypeId
+                RoomTypeId = res.RoomTypeId,
             };
 
             foreach (var catId in res.CatIds)
@@ -47,7 +47,6 @@
 
             data.Reservations.Add(newReservation);
             data.SaveChanges();
-
 
             return RedirectToAction("All", "Cats");
         }

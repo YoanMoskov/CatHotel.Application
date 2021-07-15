@@ -4,16 +4,14 @@ using CatHotel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CatHotel.Migrations
+namespace CatHotel.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210714163746_CatHotelv1.1")]
-    partial class CatHotelv11
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,13 +134,16 @@ namespace CatHotel.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Arrival")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATE");
 
                     b.Property<DateTime>("DateOfReservation")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATE");
 
                     b.Property<DateTime>("Departure")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATE");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PaymentId")
                         .HasColumnType("nvarchar(450)");

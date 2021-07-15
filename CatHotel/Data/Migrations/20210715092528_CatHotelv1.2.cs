@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CatHotel.Migrations
+namespace CatHotel.Data.Migrations
 {
-    public partial class CatHotelv1 : Migration
+    public partial class CatHotelv12 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -217,9 +217,9 @@ namespace CatHotel.Migrations
                 columns: table => new
                 {
                     ReservationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateOfReservation = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Arrival = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Departure = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfReservation = table.Column<DateTime>(type: "DATE", nullable: false),
+                    Arrival = table.Column<DateTime>(type: "DATE", nullable: false),
+                    Departure = table.Column<DateTime>(type: "DATE", nullable: false),
                     PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)

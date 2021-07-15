@@ -15,46 +15,35 @@
             <div class="form-group">
                 <label asp-for="Input.FirstName" class="form-label mt-4"></label>
                 <input asp-for="Input.FirstName" class="form-control" placeholder="First name"/>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
-            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.LastName" class="form-label mt-4"></label>
                 <input asp-for="Input.LastName" class="form-control" placeholder="Last name"/>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.Username" class="form-label mt-4"></label>
                 <input asp-for="Input.Username" class="form-control" placeholder="Username"/>
-                <span asp-validation-for="Input.Username" class="text-danger"></span>
             </div>
-            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.Email" class="form-label mt-4"></label>
                 <input asp-for="Input.Email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.Password" class="form-label mt-4"></label>
                 <input asp-for="Input.Password" class="form-control" placeholder="Password">
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.ConfirmPassword" class="form-label mt-4"></label>
                 <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm password"/>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.BirthDate" class="form-label mt-4"></label>
                 <input asp-for="Input.BirthDate" class="form-control" placeholder="Birth date"/>
-                <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group row-cols-auto">
                 <label asp-for="Input.PhoneNumber" class="form-label mt-4"></label>
                 <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone number"/>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CatHotel.Migrations
+namespace CatHotel.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210714163017_CatHotelv1")]
-    partial class CatHotelv1
+    [Migration("20210715092528_CatHotelv1.2")]
+    partial class CatHotelv12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -136,13 +136,13 @@ namespace CatHotel.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Arrival")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATE");
 
                     b.Property<DateTime>("DateOfReservation")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATE");
 
                     b.Property<DateTime>("Departure")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("DATE");
 
                     b.Property<string>("PaymentId")
                         .HasColumnType("nvarchar(450)");

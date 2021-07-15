@@ -7,11 +7,9 @@
 
     public class ReservationFormModel
     {
-        public DateTime DateOfReservation { get; set; }
+        public DateTime Arrival { get; set; } = DateTime.UtcNow.ToLocalTime();
 
-        public DateTime Arrival { get; set; }
-
-        public DateTime Departure { get; set; }
+        public DateTime Departure { get; set; } = DateTime.UtcNow.ToLocalTime();
 
         public string[] CatIds { get; set; }
 
@@ -20,5 +18,7 @@
         public int RoomTypeId { get; set; }
 
         public IEnumerable<RoomTypeViewModel> RoomTypes { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
