@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ReservationViewModel>
+
+@{
+    ViewData["Title"] = "All";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>All</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    @foreach (var res in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img src="" class="card-img-top" alt="...">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Reservation</h5>
+                    <p class="card-text">Arrival: @res.Arrival</p>
+                    <p class="card-text">Departure: @res.Departure</p>
+                    <p class="card-text">Cats:</p>
+                    @foreach (var cat in res.Cats)
+                    {
+                        <p class="card-text">@cat.Name - @cat.BreedName</p>
+                    }
+                    <a asp-controller="Reservation" asp-action="Details" class="btn btn-primary align-content-center">Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

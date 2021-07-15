@@ -1,8 +1,8 @@
-﻿namespace CatHotel.Models.Reservation
+﻿namespace CatHotel.Models.Reservation.FormModels
 {
     using Cat;
 
-    public class ResCatViewModel
+    public class ResCatFormModel
     {
         public string Id { get; set; }
 

@@ -4,12 +4,13 @@
     using Data.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Models.Reservation;
+    using Models.Reservation.ViewModels;
     using Models.RoomType;
     using Services.UserServices;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Models.Reservation.FormModels;
 
     public class ReservationController : Controller
     {
@@ -24,7 +25,7 @@
 
         public IActionResult Create() => View(new ReservationFormModel()
         {
-            Cats = this.GetCats(),
+            Cats = this.GetCatsSelectList(),
             RoomTypes = this.GetRoomTypes()
         });
 
@@ -37,6 +38,7 @@
                 Arrival = res.Arrival,
                 Departure = res.Departure,
                 RoomTypeId = res.RoomTypeId,
+                UserId = userService.CurrentlyLoggedUser(User).Id
             };
 
             foreach (var catId in res.CatIds)
@@ -51,7 +53,9 @@
             return RedirectToAction("All", "Cats");
         }
 
-        private IEnumerable<SelectListItem> GetCats()
+        public IActionResult All() => View(GetReservations());
+
+        private IEnumerable<SelectListItem> GetCatsSelectList()
             => this.data
                 .Cats
                 .Where(c => c.UserId == userService.CurrentlyLoggedUser(User).Id)
@@ -62,8 +66,6 @@
                 })
                 .ToList();
 
-        public IActionResult All() => View();
-
         private IEnumerable<RoomTypeViewModel> GetRoomTypes()
             => this.data
                 .RoomTypes
@@ -73,5 +75,35 @@
                     Name = rt.Name
                 })
                 .ToList();
+
+        private IEnumerable<ResCatViewModel> GetCatsInReservations(string resId)
+            => data.Cats
+                .Where(c => c.ReservationId == resId)
+                .Select(c => new ResCatViewModel()
+                {
+                    Name = c.Name,
+                    BreedName = c.Breed.Name
+                });
+
+        private IEnumerable<ReservationViewModel> GetReservations()
+        {
+            var resevations = data.Reservations
+                .Where(r => r.UserId == userService.CurrentlyLoggedUser(User).Id)
+                .Select(r => new ReservationViewModel()
+                {
+                    Id = r.ReservationId,
+                    Arrival = r.Arrival.ToShortDateString(),
+                    Departure = r.Departure.ToShortDateString(),
+                    RoomTypeId = r.RoomTypeId
+                })
+                .ToList();
+
+            foreach (var res in resevations)
+            {
+                res.Cats = GetCatsInReservations(res.Id);
+            }
+
+            return resevations;
+        }
     }
 }
