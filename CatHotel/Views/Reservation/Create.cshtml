@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Reservation</h4>
+<h2 class="text-center text-secondary my-sm-3">Create Reservation</h2>
 <hr />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
@@ -27,22 +25,21 @@
                 <select asp-for="RoomTypeId" class="form-control">
                     @foreach (var room in Model.RoomTypes)
                     {
-                    <option value="@room.Id">@room.Name</option>
+                        <option value="@room.Id">@room.Name</option>
                     }
                 </select>
             </div>
-            <select asp-for="CatIds" asp-items="@Model.Cats" class="form-select" multiple="multiple">
-                <option selected>Select the cats for the reservation.</option>
-            </select>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="Cats"></label>
+                <select class="custom-select" asp-for="CatIds" asp-items="@Model.Cats" class="form-select" multiple="multiple">
+                    <option disabled="disabled">Select the cats for the reservation.</option>
+                </select>
+            </div>
+            <div class="form-group text-center my-sm-3">
+                <input type="submit" value="Create" class="btn primary-color" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

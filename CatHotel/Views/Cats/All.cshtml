@@ -5,37 +5,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="heading-margin text-center">All cats</h1>
-
-<table class="table table-responsive" style="margin: auto; width: fit-content">
+<h2 class="text-center text-secondary my-sm-3">All Cats</h2>
+<hr />
+<div class="table-responsive">
+<table class="table" style="margin: auto; width: fit-content;">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Photo URL</th>
-        <th>Breed</th>
+        <th scope="col">Name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Photo URL</th>
+        <th scope="col">Breed</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var cat in Model)
-    {
-        <tr>
-            <td>@cat.Name</td>
-            <td>@cat.Age</td>
-            <td>
-                <img src="@cat.PhotoUrl" style="width: 150px; height: auto">
-            </td>
-            <td>@cat.Breed.Name</td>
-            <td>
-                <a asp-action="Edit" class="btn btn-primary" asp-route-id="@cat.Id">Edit</a>
-                <a asp-action="Delete" class="btn btn-primary" asp-route-id="@cat.Id">Delete</a>
-            </td>
-        </tr>
-    }
+        @foreach (var cat in Model)
+        {
+            <tr>
+                <td scope="row">@cat.Name</td>
+                <td>@cat.Age</td>
+                <td>
+                    <img src="@cat.PhotoUrl" style="width: 150px; height: auto">
+                </td>
+                <td>@cat.Breed.Name</td>
+                <td>
+                    <a asp-action="Edit" class="btn primary-color" asp-route-id="@cat.Id">Edit</a>
+                    <a asp-action="Delete" class="btn primary-color" asp-route-id="@cat.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
-
+</div>
 <p class="text-center">
-    <a class="btn btn-secondary" asp-action="Add">Add New</a>
+    <a class="btn btn-secondary my-sm-3" asp-action="Add">Add New</a>
 </p>

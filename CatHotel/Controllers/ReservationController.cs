@@ -10,6 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.AspNetCore.Authorization;
     using Models.Reservation.FormModels;
 
     public class ReservationController : Controller
@@ -23,6 +24,7 @@
             this.userService = userService;
         }
 
+        [Authorize]
         public IActionResult Create() => View(new ReservationFormModel()
         {
             Cats = this.GetCatsSelectList(),
@@ -30,6 +32,7 @@
         });
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(ReservationFormModel res)
         {
             var newReservation = new Reservation()
@@ -53,6 +56,7 @@
             return RedirectToAction("All", "Cats");
         }
 
+        [Authorize]
         public IActionResult All() => View(GetReservations());
 
         private IEnumerable<SelectListItem> GetCatsSelectList()

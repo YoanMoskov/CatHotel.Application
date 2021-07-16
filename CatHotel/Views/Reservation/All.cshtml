@@ -5,11 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>All</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h2 class="text-center text-secondary my-sm-3">All Reservations</h2>
+<hr />
 <div class="row">
     @foreach (var res in Model)
     {
@@ -25,9 +22,13 @@
                     {
                         <p class="card-text">@cat.Name - @cat.BreedName</p>
                     }
-                    <a asp-controller="Reservation" asp-action="Details" class="btn btn-primary align-content-center">Details</a>
+                    <a asp-controller="Reservation" asp-action="Details" class="btn primary-color align-content-center">Details</a>
                 </div>
             </div>
         </div>
     }
 </div>
+
+<p class="text-center">
+    <a asp-action="Create" class="btn btn-secondary my-sm-3">Create New</a>
+</p>
