@@ -21,6 +21,8 @@
         [Required]
         public string PhotoUrl { get; set; }
 
+        public string AdditionalInformation { get; set; }
+
         [Required]
         public int BreedId { get; set; }
 
@@ -34,5 +36,7 @@
         public string ReservationId { get; set; }
 
         public Reservation Reservation { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

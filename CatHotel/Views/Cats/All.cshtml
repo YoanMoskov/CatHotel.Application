@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CatViewModel>
+﻿@model IEnumerable<CatHotel.Models.Cat.ViewModel.CatViewModel>
 
 @{
     ViewData["Title"] = "All";
@@ -29,8 +29,8 @@
                 </td>
                 <td>@cat.Breed.Name</td>
                 <td>
-                    <a asp-action="Edit" class="btn primary-color" asp-route-id="@cat.Id">Edit</a>
-                    <a asp-action="Delete" class="btn primary-color" asp-route-id="@cat.Id">Delete</a>
+                    <a asp-action="Edit" class="btn primary-color" asp-route-catId="@cat.Id">Edit</a>
+                    <a asp-action="Delete" class="btn primary-color" asp-route-catId="@cat.Id">Delete</a>
                 </td>
             </tr>
         }

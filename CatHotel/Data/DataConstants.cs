@@ -20,13 +20,6 @@
 
         }
 
-        public static class Address
-        {
-            public const int CountryMaxLength = 50;
-            public const int CityMaxLength = 50;
-            public const int FullAddressMaxLength = 150;
-        }
-
         public static class Employee
         {
             public const int MaxNameLength = 50;
@@ -40,6 +33,7 @@
             public const int MaxNameLength = 50;
             public const int MinAge = 1;
             public const int MaxAge = 15;
+            public const int MinAdditionalInformation = 10;
         }
 
         public static class Breed

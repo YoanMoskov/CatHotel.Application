@@ -6,5 +6,7 @@
     public interface IUserService
     {
         User CurrentlyLoggedUser(ClaimsPrincipal user);
+
+        bool UserHasCats(string userId);
     }
 }

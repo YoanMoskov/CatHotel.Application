@@ -11,6 +11,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Models.User.FormModel;
 
     [AllowAnonymous]
     public class LoginModel : PageModel

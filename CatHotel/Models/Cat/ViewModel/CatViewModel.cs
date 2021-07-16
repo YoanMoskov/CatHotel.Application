@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Models.Cat
+﻿namespace CatHotel.Models.Cat.ViewModel
 {
     using System.ComponentModel;
 
@@ -12,6 +12,9 @@
 
         [DisplayName("Photo Url")]
         public string PhotoUrl { get; init; }
+
+        [DisplayName("Additional Information")]
+        public string AdditionalInformation { get; set; }
 
         public CatBreedViewModel Breed { get; init; }
     }

@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Models.User
+﻿namespace CatHotel.Models.User.FormModel
 {
     using System.ComponentModel.DataAnnotations;
 

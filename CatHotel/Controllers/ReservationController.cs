@@ -25,16 +25,33 @@
         }
 
         [Authorize]
-        public IActionResult Create() => View(new ReservationFormModel()
+        public IActionResult Create()
         {
-            Cats = this.GetCatsSelectList(),
-            RoomTypes = this.GetRoomTypes()
-        });
+            if (!userService.UserHasCats(userService.CurrentlyLoggedUser(User).Id))
+            {
+                ModelState.AddModelError(String.Empty, "You need to add a cat to create a reservation.");
+            }
+
+            return View(new ReservationFormModel()
+            {
+                Cats = this.GetCatsSelectList(),
+                RoomTypes = this.GetRoomTypes()
+            });
+        }
 
         [HttpPost]
         [Authorize]
         public IActionResult Create(ReservationFormModel res)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(new ReservationFormModel()
+                {
+                    Cats = this.GetCatsSelectList(),
+                    RoomTypes = this.GetRoomTypes()
+                });
+            }
+
             var newReservation = new Reservation()
             {
                 DateOfReservation = DateTime.UtcNow.ToLocalTime(),

@@ -9,6 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <div asp-validation-summary="All" class="text-danger"></div>
         <form asp-action="Create">
             <div class="form-group">
                 <label asp-for="Arrival" class="control-label"></label>
@@ -34,6 +35,7 @@
                 <select class="custom-select" asp-for="CatIds" asp-items="@Model.Cats" class="form-select" multiple="multiple">
                     <option disabled="disabled">Select the cats for the reservation.</option>
                 </select>
+                <span asp-validation-for="CatIds" class="text-danger"></span>
             </div>
             <div class="form-group text-center my-sm-3">
                 <input type="submit" value="Create" class="btn primary-color" />

@@ -1,6 +1,7 @@
 ﻿namespace CatHotel.Models.Reservation.FormModels
 {
     using Cat;
+    using Cat.ViewModel;
 
     public class ResCatFormModel
     {

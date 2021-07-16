@@ -8,6 +8,8 @@
     using Services.UserServices;
     using System.Collections.Generic;
     using System.Linq;
+    using Models.Cat.FormModel;
+    using Models.Cat.ViewModel;
 
     public class CatsController : Controller
     {
@@ -51,24 +53,33 @@
         }
 
         [Authorize]
-        public IActionResult All()
-        {
-            var userCats = data.Cats
-                .Where(c => c.UserId == userService.CurrentlyLoggedUser(User).Id)
-                .Select(c => new CatViewModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Age = c.Age,
-                    PhotoUrl = c.PhotoUrl,
-                    Breed = new CatBreedViewModel()
-                    {
-                        Name = c.Breed.Name
-                    }
-                }).ToList();
+        public IActionResult All() => View(catService.GetAllCatsCatViewModels(userService.CurrentlyLoggedUser(User).Id));
 
-            return View(userCats);
+
+        [Authorize]
+        public IActionResult Edit(string catId) => View(catService.GetCatInViewModel(catId));
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(EditCatFormModel c, string catId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(catService.GetCatInViewModel(catId));
+            }
+
+            catService.EditCat(c, catId);
+
+            return RedirectToAction("All");
         }
+
+        public IActionResult Delete(string catId)
+        {
+            catService.DeleteCat(catId);
+
+            return RedirectToAction("All");
+        }
+
 
         private IEnumerable<CatBreedViewModel> GetCatBreeds()
             => this.data

@@ -1,9 +1,9 @@
-﻿namespace CatHotel.Models.User
+﻿namespace CatHotel.Models.User.FormModel
 {
-    using Microsoft.AspNetCore.Mvc;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using Microsoft.AspNetCore.Mvc;
     using static Data.DataConstants.User;
     using static Data.ErrorMessageConstants.ClientErrorMessages;
 

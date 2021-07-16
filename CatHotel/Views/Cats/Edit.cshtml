@@ -1,15 +1,17 @@
-﻿@model CatHotel.Models.Cat.FormModel.AddCatFormModel
+﻿@model CatHotel.Models.Cat.ViewModel.CatViewModel
 
-@{ ViewData["Title"] = "Add Cat"; }
+@{
+    ViewData["Title"] = "Edit Cat";
+}
 
-<h2 class="text-center text-secondary my-sm-3">Add Cat</h2>
+<h2 class="text-center text-secondary my-sm-3">Edit Cat</h2>
 <hr />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form method="post">
             <div class="form-group">
                 <label asp-for="Name"></label>
-                <input asp-for="Name" class="form-control" placeholder="">
+                <input asp-for="Name" class="form-control" placeholder="" disabled="disabled">
                 <span asp-validation-for="Name" class="small text-danger"></span>
             </div>
             <div class="form-group">
@@ -23,21 +25,16 @@
                 <span asp-validation-for="PhotoUrl" class="small text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BreedId"></label>
-                <select asp-for="BreedId" class="form-control">
-                    @foreach (var breed in Model.Breeds)
-                    {
-                        <option value="@breed.Id">@breed.Name</option>
-                    }
-                </select>
+                <label asp-for="Breed"></label>
+                <input asp-for="Breed.Name" class="form-control" disabled="disabled" />
             </div>
             <div>
                 <label asp-for="AdditionalInformation"></label>
-                <input asp-for="AdditionalInformation" class="form-control" placeholder=""/>
+                <input asp-for="AdditionalInformation" class="form-control" placeholder="" />
                 <span asp-validation-for="AdditionalInformation" class="small text-danger"></span>
             </div>
             <p class="text-center my-sm-3">
-                <input class="btn primary-color " type="submit" value="Create"/>
+                <input class="btn primary-color " type="submit" value="Save"/>
             </p>
         </form>
     </div>

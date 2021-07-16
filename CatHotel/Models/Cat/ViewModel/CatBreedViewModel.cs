@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Models.Cat
+﻿namespace CatHotel.Models.Cat.ViewModel
 {
     public class CatBreedViewModel
     {
