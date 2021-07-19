@@ -1,9 +1,9 @@
-﻿namespace CatHotel.Services.UserServices
+﻿namespace CatHotel.Services.UserService
 {
-    using System.Linq;
-    using System.Security.Claims;
     using Data;
     using Data.Models;
+    using System.Linq;
+    using System.Security.Claims;
 
     public class UserService : IUserService
     {
@@ -15,8 +15,13 @@
         }
 
         public User CurrentlyLoggedUser(ClaimsPrincipal user)
-            =>  data.Users
+            => data.Users
             .FirstOrDefault(u => u.Id == user.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        public string UserId(ClaimsPrincipal user)
+            => data.Users
+                .FirstOrDefault(u => u.Id == user.FindFirstValue(ClaimTypes.NameIdentifier))
+                ?.Id;
 
         public bool UserHasCats(string userId)
             => data.Users

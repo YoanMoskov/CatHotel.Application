@@ -10,7 +10,9 @@ namespace CatHotel
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Services.CatService;
-    using Services.UserServices;
+    using Services.ReservationService;
+    using Services.ReservationServices;
+    using Services.UserService;
 
     public class Startup
     {
@@ -51,7 +53,8 @@ namespace CatHotel
 
             services
                 .AddTransient<IUserService, UserService>()
-                .AddTransient<ICatService, CatService>();
+                .AddTransient<ICatService, CatService>()
+                .AddTransient<IReservationService, ReservationService>();
 
             services
                 .AddControllersWithViews();

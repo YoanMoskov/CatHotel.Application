@@ -12,5 +12,8 @@
         [Required]
         [Column(TypeName="MONEY")]
         public decimal TotalPrice { get; set; }
+
+        [Required]
+        public bool isPaid { get; set; }
     }
 }

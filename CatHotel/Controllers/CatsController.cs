@@ -1,15 +1,12 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Models.Cat;
     using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Services.CatService;
-    using Services.UserServices;
-    using System.Collections.Generic;
-    using System.Linq;
     using Models.Cat.FormModel;
-    using Models.Cat.ViewModel;
+    using Services.CatService;
+    using Services.UserService;
+    using System.Linq;
 
     public class CatsController : Controller
     {
@@ -27,7 +24,7 @@
         [Authorize]
         public IActionResult Add() => View(new AddCatFormModel()
         {
-            Breeds = this.GetCatBreeds(),
+            Breeds = catService.GetCatBreeds()
         });
 
         [HttpPost]
@@ -41,20 +38,17 @@
 
             if (!ModelState.IsValid)
             {
-                cat.Breeds = GetCatBreeds();
+                cat.Breeds = catService.GetCatBreeds();
                 return View(cat);
             }
 
-            var loggedUser = userService.CurrentlyLoggedUser(User);
-
-            catService.AddCat(cat, loggedUser);
+            catService.AddCat(cat, userService.CurrentlyLoggedUser(User));
 
             return RedirectToAction("All");
         }
 
         [Authorize]
-        public IActionResult All() => View(catService.GetAllCatsCatViewModels(userService.CurrentlyLoggedUser(User).Id));
-
+        public IActionResult All() => View(catService.GetAllCatsCatViewModels(userService.UserId(User)));
 
         [Authorize]
         public IActionResult Edit(string catId) => View(catService.GetCatInViewModel(catId));
@@ -79,16 +73,5 @@
 
             return RedirectToAction("All");
         }
-
-
-        private IEnumerable<CatBreedViewModel> GetCatBreeds()
-            => this.data
-                .Breeds
-                .Select(c => new CatBreedViewModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToList();
     }
 }

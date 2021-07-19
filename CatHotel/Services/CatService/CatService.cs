@@ -2,11 +2,10 @@
 {
     using Data;
     using Data.Models;
-    using Models.Cat;
-    using System.Collections.Generic;
-    using System.Linq;
     using Models.Cat.FormModel;
     using Models.Cat.ViewModel;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class CatService : ICatService
     {
@@ -50,23 +49,33 @@
             data.SaveChanges();
         }
 
-            public CatViewModel GetCatInViewModel(string catId)
-            => data.Cats
-                .Where(c => c.Id == catId)
-                .Select(c => new CatViewModel()
+        public IEnumerable<CatBreedViewModel> GetCatBreeds()
+            => this.data
+                .Breeds
+                .Select(c => new CatBreedViewModel()
                 {
                     Id = c.Id,
-                    Name = c.Name,
-                    Age = c.Age,
-                    PhotoUrl = c.PhotoUrl,
-                    AdditionalInformation = c.AdditionalInformation,
-                    Breed = new CatBreedViewModel()
-                    {
-                        Id = c.BreedId,
-                        Name = c.Breed.Name
-                    }
+                    Name = c.Name
                 })
-                .FirstOrDefault();
+                .ToList();
+
+        public CatViewModel GetCatInViewModel(string catId)
+        => data.Cats
+            .Where(c => c.Id == catId)
+            .Select(c => new CatViewModel()
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Age = c.Age,
+                PhotoUrl = c.PhotoUrl,
+                AdditionalInformation = c.AdditionalInformation,
+                Breed = new CatBreedViewModel()
+                {
+                    Id = c.BreedId,
+                    Name = c.Breed.Name
+                }
+            })
+            .FirstOrDefault();
 
         public Cat GetCatById(string catId)
             => data.Cats
