@@ -1,21 +1,20 @@
 ﻿namespace CatHotel.Areas.Identity.Pages.Account
 {
-    using Data.Models;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-    using Microsoft.AspNetCore.WebUtilities;
-    using Microsoft.Extensions.Logging;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-    using Models.User;
+    using System.Text.Encodings.Web;
+    using System.Collections.Generic;
+    using Data.Models;
     using Models.User.FormModel;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Identity.UI.Services;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel

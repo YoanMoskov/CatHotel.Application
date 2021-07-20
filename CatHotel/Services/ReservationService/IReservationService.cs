@@ -1,14 +1,14 @@
 ﻿namespace CatHotel.Services.ReservationServices
 {
     using System.Collections.Generic;
-    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Models.RoomType;
     using Models.Reservation.FormModels;
     using Models.Reservation.ViewModels;
-    using Models.RoomType;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     public interface IReservationService
     {
-        void CreateReservation(ReservationFormModel res, string userId);
+        void CreateReservation(ResFormModel res, string userId);
 
         IEnumerable<SelectListItem> GetCatsSelectList(string userId);
 
@@ -16,6 +16,6 @@
 
         IEnumerable<ResCatViewModel> GetCatsInReservations(string resId);
 
-        IEnumerable<ReservationViewModel> GetReservations(string userId);
+        IEnumerable<ResViewModel> GetReservations(string userId);
     }
 }

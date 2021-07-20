@@ -17,8 +17,8 @@
 
         void DeleteCat(string catId);
 
-        IEnumerable<CatBreedViewModel> GetCatBreeds();
+        bool DoesBreedExist(int breedId);
 
-        Cat GetCatById(string catId);
+        IEnumerable<CatBreedViewModel> GetCatBreeds();
     }
 }

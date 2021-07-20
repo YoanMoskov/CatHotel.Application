@@ -7,7 +7,7 @@
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Mvc;
 
-    public class ReservationViewModel
+    public class ResViewModel
     {
         public string Id { get; set; }
 

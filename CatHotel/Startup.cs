@@ -16,12 +16,12 @@ namespace CatHotel
 
     public class Startup
     {
-        public IWebHostEnvironment env { get; set; }
+        private IWebHostEnvironment Env { get; set; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
-            this.env = env;
+            this.Env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -30,7 +30,7 @@ namespace CatHotel
         {
             var mvcBuilder = services.AddControllersWithViews();
 
-            if (env.IsDevelopment())
+            if (Env.IsDevelopment())
             {
                 mvcBuilder.AddRazorRuntimeCompilation();
             }

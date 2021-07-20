@@ -1,18 +1,18 @@
-﻿@model IEnumerable<ReservationViewModel>
+﻿@model IEnumerable<ResViewModel>
 
 @{
-    ViewData["Title"] = "All";
+    ViewBag.Title = "All Reservations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center text-secondary my-sm-3">All Reservations</h2>
+<h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
 <hr />
 <div class="row">
     @foreach (var res in Model)
     {
         <div class="col-md-4">
             <div class="card mb-3 text-center">
-                <img class="card-img-top mx-auto" style="max-width: 60%; height: auto" src="~/images/reservation.png"  alt="Reservation picture">
+                <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png"  alt="Reservation picture">
                 <div class="card-body">
                     <h5 class="card-title">Reservation</h5>
                     <p class="card-text">Arrival: @res.Arrival</p>
@@ -30,5 +30,5 @@
 </div>
 
 <p class="text-center">
-    <a asp-action="Create" class="btn btn-secondary my-sm-3">Create New</a>
+    <a asp-action="Create" class="btn btn-secondary">Create New</a>
 </p>

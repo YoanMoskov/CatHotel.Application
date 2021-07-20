@@ -1,22 +1,20 @@
 ﻿namespace CatHotel.Controllers
 {
     using Data;
+    using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Cat.FormModel;
     using Services.CatService;
     using Services.UserService;
-    using System.Linq;
 
     public class CatsController : Controller
     {
-        private readonly ApplicationDbContext data;
         private readonly IUserService userService;
         private readonly ICatService catService;
 
         public CatsController(ApplicationDbContext data, IUserService userService, ICatService catService)
         {
-            this.data = data;
             this.userService = userService;
             this.catService = catService;
         }
@@ -31,7 +29,7 @@
         [Authorize]
         public IActionResult Add(AddCatFormModel cat)
         {
-            if (!this.data.Breeds.Any(b => b.Id == cat.BreedId))
+            if (!catService.DoesBreedExist(cat.BreedId))
             {
                 this.ModelState.AddModelError(nameof(cat.BreedId), "Breed does not exist.");
             }
@@ -48,7 +46,7 @@
         }
 
         [Authorize]
-        public IActionResult All() => View(catService.GetAllCatsCatViewModels(userService.UserId(User)));
+        public IActionResult All() => View(catService.GetAllCatsCatViewModels(User.GetId()));
 
         [Authorize]
         public IActionResult Edit(string catId) => View(catService.GetCatInViewModel(catId));

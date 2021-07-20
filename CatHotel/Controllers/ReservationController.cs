@@ -1,6 +1,7 @@
 ﻿namespace CatHotel.Controllers
 {
     using Data;
+    using Infrastructure;
     using Models.Reservation.FormModels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
@@ -9,46 +10,42 @@
 
     public class ReservationController : Controller
     {
-        private readonly ApplicationDbContext data;
-        private readonly IUserService userService;
         private readonly IReservationService resService;
 
         public ReservationController(ApplicationDbContext data, IUserService userService, IReservationService resService)
         {
-            this.data = data;
-            this.userService = userService;
             this.resService = resService;
         }
 
         [Authorize]
         public IActionResult Create()
         {
-            return View(new ReservationFormModel()
+            return View(new ResFormModel()
             {
-                Cats = resService.GetCatsSelectList(userService.UserId(User)),
+                Cats = resService.GetCatsSelectList(User.GetId()),
                 RoomTypes = resService.GetRoomTypes()
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create(ReservationFormModel res)
+        public IActionResult Create(ResFormModel res)
         {
             if (!ModelState.IsValid)
             {
-                return View(new ReservationFormModel()
+                return View(new ResFormModel()
                 {
-                    Cats = resService.GetCatsSelectList(userService.UserId(User)),
+                    Cats = resService.GetCatsSelectList(User.GetId()),
                     RoomTypes = resService.GetRoomTypes()
                 });
             }
 
-            resService.CreateReservation(res, userService.UserId(User));
+            resService.CreateReservation(res, User.GetId());
 
             return RedirectToAction("All", "Cats");
         }
 
         [Authorize]
-        public IActionResult All() => View(resService.GetReservations(userService.UserId(User)));
+        public IActionResult All() => View(resService.GetReservations(User.GetId()));
     }
 }

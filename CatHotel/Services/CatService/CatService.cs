@@ -1,11 +1,11 @@
 ﻿namespace CatHotel.Services.CatService
 {
+    using System.Linq;
+    using System.Collections.Generic;
     using Data;
     using Data.Models;
     using Models.Cat.FormModel;
     using Models.Cat.ViewModel;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class CatService : ICatService
     {
@@ -49,7 +49,10 @@
             data.SaveChanges();
         }
 
-        public IEnumerable<CatBreedViewModel> GetCatBreeds()
+        public bool DoesBreedExist(int breedId)
+            => this.data.Breeds.Any(b => b.Id == breedId);
+
+            public IEnumerable<CatBreedViewModel> GetCatBreeds()
             => this.data
                 .Breeds
                 .Select(c => new CatBreedViewModel()
@@ -76,10 +79,6 @@
                 }
             })
             .FirstOrDefault();
-
-        public Cat GetCatById(string catId)
-            => data.Cats
-                .FirstOrDefault(c => c.Id == catId);
 
         public List<CatViewModel> GetAllCatsCatViewModels(string userId)
             => data.Cats

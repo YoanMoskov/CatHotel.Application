@@ -1,9 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewBag.Title = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="my-sm-3">
+    <div class="row text-center">
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img src="~/images/039-pet-house.png" class="card-img-top mx-auto card-img-resize" alt="Pet House">
+                <div class="card-body">
+                    <h5 class="card-title">Quality Accommodation</h5>
+                    <p class="card-text">
+                        Our spacious suites are intended to reproduce the comfort of
+                        home thus being equipped with several platforms, hiding
+                        places, window with great sunlight exposure, air-conditioning,
+                        an outdoor solarium and ambient music.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img src="~/images/010-cat.png" class="card-img-top mx-auto card-img-resize padding-top-14" alt="Happy Cat">
+                <div class="card-body">
+                    <h5 class="card-title">Specialized Team</h5>
+                    <p class="card-text padding-bottom-10">
+                        Our work is customized for your kitten. We understand the
+                        needs and habits of felines. During the period of your
+                        absence, your cat will have all the comfort and security it
+                        needs.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img src="~/images/001-veterinary.png" class="card-img-top mx-auto card-img-resize" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Safety</h5>
+                    <p class="card-text">
+                        Our guests enjoy full-time veterinary follow-up, as well as
+                        medication and treatments if necessary. For added security,
+                        the hotel has night-time surveillance, permanent video
+                        surveillance and civil liability insurance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-@* Todo:Implement a card for all of the cats of the user and a card for his reservations *@

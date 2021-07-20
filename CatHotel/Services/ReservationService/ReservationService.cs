@@ -1,8 +1,5 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
-    using System;
-    using System.Linq;
-    using System.Collections.Generic;
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,19 +7,20 @@
     using Models.Reservation.ViewModels;
     using Models.RoomType;
     using ReservationServices;
-    using UserService;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class ReservationService : IReservationService
     {
         private readonly ApplicationDbContext data;
-        private readonly IUserService userService;
 
         public ReservationService(ApplicationDbContext data)
         {
             this.data = data;
         }
 
-        public void CreateReservation(ReservationFormModel res, string userId)
+        public void CreateReservation(ResFormModel res, string userId)
         {
             var newReservation = new Reservation()
             {
@@ -74,11 +72,11 @@
                 })
                 .ToList();
 
-        public IEnumerable<ReservationViewModel> GetReservations(string userId)
+        public IEnumerable<ResViewModel> GetReservations(string userId)
         {
             var resevations = data.Reservations
                 .Where(r => r.UserId == userId)
-                .Select(r => new ReservationViewModel()
+                .Select(r => new ResViewModel()
                 {
                     Id = r.ReservationId,
                     Arrival = r.Arrival.ToShortDateString(),

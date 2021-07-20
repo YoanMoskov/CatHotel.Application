@@ -10,12 +10,12 @@
         protected override ValidationResult IsValid(object value,
             ValidationContext validationContext)
         {
-            var res = (ReservationFormModel)validationContext.ObjectInstance;
+            var res = (ResFormModel)validationContext.ObjectInstance;
 
             return res.Arrival < DateTime.UtcNow ? new ValidationResult(GetErrorMessage(res)) : ValidationResult.Success;
         }
 
-        private string GetErrorMessage(ReservationFormModel res)
+        private string GetErrorMessage(ResFormModel res)
         {
             return $"The arrival should be after {DateTime.UtcNow:d}.";
         }
@@ -23,15 +23,15 @@
 
     public class Departure : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object? value,
+        protected override ValidationResult IsValid(object value,
             ValidationContext validationContext)
         {
-            var res = (ReservationFormModel)validationContext.ObjectInstance;
+            var res = (ResFormModel)validationContext.ObjectInstance;
 
             return res.Departure < res.Arrival ? new ValidationResult(GetErrorMessage(res)) : ValidationResult.Success;
         }
 
-        private string GetErrorMessage(ReservationFormModel res)
+        private string GetErrorMessage(ResFormModel res)
         {
             var date = DateTime.UtcNow;
             if (!(res.Arrival < DateTime.UtcNow))
@@ -44,15 +44,15 @@
 
     public class CatIds : ValidationAttribute
     {
-        protected override ValidationResult? IsValid(object? value,
+        protected override ValidationResult IsValid(object value,
             ValidationContext validationContext)
         {
-            var res = (ReservationFormModel) validationContext.ObjectInstance;
+            var res = (ResFormModel) validationContext.ObjectInstance;
 
             return res.CatIds == null ? new ValidationResult(GetErrorMessage(res)) : ValidationResult.Success;
         }
 
-        private string GetErrorMessage(ReservationFormModel res)
+        private string GetErrorMessage(ResFormModel res)
         {
             return "You should choose at least one cat.";
         }

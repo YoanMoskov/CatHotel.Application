@@ -1,6 +1,6 @@
 ﻿namespace CatHotel.Controllers
 {
-    using CatHotel.Models;
+    using Models;
     using Microsoft.AspNetCore.Mvc;
     using System.Diagnostics;
 

@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using RoomType;
 
-    public class ReservationFormModel
+    public class ResFormModel
     {
         [Required]
         [Arrival]

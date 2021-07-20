@@ -11,17 +11,17 @@
     {
         [Required]
         [MaxLength(MaxNameLength)]
-        public string FirstName { get; set; }
+        public string FirstName { get; init; }
 
         [Required]
         [MaxLength(MaxNameLength)]
-        public string LastName { get; set; }
+        public string LastName { get; init; }
 
         [Required]
         [Column(TypeName = "DATE")]
-        public DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; init; }
 
-        public ICollection<Cat> Cats { get; set; } = new List<Cat>();
+        public ICollection<Cat> Cats { get; } = new List<Cat>();
 
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }

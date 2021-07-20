@@ -18,10 +18,6 @@
             => data.Users
             .FirstOrDefault(u => u.Id == user.FindFirstValue(ClaimTypes.NameIdentifier));
 
-        public string UserId(ClaimsPrincipal user)
-            => data.Users
-                .FirstOrDefault(u => u.Id == user.FindFirstValue(ClaimTypes.NameIdentifier))
-                ?.Id;
 
         public bool UserHasCats(string userId)
             => data.Users
