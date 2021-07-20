@@ -17,12 +17,15 @@
                     <h5 class="card-title">Reservation</h5>
                     <p class="card-text">Arrival: @res.Arrival</p>
                     <p class="card-text">Departure: @res.Departure</p>
-                    <p class="card-text font-weight-bold">Cats:</p>
-                    @foreach (var cat in res.Cats)
-                    {
-                        <p class="card-text">@cat.Name - @cat.BreedName</p>
-                    }
-                    <a asp-controller="Reservation" asp-action="Details" asp-route-resId="@res.Id" class="btn primary-color">Details</a>
+                    <div id="Cats" class="my-sm-3 d-none">
+                        <p class="card-text font-weight-bold">Cats:</p>
+                        @foreach (var cat in res.Cats)
+                        {
+                            <p class="card-text">@cat.Name - @cat.BreedName</p>
+                        }
+                    </div>
+                    <button id="showCats" class="btn primary-color">Show Cats</button>
+                    <button id="hideCats" class="btn primary-color d-none">Hide Cats</button>
                 </div>
             </div>
         </div>
@@ -32,3 +35,20 @@
 <p class="text-center">
     <a asp-action="Create" class="btn btn-secondary">Create New</a>
 </p>
+
+@section scripts{
+    <script>
+        $('#showCats').on('click',
+            ev => {
+                document.getElementById('Cats').classList.remove('d-none');
+                document.getElementById('hideCats').classList.remove('d-none');
+                document.getElementById('showCats').classList.add('d-none');
+            })
+        $('#hideCats').on('click',
+            ev => {
+                document.getElementById('Cats').classList.add('d-none');
+                document.getElementById('hideCats').classList.add('d-none');
+                document.getElementById('showCats').classList.remove('d-none');
+        })
+    </script>
+}
