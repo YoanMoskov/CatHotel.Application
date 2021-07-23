@@ -27,7 +27,7 @@
 
         public int RoomTypeId { get; set; }
 
-        public IEnumerable<RoomTypeViewModel> RoomTypes { get; set; }
+        public IEnumerable<ResRoomTypeViewModel> RoomTypes { get; set; }
 
         public bool IsActive { get; set; }
     }

@@ -12,7 +12,7 @@
     {
         private readonly IReservationService resService;
 
-        public ReservationController(ApplicationDbContext data, IUserService userService, IReservationService resService)
+        public ReservationController(IReservationService resService)
         {
             this.resService = resService;
         }

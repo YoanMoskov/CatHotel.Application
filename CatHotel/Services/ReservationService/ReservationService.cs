@@ -9,6 +9,7 @@
     using ReservationServices;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     public class ReservationService : IReservationService
@@ -22,22 +23,42 @@
 
         public void CreateReservation(ResFormModel res, string userId)
         {
+            var allCatsReservation = new List<CatReservation>();
+            var price = 0m;
+            var room = data.RoomTypes
+                .FirstOrDefault(r => r.Id == res.RoomTypeId);
+
+            if (room != null)
+            {
+                price = room.PricePerDay * (res.Departure - res.Arrival).Days * res.CatIds.Count();
+            }
+
             var newReservation = new Reservation()
             {
-                DateOfReservation = DateTime.UtcNow.ToLocalTime(),
+                DateOfReservation = DateTime.UtcNow,
                 Arrival = res.Arrival,
                 Departure = res.Departure,
                 RoomTypeId = res.RoomTypeId,
-                UserId = userId
+                UserId = userId,
+                Payment = new Payment()
+                {
+                    TotalPrice = price,
+                    isPaid = false,
+                },
+                IsActive = true
             };
 
             foreach (var catId in res.CatIds)
             {
-                var cat = data.Cats.FirstOrDefault(c => c.Id == catId);
-                newReservation.Cats.Add(cat);
+                var newCatReservation = new CatReservation()
+                {
+                    CatId = catId,
+                    Reservation = newReservation
+                };
+                allCatsReservation.Add(newCatReservation);
             }
 
-            data.Reservations.Add(newReservation);
+            data.CatsReservations.AddRange(allCatsReservation);
             data.SaveChanges();
         }
 
@@ -52,10 +73,10 @@
                 })
                 .ToList();
 
-        public IEnumerable<RoomTypeViewModel> GetRoomTypes()
+        public IEnumerable<ResRoomTypeViewModel> GetRoomTypes()
             => this.data
                 .RoomTypes
-                .Select(rt => new RoomTypeViewModel()
+                .Select(rt => new ResRoomTypeViewModel()
                 {
                     Id = rt.Id,
                     Name = rt.Name
@@ -63,34 +84,68 @@
                 .ToList();
 
         public IEnumerable<ResCatViewModel> GetCatsInReservations(string resId)
-            => data.Cats
-                .Where(c => c.ReservationId == resId)
-                .Select(c => new ResCatViewModel()
+            => data
+                .CatsReservations
+                .Where(cr => cr.ReservationId == resId)
+                .Select(cr => new ResCatViewModel()
                 {
-                    Name = c.Name,
-                    BreedName = c.Breed.Name
+                    Name = cr.Cat.Name,
+                    BreedName = cr.Cat.Breed.Name
                 })
                 .ToList();
+
 
         public IEnumerable<ResViewModel> GetReservations(string userId)
         {
-            var resevations = data.Reservations
+            var reservations = new List<ResViewModel>();
+            var reservationsWoCats = data
+                .Reservations
                 .Where(r => r.UserId == userId)
                 .Select(r => new ResViewModel()
                 {
-                    Id = r.ReservationId,
-                    Arrival = r.Arrival.ToShortDateString(),
-                    Departure = r.Departure.ToShortDateString(),
-                    RoomTypeId = r.RoomTypeId
+                    Id = r.Id,
+                    DateOfReservation = r.DateOfReservation,
+                    Arrival = r.Arrival.ToString("MM/dd/yyyy"),
+                    Departure = r.Departure.ToString("MM/dd/yyyy"),
+                    RoomType = new ResRoomTypeViewModel()
+                    {
+                        Name = r.RoomType.Name
+                    },
+                    Payment = new ResPaymentViewModel()
+                    {
+                        TotalPrice = $"$ {r.Payment.TotalPrice:f2}"
+                    },
+                    IsActive = r.IsActive
                 })
+                .OrderByDescending(r => r.DateOfReservation)
                 .ToList();
 
-            foreach (var res in resevations)
+            foreach (var res in reservationsWoCats)
             {
                 res.Cats = GetCatsInReservations(res.Id);
+                reservations.Add(res);
             }
 
-            return resevations;
+            FilterReservations(reservations);
+
+
+            return reservations;
         }
+
+        public void FilterReservations(IEnumerable<ResViewModel> reservations)
+        {
+            foreach (var res in reservations)
+            {
+                if (ConvertToDateTime(res.Arrival) >= DateTime.UtcNow ||
+                    !res.IsActive) continue;
+                res.IsActive = false;
+                data.Reservations.FirstOrDefault(r => r.Id == res.Id).IsActive = false;
+                data.SaveChanges();
+            }
+        }
+
+        public DateTime ConvertToDateTime(string dateString)
+            => DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
     }
 }

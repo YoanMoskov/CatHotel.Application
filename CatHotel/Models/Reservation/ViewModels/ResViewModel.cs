@@ -1,15 +1,16 @@
 ﻿namespace CatHotel.Models.Reservation.ViewModels
 {
-    using FormModels;
-    using RoomType;
     using System;
+    using Microsoft.AspNetCore.Mvc;
+    using RoomType;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.AspNetCore.Mvc;
 
     public class ResViewModel
     {
         public string Id { get; set; }
+
+        public DateTime DateOfReservation { get; set; }
 
         [BindProperty, DataType(DataType.Date)]
         public string Arrival { get; set; }
@@ -19,9 +20,9 @@
 
         public IEnumerable<ResCatViewModel> Cats { get; set; }
 
-        public int RoomTypeId { get; set; }
+        public ResRoomTypeViewModel RoomType { get; set; }
 
-        public IEnumerable<RoomTypeViewModel> RoomTypes { get; set; }
+        public ResPaymentViewModel Payment { get; set; }
 
         public bool IsActive { get; set; }
     }

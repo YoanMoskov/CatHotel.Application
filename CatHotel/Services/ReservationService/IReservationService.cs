@@ -1,6 +1,7 @@
 ﻿namespace CatHotel.Services.ReservationServices
 {
     using System.Collections.Generic;
+    using Data.Models;
     using Models.RoomType;
     using Models.Reservation.FormModels;
     using Models.Reservation.ViewModels;
@@ -12,10 +13,12 @@
 
         IEnumerable<SelectListItem> GetCatsSelectList(string userId);
 
-        IEnumerable<RoomTypeViewModel> GetRoomTypes();
+        IEnumerable<ResRoomTypeViewModel> GetRoomTypes();
 
         IEnumerable<ResCatViewModel> GetCatsInReservations(string resId);
 
         IEnumerable<ResViewModel> GetReservations(string userId);
+
+        void FilterReservations(IEnumerable<ResViewModel> reservations);
     }
 }

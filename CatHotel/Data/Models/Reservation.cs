@@ -8,7 +8,7 @@
     public class Reservation
     {
         [Key]
-        public string ReservationId { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [Column(TypeName = "DATE")]

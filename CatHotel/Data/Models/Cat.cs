@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using Enums;
     using static DataConstants.Cat;
 
     public class Cat
@@ -23,6 +23,8 @@
 
         public string AdditionalInformation { get; set; }
 
+        public CatSize CatSize { get; set; }
+
         [Required]
         public int BreedId { get; set; }
 
@@ -33,10 +35,12 @@
 
         public User User { get; set; }
 
-        public string ReservationId { get; set; }
-
-        public Reservation Reservation { get; set; }
-
         public bool IsDeleted { get; set; }
+
+        public string GroomingId { get; set; }
+
+        public Grooming Grooming { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

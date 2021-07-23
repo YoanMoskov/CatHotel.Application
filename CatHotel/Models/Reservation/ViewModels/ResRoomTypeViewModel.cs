@@ -5,7 +5,7 @@
 
     using static Data.DataConstants.RoomType;
 
-    public class RoomTypeViewModel
+    public class ResRoomTypeViewModel
     {
         public int Id { get; set; }
 

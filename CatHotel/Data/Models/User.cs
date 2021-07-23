@@ -17,7 +17,6 @@
         [MaxLength(MaxNameLength)]
         public string LastName { get; init; }
 
-        [Required]
         [Column(TypeName = "DATE")]
         public DateTime BirthDate { get; init; }
 

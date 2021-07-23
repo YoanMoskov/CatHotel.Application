@@ -34,8 +34,12 @@
                 <span asp-validation-for="AdditionalInformation" class="small text-danger"></span>
             </div>
             <p class="text-center my-sm-3">
-                <input class="btn primary-color " type="submit" value="Save"/>
+                <input class="btn primary-color " type="submit" value="Save" />
             </p>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

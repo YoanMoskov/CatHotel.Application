@@ -3,28 +3,42 @@
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
     using System.Linq;
+    using System.Threading.Tasks;
+    using static WebConstants;
 
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder PrepareDatabase(
             this IApplicationBuilder app)
         {
-            using var scopedServices = app.ApplicationServices.CreateScope();
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var services = serviceScope.ServiceProvider;
 
-            var data = scopedServices.ServiceProvider.GetService<ApplicationDbContext>();
+            MigrateDatabase(services);
 
-            data.Database.Migrate();
-            SeedBreeds(data);
-            SeedRoomTypes(data);
+            SeedBreeds(services);
+            SeedRoomTypes(services);
+            SeedAdmin(services);
 
             return app;
         }
 
-        private static void SeedBreeds(ApplicationDbContext data)
+        private static void MigrateDatabase(IServiceProvider services)
         {
+            var data = services.GetRequiredService<ApplicationDbContext>();
+
+            data.Database.Migrate();
+        }
+
+        private static void SeedBreeds(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<ApplicationDbContext>();
+
             if (data.Breeds.Any())
             {
                 return;
@@ -39,8 +53,10 @@
             data.SaveChanges();
         }
 
-        private static void SeedRoomTypes(ApplicationDbContext data)
+        private static void SeedRoomTypes(IServiceProvider services)
         {
+            var data = services.GetRequiredService<ApplicationDbContext>();
+
             if (data.RoomTypes.Any())
             {
                 return;
@@ -53,6 +69,42 @@
             });
 
             data.SaveChanges();
+        }
+
+        private static void SeedAdmin(IServiceProvider services)
+        {
+            var userManager = services.GetRequiredService<UserManager<User>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task
+                .Run(async () =>
+                {
+                    if (await roleManager.RoleExistsAsync(AdminRoleName))
+                    {
+                        return;
+                    }
+
+                    var role = new IdentityRole { Name = AdminRoleName };
+
+                    await roleManager.CreateAsync(role);
+
+                    const string adminEmail = "admin@ch.com";
+                    const string adminPassword = "catHotel12";
+
+                    var user = new User
+                    {
+                        Email = adminEmail,
+                        UserName = adminEmail,
+                        FirstName = "Admin",
+                        LastName = "Admin",
+                    };
+
+                    await userManager.CreateAsync(user, adminPassword);
+
+                    await userManager.AddToRoleAsync(user, role.Name);
+                })
+                .GetAwaiter()
+                .GetResult();
         }
     }
 }

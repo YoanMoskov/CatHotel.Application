@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ResViewModel>
 
 @{
-    ViewBag.Title = "All Reservations";
+    ViewBag.Title = "Reservations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,45 +10,33 @@
 <div class="row">
     @foreach (var res in Model)
     {
-        <div class="col-md-4">
-            <div class="card mb-3 text-center">
-                <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png"  alt="Reservation picture">
-                <div class="card-body">
-                    <h5 class="card-title">Reservation</h5>
-                    <p class="card-text">Arrival: @res.Arrival</p>
-                    <p class="card-text">Departure: @res.Departure</p>
-                    <div id="Cats" class="my-sm-3 d-none">
-                        <p class="card-text font-weight-bold">Cats:</p>
-                        @foreach (var cat in res.Cats)
-                        {
-                            <p class="card-text">@cat.Name - @cat.BreedName</p>
-                        }
+        @if (res.IsActive)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3 text-center">
+                    <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png" alt="Reservation picture">
+                    <div class="card-body">
+                        <h5 class="card-title">Reservation</h5>
+                        <p class="card-text">Arrival: @res.Arrival</p>
+                        <p class="card-text">Departure: @res.Departure</p>
+                        <p class="card-text">Room Type: @res.RoomType.Name</p>
+                        <div name="details" class="my-sm-3 d-none">
+                            <p class="card-text font-weight-bold">Cats:</p>
+                            @foreach (var cat in res.Cats)
+                            {
+                                <p class="card-text">@cat.Name - @cat.BreedName</p>
+                            }
+                            <p class="card-text">Total price: @res.Payment.TotalPrice</p>
+                        </div>
+                        <button name="showDetails" class="btn primary-color">Details</button>
+                        <button name="hideDetails" class="btn primary-color d-none">Hide Details</button>
                     </div>
-                    <button id="showCats" class="btn primary-color">Show Cats</button>
-                    <button id="hideCats" class="btn primary-color d-none">Hide Cats</button>
                 </div>
             </div>
-        </div>
+        }
     }
 </div>
 
 <p class="text-center">
     <a asp-action="Create" class="btn btn-secondary">Create New</a>
 </p>
-
-@section scripts{
-    <script>
-        $('#showCats').on('click',
-            ev => {
-                document.getElementById('Cats').classList.remove('d-none');
-                document.getElementById('hideCats').classList.remove('d-none');
-                document.getElementById('showCats').classList.add('d-none');
-            })
-        $('#hideCats').on('click',
-            ev => {
-                document.getElementById('Cats').classList.add('d-none');
-                document.getElementById('hideCats').classList.add('d-none');
-                document.getElementById('showCats').classList.remove('d-none');
-        })
-    </script>
-}

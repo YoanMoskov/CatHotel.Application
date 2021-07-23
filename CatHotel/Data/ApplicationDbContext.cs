@@ -18,6 +18,8 @@
 
         public DbSet<Reservation> Reservations { get; set; }
 
+        public DbSet<CatReservation> CatsReservations { get; set; }
+
         public DbSet<Room> Rooms { get; set; }
 
         public DbSet<RoomType> RoomTypes { get; set; }
@@ -35,9 +37,8 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Cat>()
-                .HasOne(c => c.Reservation)
-                .WithMany(r => r.Cats);
+            modelBuilder.Entity<CatReservation>()
+                .HasKey(k => new {k.CatId, k.ReservationId});
         }
     }
 }

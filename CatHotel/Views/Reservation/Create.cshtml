@@ -9,7 +9,6 @@
 <hr />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <div asp-validation-summary="All" class="text-danger"></div>
         <form asp-action="Create">
             <div class="form-group">
                 <label asp-for="Arrival" class="control-label"></label>
@@ -45,5 +44,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }
