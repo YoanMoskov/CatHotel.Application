@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using Services.Models.Cats;
     using ViewModel;
     using static Data.DataConstants.Cat;
 
@@ -24,8 +25,8 @@
 
         [StringLength(Int32.MaxValue, MinimumLength = MinAdditionalInformation, ErrorMessage = "Description can't be less then 10 characters long.")]
         [Display(Name = "Additional Information")]
-        public string AdditionalInformation { get; set; }
+        public string AdditionalInformation { get; init; }
 
-        public IEnumerable<CatBreedViewModel> Breeds { get; set; }
+        public IEnumerable<CatBreedServiceModel> Breeds { get; set; }
     }
 }

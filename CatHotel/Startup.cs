@@ -13,7 +13,6 @@ namespace CatHotel
     using Microsoft.Extensions.Hosting;
     using Services.CatService;
     using Services.ReservationService;
-    using Services.ReservationServices;
     using Services.UserService;
 
     public class Startup

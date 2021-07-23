@@ -16,6 +16,6 @@
         [DisplayName("Additional Information")]
         public string AdditionalInformation { get; set; }
 
-        public CatBreedViewModel Breed { get; init; }
+        public string BreedName { get; init; }
     }
 }

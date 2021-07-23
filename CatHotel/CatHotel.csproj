@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Models\User\ViewModel\" />
-    <Folder Include="Services\Models\CatReservation\" />
   </ItemGroup>
 
   <ItemGroup>

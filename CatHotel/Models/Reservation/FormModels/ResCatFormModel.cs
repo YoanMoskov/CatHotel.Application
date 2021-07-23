@@ -1,7 +1,6 @@
 ﻿namespace CatHotel.Models.Reservation.FormModels
 {
-    using Cat;
-    using Cat.ViewModel;
+    using Services.Models.Cats;
 
     public class ResCatFormModel
     {
@@ -9,6 +8,6 @@
 
         public string Name { get; set; }
 
-        public CatBreedViewModel Breed { get; set; }
+        public CatBreedServiceModel Breed { get; set; }
     }
 }

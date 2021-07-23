@@ -4,8 +4,7 @@
     using System.Collections.Generic;
     using Data;
     using Data.Models;
-    using Models.Cat.FormModel;
-    using Models.Cat.ViewModel;
+    using Models.Cats;
 
     public class CatService : ICatService
     {
@@ -16,83 +15,94 @@
             this.data = data;
         }
 
-        public void AddCat(AddCatFormModel c, User user)
+        public string Add(string name, int age, string photoUrl, int breedId, string additionalInformation, string userId)
         {
             var cat = new Cat()
             {
-                Name = c.Name,
-                Age = c.Age,
-                PhotoUrl = c.PhotoUrl,
-                BreedId = c.BreedId,
-                AdditionalInformation = c.AdditionalInformation
+                Name = name,
+                Age = age,
+                PhotoUrl = photoUrl,
+                BreedId = breedId,
+                AdditionalInformation = additionalInformation,
+                UserId = userId
             };
 
-            user.Cats.Add(cat);
+            data.Cats.Add(cat);
             data.SaveChanges();
+
+            return cat.Id;
         }
 
-        public void EditCat(EditCatFormModel c, string catId)
-        {
-            var cat = data.Cats.FirstOrDefault(c => c.Id == catId);
-            cat.Age = c.Age;
-            cat.PhotoUrl = c.PhotoUrl;
-            cat.AdditionalInformation = c.AdditionalInformation;
-
-            data.SaveChanges();
-        }
-
-        public void DeleteCat(string catId)
-        {
-            data.Cats
-                .FirstOrDefault(c => c.Id == catId).IsDeleted = true;
-
-            data.SaveChanges();
-        }
-
-        public bool DoesBreedExist(int breedId)
-            => this.data.Breeds.Any(b => b.Id == breedId);
-
-            public IEnumerable<CatBreedViewModel> GetCatBreeds()
-            => this.data
-                .Breeds
-                .Select(c => new CatBreedViewModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToList();
-
-        public CatViewModel GetCatInViewModel(string catId)
-        => data.Cats
-            .Where(c => c.Id == catId)
-            .Select(c => new CatViewModel()
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Age = c.Age,
-                PhotoUrl = c.PhotoUrl,
-                AdditionalInformation = c.AdditionalInformation,
-                Breed = new CatBreedViewModel()
-                {
-                    Id = c.BreedId,
-                    Name = c.Breed.Name
-                }
-            })
-            .FirstOrDefault();
-
-        public List<CatViewModel> GetAllCatsCatViewModels(string userId)
+        public List<CatServiceModel> All(string userId)
             => data.Cats
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
-                .Select(c => new CatViewModel()
+                .Select(c => new CatServiceModel()
                 {
                     Id = c.Id,
                     Name = c.Name,
                     Age = c.Age,
                     PhotoUrl = c.PhotoUrl,
-                    Breed = new CatBreedViewModel()
-                    {
-                        Name = c.Breed.Name
-                    }
+                    BreedName = c.Breed.Name
                 }).ToList();
+
+        public bool Edit(int age, string photoUrl, string additionalInformation, string catId)
+        {
+            var cat = data.Cats.FirstOrDefault(c => c.Id == catId);
+
+            if (cat == null)
+            {
+                return false;
+            }
+
+            cat.Age = age;
+            cat.PhotoUrl = photoUrl;
+            cat.AdditionalInformation = additionalInformation;
+
+            data.SaveChanges();
+
+            return true;
+        }
+
+        public bool Delete(string catId)
+        {
+            var cat = data.Cats.Find(catId);
+            if (cat == null)
+            {
+                return false;
+            }
+
+            cat.IsDeleted = true;
+
+            data.SaveChanges();
+
+            return true;
+        }
+
+        public CatDetailsServiceModel Details(string catId)
+            => data.Cats
+                .Where(c => c.Id == catId)
+                .Select(c => new CatDetailsServiceModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Age = c.Age,
+                    PhotoUrl = c.PhotoUrl,
+                    AdditionalInformation = c.AdditionalInformation,
+                    BreedName = c.Breed.Name
+                })
+                .FirstOrDefault();
+
+        public bool DoesBreedExist(int breedId)
+            => this.data.Breeds.Any(b => b.Id == breedId);
+
+        public IEnumerable<CatBreedServiceModel> GetBreeds()
+            => this.data
+                .Breeds
+                .Select(c => new CatBreedServiceModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList();
     }
 }

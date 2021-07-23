@@ -1,24 +1,32 @@
 ﻿namespace CatHotel.Services.CatService
 {
-    using Data.Models;
-    using Models.Cat.FormModel;
-    using Models.Cat.ViewModel;
     using System.Collections.Generic;
+    using Models.Cats;
 
     public interface ICatService
     {
-        void AddCat(AddCatFormModel c, User user);
+        string Add(
+            string name,
+            int age,
+            string photoUrl,
+            int breedId,
+            string additionalInformation,
+            string userId);
 
-        List<CatViewModel> GetAllCatsCatViewModels(string userId);
+        List<CatServiceModel> All(string userId);
 
-        CatViewModel GetCatInViewModel(string catId);
+        bool Edit(
+            int age,
+            string photoUrl,
+            string additionalInformation,
+            string catId);
 
-        void EditCat(EditCatFormModel c, string catId);
+        bool Delete(string catId);
 
-        void DeleteCat(string catId);
+        public CatDetailsServiceModel Details(string catId);
 
         bool DoesBreedExist(int breedId);
 
-        IEnumerable<CatBreedViewModel> GetCatBreeds();
+        IEnumerable<CatBreedServiceModel> GetBreeds();
     }
 }

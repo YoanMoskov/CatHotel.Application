@@ -1,10 +1,9 @@
-﻿namespace CatHotel.Services.ReservationServices
+﻿namespace CatHotel.Services.ReservationService
 {
     using System.Collections.Generic;
-    using Data.Models;
-    using Models.RoomType;
-    using Models.Reservation.FormModels;
-    using Models.Reservation.ViewModels;
+    using CatHotel.Models.Reservation.FormModels;
+    using CatHotel.Models.Reservation.ViewModels;
+    using CatHotel.Models.RoomType;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     public interface IReservationService

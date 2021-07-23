@@ -3,14 +3,13 @@
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Models.Reservation.FormModels;
-    using Models.Reservation.ViewModels;
-    using Models.RoomType;
-    using ReservationServices;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using CatHotel.Models.Reservation.FormModels;
+    using CatHotel.Models.Reservation.ViewModels;
+    using CatHotel.Models.RoomType;
 
     public class ReservationService : IReservationService
     {

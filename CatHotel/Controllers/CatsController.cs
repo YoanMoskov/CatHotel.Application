@@ -1,73 +1,114 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Data;
     using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Cat.FormModel;
+    using Models.Cat.ViewModel;
     using Services.CatService;
-    using Services.UserService;
+    using System.Linq;
 
     public class CatsController : Controller
     {
-        private readonly IUserService userService;
-        private readonly ICatService catService;
+        private readonly ICatService _catService;
 
-        public CatsController(ApplicationDbContext data, IUserService userService, ICatService catService)
+        public CatsController(
+            ICatService catService)
         {
-            this.userService = userService;
-            this.catService = catService;
+            this._catService = catService;
         }
 
         [Authorize]
         public IActionResult Add() => View(new AddCatFormModel()
         {
-            Breeds = catService.GetCatBreeds()
+            Breeds = _catService.GetCatBreeds()
         });
 
         [HttpPost]
         [Authorize]
         public IActionResult Add(AddCatFormModel cat)
         {
-            if (!catService.DoesBreedExist(cat.BreedId))
+            if (!_catService.DoesBreedExist(cat.BreedId))
             {
                 this.ModelState.AddModelError(nameof(cat.BreedId), "Breed does not exist.");
             }
 
             if (!ModelState.IsValid)
             {
-                cat.Breeds = catService.GetCatBreeds();
+                cat.Breeds = _catService.GetCatBreeds();
                 return View(cat);
             }
 
-            catService.AddCat(cat, userService.CurrentlyLoggedUser(User));
+            _catService.Add(
+                cat.Name,
+                cat.Age,
+                cat.PhotoUrl,
+                cat.BreedId,
+                cat.AdditionalInformation,
+                User.GetId());
 
             return RedirectToAction("All");
         }
 
         [Authorize]
-        public IActionResult All() => View(catService.GetAllCatsCatViewModels(User.GetId()));
+        public IActionResult All()
+        {
+            var catCollection = _catService.All(User.GetId())
+                .Select(cat => new CatViewModel()
+                {
+                    Id = cat.Id,
+                    Name = cat.Name,
+                    Age = cat.Age,
+                    PhotoUrl = cat.PhotoUrl,
+                    BreedName = cat.BreedName
+                })
+                .ToList();
+
+            return View(catCollection);
+        }
 
         [Authorize]
-        public IActionResult Edit(string catId) => View(catService.GetCatInViewModel(catId));
+        public IActionResult Edit(string catId)
+        {
+            var cat = _catService.Details(catId);
+
+            return View(new CatViewModel()
+            {
+                Id = cat.Id,
+                Name = cat.Name,
+                Age = cat.Age,
+                PhotoUrl = cat.PhotoUrl,
+                AdditionalInformation = cat.AdditionalInformation,
+                BreedName = cat.BreedName
+            });
+        }
 
         [HttpPost]
         [Authorize]
         public IActionResult Edit(EditCatFormModel c, string catId)
         {
+            var cat = _catService.Details(catId);
             if (!ModelState.IsValid)
             {
-                return View(catService.GetCatInViewModel(catId));
+                return View(new CatViewModel()
+                {
+                    Id = cat.Id,
+                    Name = cat.Name,
+                    Age = cat.Age,
+                    PhotoUrl = cat.PhotoUrl,
+                    AdditionalInformation = cat.AdditionalInformation,
+                    BreedName = cat.BreedName
+                });
             }
 
-            catService.EditCat(c, catId);
+            _catService.Edit(c.Age, c.PhotoUrl, c.AdditionalInformation, catId);
 
             return RedirectToAction("All");
         }
 
         public IActionResult Delete(string catId)
         {
-            catService.DeleteCat(catId);
+            _catService.Delete(catId);
 
             return RedirectToAction("All");
         }

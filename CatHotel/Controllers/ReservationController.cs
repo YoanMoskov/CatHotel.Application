@@ -5,8 +5,8 @@
     using Models.Reservation.FormModels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using Services.ReservationService;
     using Services.UserService;
-    using Services.ReservationServices;
 
     public class ReservationController : Controller
     {
