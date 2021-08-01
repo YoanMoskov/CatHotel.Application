@@ -21,7 +21,7 @@
         [Authorize]
         public IActionResult Add() => View(new AddCatFormModel()
         {
-            Breeds = _catService.GetCatBreeds()
+            Breeds = _catService.GetBreeds()
         });
 
         [HttpPost]
@@ -35,7 +35,7 @@
 
             if (!ModelState.IsValid)
             {
-                cat.Breeds = _catService.GetCatBreeds();
+                cat.Breeds = _catService.GetBreeds();
                 return View(cat);
             }
 

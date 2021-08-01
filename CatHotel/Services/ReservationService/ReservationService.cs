@@ -1,43 +1,41 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
+    using CatHotel.Models.Reservation.ViewModels;
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Models.Reservations;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using CatHotel.Models.Reservation.FormModels;
-    using CatHotel.Models.Reservation.ViewModels;
-    using CatHotel.Models.RoomType;
 
     public class ReservationService : IReservationService
     {
-        private readonly ApplicationDbContext data;
+        private readonly ApplicationDbContext _data;
 
         public ReservationService(ApplicationDbContext data)
         {
-            this.data = data;
+            this._data = data;
         }
 
-        public void CreateReservation(ResFormModel res, string userId)
+        public void Create(DateTime arrival, DateTime departure, int roomTypeId, string[] catIds, string userId)
         {
-            var allCatsReservation = new List<CatReservation>();
             var price = 0m;
-            var room = data.RoomTypes
-                .FirstOrDefault(r => r.Id == res.RoomTypeId);
+            var room = _data.RoomTypes
+                .FirstOrDefault(r => r.Id == roomTypeId);
 
             if (room != null)
             {
-                price = room.PricePerDay * (res.Departure - res.Arrival).Days * res.CatIds.Count();
+                price = room.PricePerDay * (departure - arrival).Days * catIds.Count();
             }
 
             var newReservation = new Reservation()
             {
                 DateOfReservation = DateTime.UtcNow,
-                Arrival = res.Arrival,
-                Departure = res.Departure,
-                RoomTypeId = res.RoomTypeId,
+                Arrival = arrival,
+                Departure = departure,
+                RoomTypeId = roomTypeId,
                 UserId = userId,
                 Payment = new Payment()
                 {
@@ -47,24 +45,17 @@
                 IsActive = true
             };
 
-            foreach (var catId in res.CatIds)
-            {
-                var newCatReservation = new CatReservation()
-                {
-                    CatId = catId,
-                    Reservation = newReservation
-                };
-                allCatsReservation.Add(newCatReservation);
-            }
+            var allCatsReservation = catIds.Select(catId
+                => new CatReservation() {CatId = catId, Reservation = newReservation}).ToList();
 
-            data.CatsReservations.AddRange(allCatsReservation);
-            data.SaveChanges();
+            _data.CatsReservations.AddRange(allCatsReservation);
+            _data.SaveChanges();
         }
 
-        public IEnumerable<SelectListItem> GetCatsSelectList(string userId)
-            => this.data
+        public IEnumerable<SelectListItem> CatsSelectList(string userId)
+            => this._data
                 .Cats
-                .Where(c => c.UserId == userId)
+                .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new SelectListItem()
                 {
                     Value = c.Id,
@@ -72,79 +63,73 @@
                 })
                 .ToList();
 
-        public IEnumerable<ResRoomTypeViewModel> GetRoomTypes()
-            => this.data
+        public IEnumerable<ResRoomTypeServiceModel> RoomTypes()
+            => this._data
                 .RoomTypes
-                .Select(rt => new ResRoomTypeViewModel()
+                .Select(rt => new ResRoomTypeServiceModel()
                 {
                     Id = rt.Id,
                     Name = rt.Name
                 })
                 .ToList();
 
-        public IEnumerable<ResCatViewModel> GetCatsInReservations(string resId)
-            => data
+        public IEnumerable<ResCatServiceModel> CatsInReservations(string resId)
+            => _data
                 .CatsReservations
                 .Where(cr => cr.ReservationId == resId)
-                .Select(cr => new ResCatViewModel()
+                .Select(cr => new ResCatServiceModel()
                 {
                     Name = cr.Cat.Name,
                     BreedName = cr.Cat.Breed.Name
                 })
                 .ToList();
 
-
-        public IEnumerable<ResViewModel> GetReservations(string userId)
+        public IEnumerable<ResServiceModel> All(string userId)
         {
-            var reservations = new List<ResViewModel>();
-            var reservationsWoCats = data
+            FilterReservations();
+
+            var reservations = _data
                 .Reservations
-                .Where(r => r.UserId == userId)
-                .Select(r => new ResViewModel()
+                .Where(r => r.UserId == userId && r.IsActive)
+                .Select(r => new ResServiceModel()
                 {
                     Id = r.Id,
                     DateOfReservation = r.DateOfReservation,
                     Arrival = r.Arrival.ToString("MM/dd/yyyy"),
                     Departure = r.Departure.ToString("MM/dd/yyyy"),
-                    RoomType = new ResRoomTypeViewModel()
-                    {
-                        Name = r.RoomType.Name
-                    },
-                    Payment = new ResPaymentViewModel()
-                    {
-                        TotalPrice = $"$ {r.Payment.TotalPrice:f2}"
-                    },
+                    RoomTypeName = r.RoomType.Name,
+                    TotalPrice = $"$ {r.Payment.TotalPrice:f2}",
                     IsActive = r.IsActive
                 })
                 .OrderByDescending(r => r.DateOfReservation)
                 .ToList();
 
-            foreach (var res in reservationsWoCats)
+            foreach (var res in reservations)
             {
-                res.Cats = GetCatsInReservations(res.Id);
-                reservations.Add(res);
+                res.Cats = CatsInReservations(res.Id);
             }
-
-            FilterReservations(reservations);
-
 
             return reservations;
         }
 
-        public void FilterReservations(IEnumerable<ResViewModel> reservations)
+        public void FilterReservations()
         {
+            var reservations = _data
+                .Reservations
+                .Where(r => r.IsActive == true)
+                .ToList();
+
             foreach (var res in reservations)
             {
-                if (ConvertToDateTime(res.Arrival) >= DateTime.UtcNow ||
-                    !res.IsActive) continue;
-                res.IsActive = false;
-                data.Reservations.FirstOrDefault(r => r.Id == res.Id).IsActive = false;
-                data.SaveChanges();
+                if (res.Departure < DateTime.UtcNow)
+                {
+                    res.IsActive = false;
+                    _data.SaveChanges();
+                }
             }
         }
 
-        public DateTime ConvertToDateTime(string dateString)
+        private DateTime ConvertToDateTime(string dateString)
             => DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
     }
 }

@@ -1,17 +1,17 @@
 ﻿namespace CatHotel.Models.Reservation.FormModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using Infrastructure;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using RoomType;
+    using Services.Models.Reservations;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class ResFormModel
     {
-        [Required]
         [Arrival]
+        [Required]
         [BindProperty, DataType(DataType.Date)]
         public DateTime Arrival { get; set; } = DateTime.UtcNow.ToLocalTime();
 
@@ -27,7 +27,7 @@
 
         public int RoomTypeId { get; set; }
 
-        public IEnumerable<ResRoomTypeViewModel> RoomTypes { get; set; }
+        public IEnumerable<ResRoomTypeServiceModel> RoomTypes { get; set; }
 
         public bool IsActive { get; set; }
     }

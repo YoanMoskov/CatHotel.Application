@@ -8,11 +8,11 @@
 
     public class CatService : ICatService
     {
-        private readonly ApplicationDbContext data;
+        private readonly ApplicationDbContext _data;
 
         public CatService(ApplicationDbContext data)
         {
-            this.data = data;
+            this._data = data;
         }
 
         public string Add(string name, int age, string photoUrl, int breedId, string additionalInformation, string userId)
@@ -27,14 +27,14 @@
                 UserId = userId
             };
 
-            data.Cats.Add(cat);
-            data.SaveChanges();
+            _data.Cats.Add(cat);
+            _data.SaveChanges();
 
             return cat.Id;
         }
 
         public List<CatServiceModel> All(string userId)
-            => data.Cats
+            => _data.Cats
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .Select(c => new CatServiceModel()
                 {
@@ -47,7 +47,7 @@
 
         public bool Edit(int age, string photoUrl, string additionalInformation, string catId)
         {
-            var cat = data.Cats.FirstOrDefault(c => c.Id == catId);
+            var cat = _data.Cats.FirstOrDefault(c => c.Id == catId);
 
             if (cat == null)
             {
@@ -58,14 +58,14 @@
             cat.PhotoUrl = photoUrl;
             cat.AdditionalInformation = additionalInformation;
 
-            data.SaveChanges();
+            _data.SaveChanges();
 
             return true;
         }
 
         public bool Delete(string catId)
         {
-            var cat = data.Cats.Find(catId);
+            var cat = _data.Cats.Find(catId);
             if (cat == null)
             {
                 return false;
@@ -73,13 +73,13 @@
 
             cat.IsDeleted = true;
 
-            data.SaveChanges();
+            _data.SaveChanges();
 
             return true;
         }
 
         public CatDetailsServiceModel Details(string catId)
-            => data.Cats
+            => _data.Cats
                 .Where(c => c.Id == catId)
                 .Select(c => new CatDetailsServiceModel()
                 {
@@ -93,10 +93,10 @@
                 .FirstOrDefault();
 
         public bool DoesBreedExist(int breedId)
-            => this.data.Breeds.Any(b => b.Id == breedId);
+            => this._data.Breeds.Any(b => b.Id == breedId);
 
         public IEnumerable<CatBreedServiceModel> GetBreeds()
-            => this.data
+            => this._data
                 .Breeds
                 .Select(c => new CatBreedServiceModel()
                 {

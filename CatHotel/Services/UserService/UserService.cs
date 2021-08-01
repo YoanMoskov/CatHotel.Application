@@ -14,11 +14,6 @@
             this.data = data;
         }
 
-        public User CurrentlyLoggedUser(ClaimsPrincipal user)
-            => data.Users
-            .FirstOrDefault(u => u.Id == user.FindFirstValue(ClaimTypes.NameIdentifier));
-
-
         public bool UserHasCats(string userId)
             => data.Users
                 .FirstOrDefault(u => u.Id == userId).Cats.Any();

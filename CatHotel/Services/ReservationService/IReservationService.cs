@@ -1,23 +1,29 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
+    using System;
     using System.Collections.Generic;
     using CatHotel.Models.Reservation.FormModels;
     using CatHotel.Models.Reservation.ViewModels;
-    using CatHotel.Models.RoomType;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Models.Reservations;
 
     public interface IReservationService
     {
-        void CreateReservation(ResFormModel res, string userId);
+        void Create(
+            DateTime arrival,
+            DateTime departure,
+            int roomTypeId,
+            string[] catIds,
+            string userId);
 
-        IEnumerable<SelectListItem> GetCatsSelectList(string userId);
+        IEnumerable<SelectListItem> CatsSelectList(string userId);
 
-        IEnumerable<ResRoomTypeViewModel> GetRoomTypes();
+        IEnumerable<ResRoomTypeServiceModel> RoomTypes();
 
-        IEnumerable<ResCatViewModel> GetCatsInReservations(string resId);
+        IEnumerable<ResCatServiceModel> CatsInReservations(string resId);
 
-        IEnumerable<ResViewModel> GetReservations(string userId);
+        IEnumerable<ResServiceModel> All(string userId);
 
-        void FilterReservations(IEnumerable<ResViewModel> reservations);
+        void FilterReservations();
     }
 }

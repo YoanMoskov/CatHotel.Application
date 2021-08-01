@@ -19,17 +19,16 @@
                         <h5 class="card-title">Reservation</h5>
                         <p class="card-text">Arrival: @res.Arrival</p>
                         <p class="card-text">Departure: @res.Departure</p>
-                        <p class="card-text">Room Type: @res.RoomType.Name</p>
+                        <p class="card-text">Room Type: @res.RoomTypeName</p>
                         <div name="details" class="my-sm-3 d-none">
                             <p class="card-text font-weight-bold">Cats:</p>
                             @foreach (var cat in res.Cats)
                             {
                                 <p class="card-text">@cat.Name - @cat.BreedName</p>
                             }
-                            <p class="card-text">Total price: @res.Payment.TotalPrice</p>
+                            <p class="card-text">Total price: @res.TotalPrice</p>
                         </div>
-                        <button name="showDetails" class="btn primary-color">Details</button>
-                        <button name="hideDetails" class="btn primary-color d-none">Hide Details</button>
+                        <button class="btn primary-color">Details</button>
                     </div>
                 </div>
             </div>
