@@ -1,12 +1,13 @@
 ﻿namespace CatHotel.Controllers
 {
-    using System.Linq;
     using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Reservation.FormModels;
     using Models.Reservation.ViewModels;
     using Services.ReservationService;
+    using System.Linq;
+    using AutoMapper;
 
     [Authorize]
     public class ReservationController : Controller
@@ -53,9 +54,9 @@
                     DateOfReservation = r.DateOfReservation,
                     Arrival = r.Arrival,
                     Departure = r.Departure,
-                    Cats = r.Cats,
                     RoomTypeName = r.RoomTypeName,
                     TotalPrice = r.TotalPrice,
+                    Cats = r.Cats,
                     IsActive = r.IsActive
                 })
                 .ToList();

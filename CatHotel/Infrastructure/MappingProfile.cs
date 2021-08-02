@@ -4,7 +4,9 @@
     using Data.Models;
     using Models.Cat.FormModel;
     using Models.Cat.ViewModel;
+    using Models.Reservation.ViewModels;
     using Services.Models.Cats;
+    using Services.Models.Reservations;
 
     public class MappingProfile : Profile
     {
@@ -15,6 +17,8 @@
             CreateMap<Cat, CatServiceModel>();
             CreateMap<Cat, CatDetailsServiceModel>();
             CreateMap<Breed, CatBreedServiceModel>();
+
+            CreateMap<ResServiceModel, ResViewModel>();
         }
     }
 }

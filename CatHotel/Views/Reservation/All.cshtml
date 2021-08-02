@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Reservations";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var counter = 0;
 }
 
 <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
@@ -20,19 +22,26 @@
                         <p class="card-text">Arrival: @res.Arrival</p>
                         <p class="card-text">Departure: @res.Departure</p>
                         <p class="card-text">Room Type: @res.RoomTypeName</p>
-                        <div name="details" class="my-sm-3 d-none">
-                            <p class="card-text font-weight-bold">Cats:</p>
-                            @foreach (var cat in res.Cats)
-                            {
-                                <p class="card-text">@cat.Name - @cat.BreedName</p>
-                            }
-                            <p class="card-text">Total price: @res.TotalPrice</p>
+                        <p>
+                            <button class="btn primary-color" type="button" data-toggle="collapse" data-target="#collapseDetails_@counter" aria-expanded="false" aria-controls="collapseDetails_@counter">
+                                Details
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseDetails_@counter">
+                            <ol class="card card-body center">
+                                <p class="card-text font-weight-bold center">Cats:</p>
+                                @foreach (var cat in @res.Cats)
+                                {
+                                    <li>@cat.Name - @cat.BreedName</li>
+                                }
+                            </ol>
+                            <p>Total price: @res.TotalPrice</p>
                         </div>
-                        <button class="btn primary-color">Details</button>
                     </div>
                 </div>
             </div>
         }
+        counter += 1;
     }
 </div>
 

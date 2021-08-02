@@ -1,13 +1,11 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
-    using CatHotel.Models.Reservation.ViewModels;
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Models.Reservations;
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     public class ReservationService : IReservationService
@@ -46,7 +44,7 @@
             };
 
             var allCatsReservation = catIds.Select(catId
-                => new CatReservation() {CatId = catId, Reservation = newReservation}).ToList();
+                => new CatReservation() { CatId = catId, Reservation = newReservation }).ToList();
 
             _data.CatsReservations.AddRange(allCatsReservation);
             _data.SaveChanges();
@@ -80,7 +78,8 @@
                 .Select(cr => new ResCatServiceModel()
                 {
                     Name = cr.Cat.Name,
-                    BreedName = cr.Cat.Breed.Name
+                    BreedName = cr.Cat.Breed.Name,
+                    PhotoUrl = cr.Cat.PhotoUrl
                 })
                 .ToList();
 
@@ -98,7 +97,7 @@
                     Arrival = r.Arrival.ToString("MM/dd/yyyy"),
                     Departure = r.Departure.ToString("MM/dd/yyyy"),
                     RoomTypeName = r.RoomType.Name,
-                    TotalPrice = $"$ {r.Payment.TotalPrice:f2}",
+                    TotalPrice = $"${r.Payment.TotalPrice}",
                     IsActive = r.IsActive
                 })
                 .OrderByDescending(r => r.DateOfReservation)
@@ -106,13 +105,16 @@
 
             foreach (var res in reservations)
             {
-                res.Cats = CatsInReservations(res.Id);
+                if (res != null)
+                {
+                    res.Cats = CatsInReservations(res.Id);
+                }
             }
 
             return reservations;
         }
 
-        public void FilterReservations()
+        private void FilterReservations()
         {
             var reservations = _data
                 .Reservations
@@ -128,8 +130,5 @@
                 }
             }
         }
-
-        private DateTime ConvertToDateTime(string dateString)
-            => DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
     }
 }
