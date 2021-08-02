@@ -8,6 +8,7 @@
     using Models.Reservation.ViewModels;
     using Services.ReservationService;
 
+    [Authorize]
     public class ReservationController : Controller
     {
         private readonly IReservationService _resService;
@@ -17,7 +18,6 @@
             this._resService = resService;
         }
 
-        [Authorize]
         public IActionResult Create()
         {
             return View(new ResFormModel()
@@ -28,7 +28,6 @@
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(ResFormModel res)
         {
             if (!ModelState.IsValid)
@@ -45,7 +44,6 @@
             return RedirectToAction("All", "Cats");
         }
 
-        [Authorize]
         public IActionResult All()
         {
             var resCollection = _resService.All(User.GetId())

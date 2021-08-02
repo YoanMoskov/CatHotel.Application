@@ -58,6 +58,8 @@ namespace CatHotel
                 .AddTransient<ICatService, CatService>()
                 .AddTransient<IReservationService, ReservationService>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services
                 .AddControllersWithViews(options =>
                 {

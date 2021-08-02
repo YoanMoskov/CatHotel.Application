@@ -1,5 +1,7 @@
 ﻿namespace CatHotel.Controllers
 {
+    using AutoMapper;
+    using Data.Models;
     using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -8,24 +10,26 @@
     using Services.CatService;
     using System.Linq;
 
+    [Authorize]
     public class CatsController : Controller
     {
         private readonly ICatService _catService;
+        private readonly IMapper _mapper;
 
         public CatsController(
-            ICatService catService)
+            ICatService catService,
+            IMapper mapper)
         {
             this._catService = catService;
+            this._mapper = mapper;
         }
 
-        [Authorize]
         public IActionResult Add() => View(new AddCatFormModel()
         {
             Breeds = _catService.GetBreeds()
         });
 
         [HttpPost]
-        [Authorize]
         public IActionResult Add(AddCatFormModel cat)
         {
             if (!_catService.DoesBreedExist(cat.BreedId))
@@ -39,18 +43,15 @@
                 return View(cat);
             }
 
+            var catForm = _mapper.Map<Cat>(cat);
+
             _catService.Add(
-                cat.Name,
-                cat.Age,
-                cat.PhotoUrl,
-                cat.BreedId,
-                cat.AdditionalInformation,
+                catForm,
                 User.GetId());
 
             return RedirectToAction("All");
         }
 
-        [Authorize]
         public IActionResult All()
         {
             var catCollection = _catService.All(User.GetId())
@@ -67,38 +68,25 @@
             return View(catCollection);
         }
 
-        [Authorize]
         public IActionResult Edit(string catId)
         {
             var cat = _catService.Details(catId);
 
-            return View(new CatViewModel()
-            {
-                Id = cat.Id,
-                Name = cat.Name,
-                Age = cat.Age,
-                PhotoUrl = cat.PhotoUrl,
-                AdditionalInformation = cat.AdditionalInformation,
-                BreedName = cat.BreedName
-            });
+            var catEditForm = _mapper.Map<CatViewModel>(cat);
+
+            return View(catEditForm);
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Edit(EditCatFormModel c, string catId)
         {
             var cat = _catService.Details(catId);
+
+            var catEditForm = _mapper.Map<CatViewModel>(cat);
+
             if (!ModelState.IsValid)
             {
-                return View(new CatViewModel()
-                {
-                    Id = cat.Id,
-                    Name = cat.Name,
-                    Age = cat.Age,
-                    PhotoUrl = cat.PhotoUrl,
-                    AdditionalInformation = cat.AdditionalInformation,
-                    BreedName = cat.BreedName
-                });
+                return View(catEditForm);
             }
 
             _catService.Edit(c.Age, c.PhotoUrl, c.AdditionalInformation, catId);

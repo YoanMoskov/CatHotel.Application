@@ -1,17 +1,12 @@
 ﻿namespace CatHotel.Services.CatService
 {
     using System.Collections.Generic;
+    using Data.Models;
     using Models.Cats;
 
     public interface ICatService
     {
-        string Add(
-            string name,
-            int age,
-            string photoUrl,
-            int breedId,
-            string additionalInformation,
-            string userId);
+        string Add(Cat cat, string userId);
 
         List<CatServiceModel> All(string userId);
 

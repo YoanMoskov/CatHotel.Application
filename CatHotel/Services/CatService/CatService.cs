@@ -2,6 +2,8 @@
 {
     using System.Linq;
     using System.Collections.Generic;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
     using Models.Cats;
@@ -9,23 +11,19 @@
     public class CatService : ICatService
     {
         private readonly ApplicationDbContext _data;
+        private readonly IMapper _mapper;
 
-        public CatService(ApplicationDbContext data)
+        public CatService(
+            IMapper mapper,
+            ApplicationDbContext data)
         {
+            this._mapper = mapper;
             this._data = data;
         }
 
-        public string Add(string name, int age, string photoUrl, int breedId, string additionalInformation, string userId)
+        public string Add(Cat cat, string userId)
         {
-            var cat = new Cat()
-            {
-                Name = name,
-                Age = age,
-                PhotoUrl = photoUrl,
-                BreedId = breedId,
-                AdditionalInformation = additionalInformation,
-                UserId = userId
-            };
+            cat.UserId = userId;
 
             _data.Cats.Add(cat);
             _data.SaveChanges();
@@ -36,14 +34,8 @@
         public List<CatServiceModel> All(string userId)
             => _data.Cats
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
-                .Select(c => new CatServiceModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Age = c.Age,
-                    PhotoUrl = c.PhotoUrl,
-                    BreedName = c.Breed.Name
-                }).ToList();
+                .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
+                .ToList();
 
         public bool Edit(int age, string photoUrl, string additionalInformation, string catId)
         {
@@ -81,15 +73,7 @@
         public CatDetailsServiceModel Details(string catId)
             => _data.Cats
                 .Where(c => c.Id == catId)
-                .Select(c => new CatDetailsServiceModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Age = c.Age,
-                    PhotoUrl = c.PhotoUrl,
-                    AdditionalInformation = c.AdditionalInformation,
-                    BreedName = c.Breed.Name
-                })
+                .ProjectTo<CatDetailsServiceModel>(this._mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
         public bool DoesBreedExist(int breedId)
@@ -98,11 +82,7 @@
         public IEnumerable<CatBreedServiceModel> GetBreeds()
             => this._data
                 .Breeds
-                .Select(c => new CatBreedServiceModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
+                .ProjectTo<CatBreedServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
     }
 }
