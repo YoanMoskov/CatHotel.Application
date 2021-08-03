@@ -97,7 +97,7 @@
                     Arrival = r.Arrival.ToString("MM/dd/yyyy"),
                     Departure = r.Departure.ToString("MM/dd/yyyy"),
                     RoomTypeName = r.RoomType.Name,
-                    TotalPrice = $"${r.Payment.TotalPrice}",
+                    TotalPrice = $"${r.Payment.TotalPrice:f2}",
                     IsActive = r.IsActive
                 })
                 .OrderByDescending(r => r.DateOfReservation)
