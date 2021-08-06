@@ -14,8 +14,6 @@
 
         public DbSet<Breed> Breeds { get; set; }
 
-        public DbSet<Employee> Employees { get; set; }
-
         public DbSet<Reservation> Reservations { get; set; }
 
         public DbSet<CatReservation> CatsReservations { get; set; }

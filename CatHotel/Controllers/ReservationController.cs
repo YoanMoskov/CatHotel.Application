@@ -1,13 +1,13 @@
 ﻿namespace CatHotel.Controllers
 {
     using Infrastructure;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Reservation.FormModels;
     using Models.Reservation.ViewModels;
     using Services.ReservationService;
     using System.Linq;
-    using AutoMapper;
+    using Microsoft.AspNetCore.Authorization;
+
 
     [Authorize]
     public class ReservationController : Controller
@@ -42,7 +42,7 @@
 
             _resService.Create(res.Arrival, res.Departure, res.RoomTypeId, res.CatIds, User.GetId());
 
-            return RedirectToAction("All", "Cats");
+            return RedirectToAction("All");
         }
 
         public IActionResult All()

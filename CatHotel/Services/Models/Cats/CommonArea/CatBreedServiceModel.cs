@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Services.Models.Cats
+﻿namespace CatHotel.Services.Models.Cats.CommonArea
 {
     public class CatBreedServiceModel
     {

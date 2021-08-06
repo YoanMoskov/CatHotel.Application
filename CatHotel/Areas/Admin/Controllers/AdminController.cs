@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Area(AdminConstants.AreaName)]
-    [Authorize(Roles = AdminConstants.AdminRoleName)]
+    [Authorize(Roles = AdminConstants.RoleName)]
     public abstract class AdminController : Controller
     {
     }

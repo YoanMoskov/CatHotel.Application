@@ -80,12 +80,12 @@
             Task
                 .Run(async () =>
                 {
-                    if (await roleManager.RoleExistsAsync(AdminRoleName))
+                    if (await roleManager.RoleExistsAsync(RoleName))
                     {
                         return;
                     }
 
-                    var role = new IdentityRole { Name = AdminRoleName };
+                    var role = new IdentityRole { Name = RoleName };
 
                     await roleManager.CreateAsync(role);
 

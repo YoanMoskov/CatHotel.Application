@@ -1,6 +1,7 @@
 ﻿namespace CatHotel.Models.Reservation.FormModels
 {
     using Services.Models.Cats;
+    using Services.Models.Cats.CommonArea;
 
     public class ResCatFormModel
     {

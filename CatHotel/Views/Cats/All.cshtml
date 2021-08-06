@@ -1,42 +1,12 @@
-﻿@model IEnumerable<CatViewModel>
+﻿@model IEnumerable<CatHotel.Services.Models.Cats.CommonArea.CatServiceModel>
 
 @{
     ViewBag.Title = "All";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
-<hr />
-<div class="table-responsive">
-<table class="table" style="margin: auto; width: fit-content;">
-    <thead>
-    <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Age</th>
-        <th scope="col">Photo URL</th>
-        <th scope="col">Breed</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-        @foreach (var cat in Model)
-        {
-            <tr>
-                <td scope="row">@cat.Name</td>
-                <td>@cat.Age</td>
-                <td>
-                    <img src="@cat.PhotoUrl" style="width: 150px; height: auto">
-                </td>
-                <td>@cat.BreedName</td>
-                <td>
-                    <a asp-action="Edit" class="btn primary-color" asp-route-catId="@cat.Id">Edit</a>
-                    <a asp-action="Delete" class="btn primary-color" asp-route-catId="@cat.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-</div>
+<partial name="~/Views/Cats/_CatsAllPartial.cshtml" />
+
 <p class="text-center">
     <a class="btn btn-secondary my-sm-3" asp-action="Add">Add New</a>
 </p>

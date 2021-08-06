@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Models\Cat\ViewModel\" />
     <Folder Include="Models\User\ViewModel\" />
   </ItemGroup>
 

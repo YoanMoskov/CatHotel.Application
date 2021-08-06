@@ -1,11 +1,11 @@
 ﻿namespace CatHotel.Models.Cat.FormModel
 {
+    using Services.Models.Cats;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using Services.Models.Cats;
-    using ViewModel;
+    using Services.Models.Cats.CommonArea;
     using static Data.DataConstants.Cat;
 
     public class AddCatFormModel

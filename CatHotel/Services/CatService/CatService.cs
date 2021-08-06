@@ -1,12 +1,13 @@
 ﻿namespace CatHotel.Services.CatService
 {
-    using System.Linq;
-    using System.Collections.Generic;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
-    using Models.Cats;
+    using Models.Cats.AdminArea;
+    using Models.Cats.CommonArea;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class CatService : ICatService
     {
@@ -37,9 +38,14 @@
                 .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
 
+        public List<AdminCatServiceModel> AdminAll()
+            => _data.Cats
+                .ProjectTo<AdminCatServiceModel>(this._mapper.ConfigurationProvider)
+                .ToList();
+
         public bool Edit(int age, string photoUrl, string additionalInformation, string catId)
         {
-            var cat = _data.Cats.FirstOrDefault(c => c.Id == catId);
+            var cat = FindCatById(catId);
 
             if (cat == null)
             {
@@ -48,6 +54,26 @@
 
             cat.Age = age;
             cat.PhotoUrl = photoUrl;
+            cat.AdditionalInformation = additionalInformation;
+
+            _data.SaveChanges();
+
+            return true;
+        }
+
+        public bool AdminEdit(string name, int age, string photoUrl, int breedId, string additionalInformation, string catId)
+        {
+            var cat = FindCatById(catId);
+
+            if (cat == null)
+            {
+                return false;
+            }
+
+            cat.Name = name;
+            cat.Age = age;
+            cat.PhotoUrl = photoUrl;
+            cat.BreedId = breedId;
             cat.AdditionalInformation = additionalInformation;
 
             _data.SaveChanges();
@@ -70,10 +96,25 @@
             return true;
         }
 
-        public CatDetailsServiceModel Details(string catId)
+        public bool AdminRestore(string catId)
+        {
+            var cat = _data.Cats.Find(catId);
+            if (cat == null)
+            {
+                return false;
+            }
+
+            cat.IsDeleted = false;
+
+            _data.SaveChanges();
+
+            return true;
+        }
+
+        public CatServiceModel Cat(string catId)
             => _data.Cats
                 .Where(c => c.Id == catId)
-                .ProjectTo<CatDetailsServiceModel>(this._mapper.ConfigurationProvider)
+                .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
         public bool DoesBreedExist(int breedId)
@@ -84,5 +125,8 @@
                 .Breeds
                 .ProjectTo<CatBreedServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
+
+        public Cat FindCatById(string catId)
+            => _data.Cats.FirstOrDefault(c => c.Id == catId);
     }
 }

@@ -1,22 +1,24 @@
 ﻿namespace CatHotel.Infrastructure
 {
+    using Areas.Admin.Models;
     using AutoMapper;
     using Data.Models;
     using Models.Cat.FormModel;
-    using Models.Cat.ViewModel;
     using Models.Reservation.ViewModels;
     using Services.Models.Cats;
+    using Services.Models.Cats.AdminArea;
+    using Services.Models.Cats.CommonArea;
     using Services.Models.Reservations;
 
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            CreateMap<CatDetailsServiceModel, CatViewModel>();
             CreateMap<AddCatFormModel, Cat>();
             CreateMap<Cat, CatServiceModel>();
-            CreateMap<Cat, CatDetailsServiceModel>();
             CreateMap<Breed, CatBreedServiceModel>();
+            CreateMap<Cat, AdminCatServiceModel>();
+            CreateMap<Cat, AdminCatEditViewModel>();
 
             CreateMap<ResServiceModel, ResViewModel>();
         }

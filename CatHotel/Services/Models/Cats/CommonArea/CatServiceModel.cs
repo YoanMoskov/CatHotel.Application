@@ -1,8 +1,8 @@
-﻿namespace CatHotel.Models.Cat.ViewModel
+﻿namespace CatHotel.Services.Models.Cats.CommonArea
 {
     using System.ComponentModel;
 
-    public class CatViewModel
+    public class CatServiceModel
     {
         public string Id { get; init; }
 
@@ -13,9 +13,9 @@
         [DisplayName("Photo Url")]
         public string PhotoUrl { get; init; }
 
-        [DisplayName("Additional Information")]
-        public string AdditionalInformation { get; set; }
-
         public string BreedName { get; init; }
+
+        [DisplayName("Additional Information")]
+        public string AdditionalInformation { get; init; }
     }
 }

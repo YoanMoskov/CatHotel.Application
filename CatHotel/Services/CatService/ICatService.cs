@@ -1,8 +1,9 @@
 ﻿namespace CatHotel.Services.CatService
 {
-    using System.Collections.Generic;
     using Data.Models;
-    using Models.Cats;
+    using Models.Cats.AdminArea;
+    using Models.Cats.CommonArea;
+    using System.Collections.Generic;
 
     public interface ICatService
     {
@@ -10,18 +11,32 @@
 
         List<CatServiceModel> All(string userId);
 
+        List<AdminCatServiceModel> AdminAll();
+
         bool Edit(
             int age,
             string photoUrl,
             string additionalInformation,
             string catId);
 
+        bool AdminEdit(
+            string name,
+            int age,
+            string photoUrl,
+            int breedId,
+            string additionalInformation,
+            string catId);
+
         bool Delete(string catId);
 
-        public CatDetailsServiceModel Details(string catId);
+        bool AdminRestore(string catId);
+
+        public CatServiceModel Cat(string catId);
 
         bool DoesBreedExist(int breedId);
 
         IEnumerable<CatBreedServiceModel> GetBreeds();
+
+        Cat FindCatById(string catId);
     }
 }

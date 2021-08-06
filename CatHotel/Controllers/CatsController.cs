@@ -6,9 +6,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Cat.FormModel;
-    using Models.Cat.ViewModel;
     using Services.CatService;
-    using System.Linq;
+    using Services.Models.Cats.CommonArea;
 
     [Authorize]
     public class CatsController : Controller
@@ -54,35 +53,24 @@
 
         public IActionResult All()
         {
-            var catCollection = _catService.All(User.GetId())
-                .Select(cat => new CatViewModel()
-                {
-                    Id = cat.Id,
-                    Name = cat.Name,
-                    Age = cat.Age,
-                    PhotoUrl = cat.PhotoUrl,
-                    BreedName = cat.BreedName
-                })
-                .ToList();
+            var catCollection = _catService.All(User.GetId());
 
             return View(catCollection);
         }
 
         public IActionResult Edit(string catId)
         {
-            var cat = _catService.Details(catId);
+            var cat = _catService.Cat(catId);
 
-            var catEditForm = _mapper.Map<CatViewModel>(cat);
-
-            return View(catEditForm);
+            return View(cat);
         }
 
         [HttpPost]
         public IActionResult Edit(EditCatFormModel c, string catId)
         {
-            var cat = _catService.Details(catId);
+            var cat = _catService.Cat(catId);
 
-            var catEditForm = _mapper.Map<CatViewModel>(cat);
+            var catEditForm = _mapper.Map<CatServiceModel>(cat);
 
             if (!ModelState.IsValid)
             {
