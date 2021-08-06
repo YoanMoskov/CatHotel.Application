@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using Enums;
     using static DataConstants.Cat;
 
@@ -20,6 +21,10 @@
 
         [Required]
         public string PhotoUrl { get; set; }
+
+        [Required]
+        [Column(TypeName = "DATE")]
+        public DateTime DateAdded { get; set; }
 
         public string AdditionalInformation { get; set; }
 

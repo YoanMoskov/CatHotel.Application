@@ -1,9 +1,11 @@
 ﻿namespace CatHotel.Services.CatService
 {
+    using System;
     using Data.Models;
     using Models.Cats.AdminArea;
     using Models.Cats.CommonArea;
     using System.Collections.Generic;
+    using Areas.Admin.Models.Enums;
 
     public interface ICatService
     {
@@ -11,7 +13,12 @@
 
         List<CatServiceModel> All(string userId);
 
-        List<AdminCatServiceModel> AdminAll();
+        AdminCatQueryServiceModel AdminAll(
+            string breed = null,
+            int currentPage = 1,
+            CatSorting sorting = CatSorting.Newest,
+            CatFiltering filtering = CatFiltering.All,
+            int catsPerPage = Int32.MaxValue);
 
         bool Edit(
             int age,
@@ -36,7 +43,5 @@
         bool DoesBreedExist(int breedId);
 
         IEnumerable<CatBreedServiceModel> GetBreeds();
-
-        Cat FindCatById(string catId);
     }
 }

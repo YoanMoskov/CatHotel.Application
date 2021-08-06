@@ -1,5 +1,6 @@
 ﻿namespace CatHotel.Services.CatService
 {
+    using System;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
@@ -8,6 +9,7 @@
     using Models.Cats.CommonArea;
     using System.Collections.Generic;
     using System.Linq;
+    using Areas.Admin.Models.Enums;
 
     public class CatService : ICatService
     {
@@ -25,6 +27,7 @@
         public string Add(Cat cat, string userId)
         {
             cat.UserId = userId;
+            cat.DateAdded = DateTime.UtcNow;
 
             _data.Cats.Add(cat);
             _data.SaveChanges();
@@ -38,10 +41,53 @@
                 .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
 
-        public List<AdminCatServiceModel> AdminAll()
-            => _data.Cats
-                .ProjectTo<AdminCatServiceModel>(this._mapper.ConfigurationProvider)
-                .ToList();
+
+        public AdminCatQueryServiceModel AdminAll(
+            string breed = null,
+            int currentPage = 1,
+            CatSorting sorting = CatSorting.Newest,
+            CatFiltering filtering = CatFiltering.All,
+            int catsPerPage = Int32.MaxValue)
+        {
+            IQueryable<Cat> catsQuery = _data.Cats;
+
+            if (!string.IsNullOrWhiteSpace(breed))
+            {
+                catsQuery = catsQuery.Where(c => c.Breed.Id == int.Parse(breed));
+            }
+
+            catsQuery = filtering switch
+            {
+                CatFiltering.Available => catsQuery.Where(c => c.IsDeleted == false),
+                CatFiltering.Deleted => catsQuery.Where(c => c.IsDeleted == true),
+                CatFiltering.All or _ => catsQuery
+            };
+
+            catsQuery = sorting switch
+            {
+                CatSorting.Oldest => catsQuery.OrderBy(c => c.DateAdded),
+                CatSorting.Newest or _ => catsQuery.OrderByDescending(c => c.DateAdded)
+            };
+
+            var totalCats = catsQuery.Count();
+
+            var cats = GetCats(catsQuery
+                .Skip((currentPage - 1) * catsPerPage)
+                .Take(catsPerPage));
+
+            foreach (var cat in cats)
+            {
+                var date = cat.DateAdded;
+            }
+
+            return new AdminCatQueryServiceModel()
+            {
+                TotalCats = totalCats,
+                CurrentPage = currentPage,
+                CatsPerPage = catsPerPage,
+                Cats = cats
+            };
+        }
 
         public bool Edit(int age, string photoUrl, string additionalInformation, string catId)
         {
@@ -126,7 +172,12 @@
                 .ProjectTo<CatBreedServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
 
-        public Cat FindCatById(string catId)
+        private Cat FindCatById(string catId)
             => _data.Cats.FirstOrDefault(c => c.Id == catId);
+
+        private IEnumerable<AdminCatServiceModel> GetCats(IQueryable<Cat> catQuery)
+            => catQuery
+                .ProjectTo<AdminCatServiceModel>(_mapper.ConfigurationProvider)
+                .ToList();
     }
 }

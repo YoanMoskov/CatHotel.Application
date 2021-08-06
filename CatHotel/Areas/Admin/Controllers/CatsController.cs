@@ -6,6 +6,7 @@
     using Data;
     using Microsoft.AspNetCore.Mvc;
     using Models;
+    using Models.Enums;
     using Services.CatService;
 
     public class CatsController : AdminController
@@ -23,10 +24,22 @@
             _data = data;
         }
 
-        public IActionResult All()
+        public IActionResult All([FromQuery] AdminAllCatsQueryModel query)
         {
-            var cats = _catService.AdminAll();
-            return View(cats);
+            var queryRes = _catService.AdminAll(
+                query.Breed,
+                query.CurrentPage,
+                query.Sorting,
+                query.Filtering,
+                AdminAllCatsQueryModel.CatsPerPage);
+
+            var catBreeds = _catService.GetBreeds();
+
+            query.Breeds = catBreeds;
+            query.TotalCats = queryRes.TotalCats;
+            query.Cats = queryRes.Cats;
+
+            return View(query);
         }
 
         public IActionResult Edit(string catId)

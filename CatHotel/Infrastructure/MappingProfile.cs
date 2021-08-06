@@ -5,7 +5,6 @@
     using Data.Models;
     using Models.Cat.FormModel;
     using Models.Reservation.ViewModels;
-    using Services.Models.Cats;
     using Services.Models.Cats.AdminArea;
     using Services.Models.Cats.CommonArea;
     using Services.Models.Reservations;

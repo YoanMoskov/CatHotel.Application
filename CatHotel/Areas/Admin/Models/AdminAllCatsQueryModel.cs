@@ -2,16 +2,24 @@
 {
     using Services.Models.Cats.AdminArea;
     using System.Collections.Generic;
+    using Enums;
+    using Services.Models.Cats.CommonArea;
 
     public class AdminAllCatsQueryModel
     {
-        public int CatsPerPage = 5;
+        public const int CatsPerPage = 6;
 
-        public int CurrentPage { get; set; }
+        public string Breed { get; init; }
+
+        public int CurrentPage { get; set; } = 1;
 
         public int TotalCats { get; set; }
 
-        public IEnumerable<string> Breeds { get; set; }
+        public CatSorting Sorting { get; init; }
+
+        public CatFiltering Filtering { get; init; }
+
+        public IEnumerable<CatBreedServiceModel> Breeds { get; set; }
 
         public IEnumerable<AdminCatServiceModel> Cats { get; set; }
     }
