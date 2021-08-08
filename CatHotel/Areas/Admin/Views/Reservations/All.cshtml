@@ -1,7 +1,7 @@
-﻿@model AdminAllCatsQueryModel
+﻿@model AdminAllReservationsQueryModel
 
 @{
-    ViewBag.Title = "All";
+    ViewBag.Title = "Reservations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
@@ -10,13 +10,13 @@
     <div class="d-flex justify-content-center">
         <div class="form-group col-md-4">
             <div class="form-group">
-                <label asp-for="Breed"></label>
-                <select asp-for="Breed" class="form-control">
+                <label asp-for="RoomType"></label>
+                <select asp-for="RoomType" class="form-control">
                     <option value="">All</option>
 
-                    @foreach (var breed in Model.Breeds)
+                    @foreach (var room in Model.RoomTypes)
                     {
-                        <option value="@breed.Id">@breed.Name</option>
+                        <option value="@room.Id">@room.Name</option>
                     }
                 </select>
             </div>
@@ -34,9 +34,10 @@
             <div class="form-group">
                 <label asp-for="Filtering"></label>
                 <select asp-for="Filtering" class="form-control">
-                    <option value="10" selected>All</option>
-                    <option value="20">Deleted</option>
-                    <option value="30">Available</option>
+                    <option value="20" selected>Pending</option>
+                    <option value="10">Approved</option>
+                    <option value="30">Active</option>
+                    <option value="40">Expired</option>
                 </select>
             </div>
         </div>
@@ -53,40 +54,41 @@
         previousPage = 1;
     }
 
-    var maxPage = Math.Ceiling((double)Model.TotalCats / AdminAllCatsQueryModel.CatsPerPage);
+    var maxPage = Math.Ceiling((double)Model.TotalReservations / AdminAllReservationsQueryModel.ResPerPage);
 }
 
 <div class="row mb-5">
     <div class="col-md-6">
         <a class="btn primary-color @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
-           asp-controller="Cats"
+           asp-controller="Reservations"
            asp-action="All"
            asp-route-currentPage="@previousPage"
-           asp-route-breed="@Model.Breed"
+           asp-route-room-type="@Model.RoomType"
            asp-route-sorting="@((int)Model.Sorting)"><<</a>
     </div>
 
     @{
         var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
-                                     !Model.Cats.Any();
+                                     !Model.Reservations.Any();
     }
 
     <div class="col-md-6">
         <a class="btn primary-color float-sm-right @(shouldButtonBeDisabled ? "disabled" : string.Empty)" style="margin-top: 10px"
-           asp-controller="Cats"
+           asp-controller="Reservations"
            asp-action="All"
            asp-route-currentPage="@(Model.CurrentPage + 1)"
-           asp-route-breed="@Model.Breed"
+           asp-route-room-type="@Model.RoomType"
            asp-route-sorting="@((int)Model.Sorting)">>></a>
     </div>
 </div>
 
-@if (!Model.Cats.Any())
+@if (!Model.Reservations.Any())
 {
-    <h2 class="text-center">No cats found by the given criteria!</h2>
+    <h2 class="text-center">No reservations found by the given criteria!</h2>
 }
 else
 {
-    <partial name="~/Views/Cats/_CatsAllPartial.cshtml" />
+    <partial name="~/Views/Reservations/_ReservationAllPartial.cshtml"/>
 }
+
 

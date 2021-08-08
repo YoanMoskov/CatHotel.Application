@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Areas.Admin.Models.Enums
+﻿namespace CatHotel.Areas.Admin.Models.Enums.Cats
 {
     public enum CatFiltering
     {

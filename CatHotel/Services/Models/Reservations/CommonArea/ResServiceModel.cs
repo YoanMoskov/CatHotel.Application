@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Services.Models.Reservations
+﻿namespace CatHotel.Services.Models.Reservations.CommonArea
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,9 @@
 
         public string TotalPrice { get; init; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; init; }
+
+        public bool IsApproved { get; init; }
 
         public IEnumerable<ResCatServiceModel> Cats { get; set; }
     }

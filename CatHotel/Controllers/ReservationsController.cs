@@ -10,11 +10,11 @@
 
 
     [Authorize]
-    public class ReservationController : Controller
+    public class ReservationsController : Controller
     {
         private readonly IReservationService _resService;
 
-        public ReservationController(IReservationService resService)
+        public ReservationsController(IReservationService resService)
         {
             this._resService = resService;
         }

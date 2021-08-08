@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Services.Models.Reservations
+﻿namespace CatHotel.Services.Models.Reservations.CommonArea
 {
     public class ResCatServiceModel
     {

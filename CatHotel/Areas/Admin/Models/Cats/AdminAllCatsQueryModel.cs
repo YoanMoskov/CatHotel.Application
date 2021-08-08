@@ -1,8 +1,8 @@
-﻿namespace CatHotel.Areas.Admin.Models
+﻿namespace CatHotel.Areas.Admin.Models.Cats
 {
-    using Services.Models.Cats.AdminArea;
     using System.Collections.Generic;
-    using Enums;
+    using Enums.Cats;
+    using Services.Models.Cats.AdminArea;
     using Services.Models.Cats.CommonArea;
 
     public class AdminAllCatsQueryModel

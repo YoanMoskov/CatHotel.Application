@@ -1,9 +1,8 @@
-﻿namespace CatHotel.Areas.Admin.Models
+﻿namespace CatHotel.Areas.Admin.Models.Cats
 {
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-
     using static Data.DataConstants.Cat;
 
     public class AdminEditCatFormModel

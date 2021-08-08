@@ -6,6 +6,7 @@
     using Models.Cats.CommonArea;
     using System.Collections.Generic;
     using Areas.Admin.Models.Enums;
+    using Areas.Admin.Models.Enums.Cats;
 
     public interface ICatService
     {

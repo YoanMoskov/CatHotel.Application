@@ -1,8 +1,8 @@
-﻿namespace CatHotel.Areas.Admin.Models
+﻿namespace CatHotel.Areas.Admin.Models.Cats
 {
-    using Services.Models.Cats.CommonArea;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using Services.Models.Cats.CommonArea;
 
     public class AdminCatEditViewModel
     {

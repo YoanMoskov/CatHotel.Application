@@ -36,6 +36,8 @@
 
         public bool IsActive { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public ICollection<Cat> Cats { get; set; } = new List<Cat>();
 
         public ICollection<Room> Rooms { get; set; } = new List<Room>();

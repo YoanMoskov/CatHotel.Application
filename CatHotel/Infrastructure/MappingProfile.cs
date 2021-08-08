@@ -1,13 +1,13 @@
 ﻿namespace CatHotel.Infrastructure
 {
-    using Areas.Admin.Models;
+    using Areas.Admin.Models.Cats;
     using AutoMapper;
     using Data.Models;
     using Models.Cat.FormModel;
     using Models.Reservation.ViewModels;
     using Services.Models.Cats.AdminArea;
     using Services.Models.Cats.CommonArea;
-    using Services.Models.Reservations;
+    using Services.Models.Reservations.CommonArea;
 
     public class MappingProfile : Profile
     {
@@ -18,8 +18,10 @@
             CreateMap<Breed, CatBreedServiceModel>();
             CreateMap<Cat, AdminCatServiceModel>();
             CreateMap<Cat, AdminCatEditViewModel>();
+            CreateMap<Cat, ResCatServiceModel>();
 
             CreateMap<ResServiceModel, ResViewModel>();
+            CreateMap<Reservation, ResServiceModel>();
         }
     }
 }

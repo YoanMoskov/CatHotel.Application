@@ -1,15 +1,15 @@
 ﻿namespace CatHotel.Services.CatService
 {
-    using System;
+    using Areas.Admin.Models.Enums.Cats;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
     using Data.Models;
     using Models.Cats.AdminArea;
     using Models.Cats.CommonArea;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Areas.Admin.Models.Enums;
 
     public class CatService : ICatService
     {
@@ -40,7 +40,6 @@
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
                 .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
                 .ToList();
-
 
         public AdminCatQueryServiceModel AdminAll(
             string breed = null,
@@ -74,11 +73,6 @@
             var cats = GetCats(catsQuery
                 .Skip((currentPage - 1) * catsPerPage)
                 .Take(catsPerPage));
-
-            foreach (var cat in cats)
-            {
-                var date = cat.DateAdded;
-            }
 
             return new AdminCatQueryServiceModel()
             {

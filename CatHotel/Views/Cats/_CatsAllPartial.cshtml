@@ -16,7 +16,7 @@
                             <a asp-area="@area" asp-action="Edit" class="btn primary-color" asp-route-catId="@cat.Id">Edit</a>
                             @if (area == AdminConstants.AreaName && cat.IsDeleted)
                             {
-                                <a asp-area="@area" asp-action="Restore" class="btn primary-color" asp-route-catId="@cat.Id">Restore</a>
+                                <a asp-area="@AdminConstants.AreaName" asp-action="Restore" class="btn primary-color" asp-route-catId="@cat.Id">Restore</a>
                             }
                             else
                             {

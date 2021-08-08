@@ -1,13 +1,12 @@
 ﻿namespace CatHotel.Areas.Admin.Controllers
 {
-    using System.Linq;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
     using Microsoft.AspNetCore.Mvc;
-    using Models;
-    using Models.Enums;
+    using Models.Cats;
     using Services.CatService;
+    using System.Linq;
 
     public class CatsController : AdminController
     {
