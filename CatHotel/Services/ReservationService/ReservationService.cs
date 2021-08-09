@@ -128,7 +128,7 @@
                 ResFiltering.Approved => resQuery.Where(r => r.IsApproved),
                 ResFiltering.Active => resQuery.Where(r => r.IsActive),
                 ResFiltering.Expired => resQuery.Where(r => r.IsActive == false),
-                ResFiltering.Pending or _ => resQuery.Where(r => r.IsApproved == false)
+                ResFiltering.Pending or _ => resQuery.Where(r => r.IsApproved == false && r.IsActive)
             };
 
             resQuery = sorting switch
@@ -158,6 +158,22 @@
                 ResPerPage = resPerPage,
                 Reservations = reservations
             };
+        }
+
+        public bool AdminApprove(string resId)
+        {
+            var res = _data.Reservations
+                .FirstOrDefault(r => r.Id == resId && r.IsApproved == false);
+
+            if (res != null)
+            {
+                res.IsApproved = true;
+                _data.SaveChanges();
+
+                return true;
+            }
+
+            return false;
         }
 
         private void FilterReservations()

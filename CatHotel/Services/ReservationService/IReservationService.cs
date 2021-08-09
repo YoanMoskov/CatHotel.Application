@@ -25,6 +25,8 @@
             ResFiltering filtering = ResFiltering.Pending,
             int resPerPage = Int32.MaxValue);
 
+        bool AdminApprove(string resId);
+
         IEnumerable<SelectListItem> CatsSelectList(string userId);
 
         IEnumerable<ResRoomTypeServiceModel> RoomTypes();

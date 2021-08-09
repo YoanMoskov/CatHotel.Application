@@ -13,55 +13,49 @@
 {
     @if (@Model.Any(r => r.IsApproved && r.IsActive))
     {
-        <h2 class="text-center text-secondary my-sm-3">@ViewBag.TitleActive</h2>
-        <hr/>
-        <div class="container-fluid">
-            <div class="row text-center">
-                <partial name="All"/>
-            </div>
-        </div>
+        <partial name="_ReservationAllPartial" />
     }
 
-@if (@Model.Any(r => r.IsApproved == false))
-{
-    <h2 class="text-center text-secondary my-sm-3">@ViewBag.TitlePending</h2>
-    <hr />
-    <div class="row">
-        @foreach (var res in Model)
-        {
-            @if (res.IsActive && !res.IsApproved)
+    @if (@Model.Any(r => r.IsApproved == false))
+    {
+        <h2 class="text-center text-secondary my-sm-3">@ViewBag.TitlePending</h2>
+        <hr />
+        <div class="row">
+            @foreach (var res in Model)
             {
-                <div class="col-md-4">
-                    <div class="card mb-3 text-center">
-                        <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png" alt="Reservation picture">
-                        <div class="card-body">
-                            <h5 class="card-title">Reservation</h5>
-                            <p class="card-text">Arrival: @res.Arrival</p>
-                            <p class="card-text">Departure: @res.Departure</p>
-                            <p class="card-text">Room Type: @res.RoomTypeName</p>
-                            <p>
-                                <button class="btn primary-color" type="button" data-toggle="collapse" data-target="#collapseDetails_@counter" aria-expanded="false" aria-controls="collapseDetails_@counter">
-                                    Details
-                                </button>
-                            </p>
-                            <div class="collapse" id="collapseDetails_@counter">
-                                <ol class="card card-body center">
-                                    <p class="card-text font-weight-bold center">Cats:</p>
-                                    @foreach (var cat in @res.Cats)
-                                    {
-                                        <li>@cat.Name - @cat.BreedName</li>
-                                    }
-                                </ol>
-                                <p>Total price: @res.TotalPrice</p>
+                @if (res.IsActive && !res.IsApproved)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-3 text-center">
+                            <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png" alt="Reservation picture">
+                            <div class="card-body">
+                                <h5 class="card-title">Reservation</h5>
+                                <p class="card-text">Arrival: @res.Arrival</p>
+                                <p class="card-text">Departure: @res.Departure</p>
+                                <p class="card-text">Room Type: @res.RoomTypeName</p>
+                                <p>
+                                    <button class="btn primary-color" type="button" data-toggle="collapse" data-target="#collapseDetails_@counter" aria-expanded="false" aria-controls="collapseDetails_@counter">
+                                        Details
+                                    </button>
+                                </p>
+                                <div class="collapse" id="collapseDetails_@counter">
+                                    <ol class="card card-body center">
+                                        <p class="card-text font-weight-bold center">Cats:</p>
+                                        @foreach (var cat in @res.Cats)
+                                        {
+                                            <li>@cat.Name - @cat.BreedName</li>
+                                        }
+                                    </ol>
+                                    <p>Total price: @res.TotalPrice</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+                counter += 1;
             }
-            counter += 1;
-        }
-    </div>
-}
+        </div>
+    }
 }
 else
 {

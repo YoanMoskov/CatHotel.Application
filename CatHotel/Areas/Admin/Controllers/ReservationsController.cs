@@ -30,5 +30,12 @@
 
             return View(query);
         }
+
+        public IActionResult Approve(string resId)
+        {
+            _resService.AdminApprove(resId);
+
+            return RedirectToAction("All");
+        }
     }
 }

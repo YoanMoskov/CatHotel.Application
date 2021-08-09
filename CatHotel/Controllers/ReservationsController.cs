@@ -57,7 +57,8 @@
                     RoomTypeName = r.RoomTypeName,
                     TotalPrice = r.TotalPrice,
                     Cats = r.Cats,
-                    IsActive = r.IsActive
+                    IsActive = r.IsActive,
+                    IsApproved = r.IsApproved
                 })
                 .ToList();
             return View(resCollection);
