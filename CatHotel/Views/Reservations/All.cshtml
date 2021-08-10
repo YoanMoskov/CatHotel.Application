@@ -11,7 +11,7 @@
 
 @if (@Model.Any())
 {
-    @if (@Model.Any(r => r.IsApproved && r.IsActive))
+    @if (@Model.Any(r => r.IsApproved && r.ReservationState != ReservationState.Expired))
     {
         <partial name="_ReservationAllPartial" />
     }
@@ -23,7 +23,7 @@
         <div class="row">
             @foreach (var res in Model)
             {
-                @if (res.IsActive && !res.IsApproved)
+                @if (res.ReservationState == ReservationState.Pending && !res.IsApproved)
                 {
                     <div class="col-md-4">
                         <div class="card mb-3 text-center">

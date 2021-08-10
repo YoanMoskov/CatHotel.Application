@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatHotel.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210716203620_CatHotelv1.7")]
-    partial class CatHotelv17
+    [Migration("20210810182126_Initial-Create")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,13 @@ namespace CatHotel.Data.Migrations
                     b.Property<int>("BreedId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<int>("CatSize")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("DATE");
+
+                    b.Property<string>("GroomingId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
@@ -67,9 +73,6 @@ namespace CatHotel.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReservationId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -78,49 +81,44 @@ namespace CatHotel.Data.Migrations
 
                     b.HasIndex("BreedId");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ReservationId");
+                    b.HasIndex("GroomingId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Cats");
                 });
 
-            modelBuilder.Entity("CatHotel.Data.Models.Employee", b =>
+            modelBuilder.Entity("CatHotel.Data.Models.CatReservation", b =>
+                {
+                    b.Property<string>("CatId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReservationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CatId", "ReservationId");
+
+                    b.HasIndex("ReservationId");
+
+                    b.ToTable("CatsReservations");
+                });
+
+            modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("DescribePreferredStyle")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsVeterinarian")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsWorking")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("Grooming");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Payment", b =>
@@ -131,6 +129,9 @@ namespace CatHotel.Data.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("MONEY");
 
+                    b.Property<bool>("isPaid")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Payments");
@@ -138,7 +139,7 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
                 {
-                    b.Property<string>("ReservationId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Arrival")
@@ -150,11 +151,14 @@ namespace CatHotel.Data.Migrations
                     b.Property<DateTime>("Departure")
                         .HasColumnType("DATE");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<string>("PaymentId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ReservationState")
+                        .HasColumnType("int");
 
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
@@ -162,7 +166,7 @@ namespace CatHotel.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ReservationId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PaymentId");
 
@@ -443,13 +447,9 @@ namespace CatHotel.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CatHotel.Data.Models.Employee", null)
+                    b.HasOne("CatHotel.Data.Models.Grooming", "Grooming")
                         .WithMany("Cats")
-                        .HasForeignKey("EmployeeId");
-
-                    b.HasOne("CatHotel.Data.Models.Reservation", "Reservation")
-                        .WithMany("Cats")
-                        .HasForeignKey("ReservationId");
+                        .HasForeignKey("GroomingId");
 
                     b.HasOne("CatHotel.Data.Models.User", "User")
                         .WithMany("Cats")
@@ -459,9 +459,37 @@ namespace CatHotel.Data.Migrations
 
                     b.Navigation("Breed");
 
-                    b.Navigation("Reservation");
+                    b.Navigation("Grooming");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CatHotel.Data.Models.CatReservation", b =>
+                {
+                    b.HasOne("CatHotel.Data.Models.Cat", "Cat")
+                        .WithMany()
+                        .HasForeignKey("CatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CatHotel.Data.Models.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cat");
+
+                    b.Navigation("Reservation");
+                });
+
+            modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
+                {
+                    b.HasOne("CatHotel.Data.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
@@ -553,15 +581,13 @@ namespace CatHotel.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CatHotel.Data.Models.Employee", b =>
+            modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
                     b.Navigation("Cats");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
                 {
-                    b.Navigation("Cats");
-
                     b.Navigation("Rooms");
                 });
 

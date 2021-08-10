@@ -6,6 +6,7 @@
     using Models.Reservations.CommonArea;
     using System;
     using System.Collections.Generic;
+    using Models.Cats.CommonArea;
 
     public interface IReservationService
     {
@@ -26,6 +27,12 @@
             int resPerPage = Int32.MaxValue);
 
         bool AdminApprove(string resId);
+
+        bool DoesCatExist(string catId);
+
+        string AreCatsInResTimeFrame(string[] catIds, DateTime arrival, DateTime departure);
+
+        bool DoesRoomTypeExist(int roomTypeId);
 
         IEnumerable<SelectListItem> CatsSelectList(string userId);
 

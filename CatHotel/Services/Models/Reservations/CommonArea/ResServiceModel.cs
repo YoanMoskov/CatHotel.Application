@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Data.Models.Enums;
 
     public class ResServiceModel
     {
@@ -17,7 +18,7 @@
 
         public string TotalPrice { get; init; }
 
-        public bool IsActive { get; init; }
+        public ReservationState ReservationState { get; set; }
 
         public bool IsApproved { get; init; }
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Enums;
 
     public class Reservation
     {
@@ -34,7 +35,7 @@
 
         public RoomType RoomType { get; set; }
 
-        public bool IsActive { get; set; }
+        public ReservationState ReservationState { get; set; }
 
         public bool IsApproved { get; set; }
 

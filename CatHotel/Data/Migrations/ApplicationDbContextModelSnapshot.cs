@@ -149,14 +149,14 @@ namespace CatHotel.Data.Migrations
                     b.Property<DateTime>("Departure")
                         .HasColumnType("DATE");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<string>("PaymentId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ReservationState")
+                        .HasColumnType("int");
 
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
@@ -300,21 +300,6 @@ namespace CatHotel.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("CatReservation", b =>
-                {
-                    b.Property<string>("CatsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ReservationsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CatsId", "ReservationsId");
-
-                    b.HasIndex("ReservationsId");
-
-                    b.ToTable("CatReservation");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -541,21 +526,6 @@ namespace CatHotel.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("RoomType");
-                });
-
-            modelBuilder.Entity("CatReservation", b =>
-                {
-                    b.HasOne("CatHotel.Data.Models.Cat", null)
-                        .WithMany()
-                        .HasForeignKey("CatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CatHotel.Data.Models.Reservation", null)
-                        .WithMany()
-                        .HasForeignKey("ReservationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

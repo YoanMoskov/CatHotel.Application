@@ -68,9 +68,15 @@
         [HttpPost]
         public IActionResult Edit(EditCatFormModel c, string catId)
         {
+            if (c == null)
+            {
+                return BadRequest();
+            }
+
             var cat = _catService.Cat(catId);
 
             var catEditForm = _mapper.Map<CatServiceModel>(cat);
+
 
             if (!ModelState.IsValid)
             {

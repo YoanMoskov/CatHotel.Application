@@ -1,5 +1,6 @@
 ﻿namespace CatHotel.Data
 {
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Models;
@@ -32,11 +33,11 @@
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<CatReservation>()
-                .HasKey(k => new {k.CatId, k.ReservationId});
+            base.OnModelCreating(builder);
+            builder.Entity<CatReservation>()
+                .HasKey(k => new { k.CatId, k.ReservationId });
         }
     }
 }

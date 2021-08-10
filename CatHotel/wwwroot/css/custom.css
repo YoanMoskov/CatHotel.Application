@@ -1,25 +1,32 @@
 ﻿.primary-color {
     background-color: #ea9ac2
 }
+
 .text-primary-color {
     color: #ea9ac2 !important;
 }
+
 .card-img-resize {
     max-width: 40%;
     height: auto
 }
+
 .padding-bottom-10 {
     padding-bottom: 10px;
 }
+
 .padding-top-14 {
     padding-top: 14px;
 }
+
 .hidden-content {
     display: none
 }
+
 .hide-content {
     display: block
 }
+
 .center {
     text-align: center;
     list-style-position: inside;

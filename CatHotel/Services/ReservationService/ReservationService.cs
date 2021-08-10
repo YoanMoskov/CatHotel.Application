@@ -1,26 +1,29 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
     using Areas.Admin.Models.Enums.Reservations;
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
+    using CatService;
     using Data;
     using Data.Models;
+    using Data.Models.Enums;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Models.Reservations.AdminArea;
     using Models.Reservations.CommonArea;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.EntityFrameworkCore;
 
     public class ReservationService : IReservationService
     {
         private readonly ApplicationDbContext _data;
-        private readonly IMapper _mapper;
 
-        public ReservationService(ApplicationDbContext data, IMapper mapper)
+        private const ReservationState Pending = ReservationState.Pending;
+        private const ReservationState Active = ReservationState.Active;
+        private const ReservationState Expired = ReservationState.Expired;
+
+        public ReservationService(ApplicationDbContext data)
         {
             this._data = data;
-            _mapper = mapper;
         }
 
         public void Create(DateTime arrival, DateTime departure, int roomTypeId, string[] catIds, string userId)
@@ -46,7 +49,7 @@
                     TotalPrice = price,
                     isPaid = false,
                 },
-                IsActive = true
+                ReservationState = Pending
             };
 
             var allCatsReservation = catIds.Select(catId
@@ -67,6 +70,25 @@
                 })
                 .ToList();
 
+        public string AreCatsInResTimeFrame(string[] catIds, DateTime arrival, DateTime departure)
+        {
+            var reservations = new List<ResActiveServiceModel>();
+
+            var errorMessage = string.Empty;
+            foreach (var catId in catIds)
+            {
+                var isInTimeFrame = _data.Cats.Any(c => c.Reservations.Any(r =>
+                    !(r.Arrival < arrival && r.Departure < departure ||
+                      r.Arrival > arrival && r.Departure > departure)));
+                if (isInTimeFrame)
+                {
+                    errorMessage = "There's a cat in reservation in this time frame already.";
+                }
+            }
+
+            return errorMessage;
+        }
+
         public IEnumerable<ResRoomTypeServiceModel> RoomTypes()
             => this._data
                 .RoomTypes
@@ -79,11 +101,11 @@
 
         public IEnumerable<ResServiceModel> All(string userId)
         {
-            FilterReservations();
+            FilterReservations(false, userId);
 
             var reservations = _data
                 .Reservations
-                .Where(r => r.UserId == userId && r.IsActive)
+                .Where(r => r.UserId == userId && r.ReservationState != Expired)
                 .Select(r => new ResServiceModel()
                 {
                     Id = r.Id,
@@ -92,7 +114,7 @@
                     Departure = r.Departure.ToString("MM/dd/yyyy"),
                     RoomTypeName = r.RoomType.Name,
                     TotalPrice = $"${r.Payment.TotalPrice:f2}",
-                    IsActive = r.IsActive,
+                    ReservationState = r.ReservationState,
                     IsApproved = r.IsApproved
                 })
                 .OrderByDescending(r => r.DateOfReservation)
@@ -126,9 +148,10 @@
             resQuery = filtering switch
             {
                 ResFiltering.Approved => resQuery.Where(r => r.IsApproved),
-                ResFiltering.Active => resQuery.Where(r => r.IsActive),
-                ResFiltering.Expired => resQuery.Where(r => r.IsActive == false),
-                ResFiltering.Pending or _ => resQuery.Where(r => r.IsApproved == false && r.IsActive)
+                ResFiltering.Active => resQuery.Where(r => r.ReservationState == Active),
+                ResFiltering.Expired => resQuery.Where(r => r.ReservationState == Expired),
+                ResFiltering.Pending => resQuery.Where(r => r.ReservationState == Pending),
+                ResFiltering.PendingApproval or _ => resQuery.Where(r => r.IsApproved == false && r.ReservationState == Pending)
             };
 
             resQuery = sorting switch
@@ -138,6 +161,8 @@
             };
 
             var totalRes = resQuery.Count();
+
+            FilterReservations(true);
 
             var reservations = GetReservations(resQuery
                 .Skip((currentPage - 1) * resPerPage)
@@ -168,6 +193,7 @@
             if (res != null)
             {
                 res.IsApproved = true;
+
                 _data.SaveChanges();
 
                 return true;
@@ -176,19 +202,51 @@
             return false;
         }
 
-        private void FilterReservations()
-        {
-            var reservations = _data
-                .Reservations
-                .Where(r => r.IsActive == true)
-                .ToList();
+        public bool DoesCatExist(string catId)
+            => _data.Cats.Any(c => c.Id == catId);
 
-            foreach (var res in reservations)
+        public bool DoesRoomTypeExist(int roomTypeId)
+            => _data.RoomTypes.Any(rt => rt.Id == roomTypeId);
+
+        private void FilterReservations(bool isAdmin, string userId = null)
+        {
+            if (!isAdmin)
             {
-                if (res.Departure < DateTime.UtcNow)
+                var reservations = _data
+                    .Reservations
+                    .Where(r => r.UserId == userId && r.ReservationState != Expired)
+                    .ToList();
+
+                foreach (var res in reservations)
                 {
-                    res.IsActive = false;
-                    _data.SaveChanges();
+                    if (res.Departure < DateTime.UtcNow)
+                    {
+                        res.ReservationState = Expired;
+
+                        _data.SaveChanges();
+                    }
+                }
+            }
+            else
+            {
+                var reservations = _data.Reservations
+                    .Where(r => r.ReservationState == Pending || r.ReservationState == Active)
+                    .ToList();
+
+                foreach (var res in reservations)
+                {
+                    if (res.Arrival < DateTime.UtcNow && res.Departure > DateTime.UtcNow && res.ReservationState != Active)
+                    {
+                        res.ReservationState = Active;
+
+                        _data.SaveChanges();
+                    }
+                    else if (res.Departure < DateTime.UtcNow)
+                    {
+                        res.ReservationState = Expired;
+
+                        _data.SaveChanges();
+                    }
                 }
             }
         }
@@ -208,16 +266,16 @@
         private IEnumerable<ResServiceModel> GetReservations(IQueryable<Reservation> resQuery)
             => resQuery
                 .Select(r => new ResServiceModel()
-                    {
-                        Id = r.Id,
-                        DateOfReservation = r.DateOfReservation,
-                        Arrival = r.Arrival.ToString("MM/dd/yyyy"),
-                        Departure = r.Departure.ToString("MM/dd/yyyy"),
-                        RoomTypeName = r.RoomType.Name,
-                        TotalPrice = $"${r.Payment.TotalPrice:f2}",
-                        IsActive = r.IsActive,
-                        IsApproved = r.IsApproved
-                    })
+                {
+                    Id = r.Id,
+                    DateOfReservation = r.DateOfReservation,
+                    Arrival = r.Arrival.ToString("MM/dd/yyyy"),
+                    Departure = r.Departure.ToString("MM/dd/yyyy"),
+                    RoomTypeName = r.RoomType.Name,
+                    TotalPrice = $"${r.Payment.TotalPrice:f2}",
+                    ReservationState = r.ReservationState,
+                    IsApproved = r.IsApproved
+                })
                 .ToList();
     }
 }

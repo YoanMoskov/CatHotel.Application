@@ -3,7 +3,6 @@
     using Models.Reservation.FormModels;
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
     public class Arrival : ValidationAttribute
     {
@@ -47,7 +46,7 @@
         protected override ValidationResult IsValid(object value,
             ValidationContext validationContext)
         {
-            var res = (ResFormModel) validationContext.ObjectInstance;
+            var res = (ResFormModel)validationContext.ObjectInstance;
 
             return res.CatIds == null ? new ValidationResult(GetErrorMessage(res)) : ValidationResult.Success;
         }

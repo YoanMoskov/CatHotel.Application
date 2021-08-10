@@ -3,7 +3,6 @@
     using Infrastructure;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Services.Models.Reservations;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

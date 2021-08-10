@@ -8,8 +8,9 @@
     public enum ResFiltering
     {
         Approved = 10,
-        Pending = 20,
+        PendingApproval = 20,
         Active = 30,
         Expired = 40,
+        Pending = 50
     }
 }

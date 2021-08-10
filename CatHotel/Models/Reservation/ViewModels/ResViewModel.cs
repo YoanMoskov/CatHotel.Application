@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Data.Models.Enums;
     using Services.Models.Reservations;
     using Services.Models.Reservations.CommonArea;
 
@@ -25,8 +26,8 @@
 
         public string TotalPrice { get; init; }
 
-        public  bool IsApproved { get; set; }
+        public ReservationState ReservationState { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsApproved { get; set; }
     }
 }
