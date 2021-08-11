@@ -19,6 +19,7 @@
             CreateMap<Cat, AdminCatServiceModel>();
             CreateMap<Cat, AdminCatEditViewModel>();
             CreateMap<Cat, ResCatServiceModel>();
+            CreateMap<Cat, AdminCatEditServiceModel>();
 
             CreateMap<ResServiceModel, ResViewModel>();
             CreateMap<Reservation, ResServiceModel>();
