@@ -1,10 +1,7 @@
 ﻿@{
     var area = User.IsInRole(AdminConstants.RoleName) ? AdminConstants.AreaName : string.Empty;
-    var title = area == AdminConstants.AreaName ? @ViewBag.Title : @ViewBag.TitleActive;
     var counter = 0;
 }
-<h2 class="text-center text-secondary my-sm-3">@title</h2>
-<hr />
 <div class="row">
     @foreach (var res in area == AdminConstants.AreaName ? @Model.Reservations : @Model)
     {

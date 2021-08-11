@@ -39,8 +39,8 @@
 
         public bool IsApproved { get; set; }
 
-        public ICollection<Cat> Cats { get; set; } = new List<Cat>();
-
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
+
+        public ICollection<CatReservation> CatsReservations { get; set; }
     }
 }

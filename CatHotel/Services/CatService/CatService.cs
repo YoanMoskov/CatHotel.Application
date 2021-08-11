@@ -160,6 +160,9 @@
         public bool DoesBreedExist(int breedId)
             => this._data.Breeds.Any(b => b.Id == breedId);
 
+        public bool UserHasCats(string UserId)
+            => _data.Cats.Any(c => c.UserId == UserId);
+
         public IEnumerable<CatBreedServiceModel> GetBreeds()
             => this._data
                 .Breeds

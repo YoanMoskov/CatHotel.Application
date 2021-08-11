@@ -53,6 +53,10 @@
 
         public IActionResult All()
         {
+            if (!_catService.UserHasCats(User.GetId()))
+            {
+                return RedirectToAction("Add");
+            }
             var catCollection = _catService.All(User.GetId());
 
             return View(catCollection);
@@ -76,7 +80,6 @@
             var cat = _catService.Cat(catId);
 
             var catEditForm = _mapper.Map<CatServiceModel>(cat);
-
 
             if (!ModelState.IsValid)
             {

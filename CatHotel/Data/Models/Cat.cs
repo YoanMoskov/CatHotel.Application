@@ -46,6 +46,6 @@
 
         public Grooming Grooming { get; set; }
 
-        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+        public ICollection<CatReservation> CatsReservations { get; set; } = new List<CatReservation>();
     }
 }

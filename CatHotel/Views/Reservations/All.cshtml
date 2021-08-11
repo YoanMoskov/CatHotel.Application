@@ -13,6 +13,8 @@
 {
     @if (@Model.Any(r => r.IsApproved && r.ReservationState != ReservationState.Expired))
     {
+        <h2 class="text-center text-secondary my-sm-3">@ViewBag.TitleActive</h2>
+        <hr />
         <partial name="_ReservationAllPartial" />
     }
 

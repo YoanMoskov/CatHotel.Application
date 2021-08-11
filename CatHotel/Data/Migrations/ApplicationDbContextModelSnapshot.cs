@@ -465,13 +465,13 @@ namespace CatHotel.Data.Migrations
             modelBuilder.Entity("CatHotel.Data.Models.CatReservation", b =>
                 {
                     b.HasOne("CatHotel.Data.Models.Cat", "Cat")
-                        .WithMany()
+                        .WithMany("CatsReservations")
                         .HasForeignKey("CatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CatHotel.Data.Models.Reservation", "Reservation")
-                        .WithMany()
+                        .WithMany("CatsReservations")
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -579,6 +579,11 @@ namespace CatHotel.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CatHotel.Data.Models.Cat", b =>
+                {
+                    b.Navigation("CatsReservations");
+                });
+
             modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
                     b.Navigation("Cats");
@@ -586,6 +591,8 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
                 {
+                    b.Navigation("CatsReservations");
+
                     b.Navigation("Rooms");
                 });
 

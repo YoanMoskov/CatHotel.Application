@@ -1,7 +1,6 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
     using Areas.Admin.Models.Enums.Reservations;
-    using CatService;
     using Data;
     using Data.Models;
     using Data.Models.Enums;
@@ -11,7 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.EntityFrameworkCore;
+    using System.Text;
 
     public class ReservationService : IReservationService
     {
@@ -72,21 +71,42 @@
 
         public string AreCatsInResTimeFrame(string[] catIds, DateTime arrival, DateTime departure)
         {
-            var reservations = new List<ResActiveServiceModel>();
-
-            var errorMessage = string.Empty;
+            var errorMessage = new StringBuilder();
+            var cats = new List<ResActiveCatServiceModel>();
             foreach (var catId in catIds)
             {
-                var isInTimeFrame = _data.Cats.Any(c => c.Reservations.Any(r =>
-                    !(r.Arrival < arrival && r.Departure < departure ||
-                      r.Arrival > arrival && r.Departure > departure)));
-                if (isInTimeFrame)
+                var reservations = _data.CatsReservations
+                    .Where(cr => cr.CatId == catId && cr.Reservation.ReservationState != Expired)
+                    .Select(r => new ResActiveServiceModel()
+                    {
+                        Arrival = r.Reservation.Arrival,
+                        Departure = r.Reservation.Departure
+                    });
+                foreach (var res in reservations)
                 {
-                    errorMessage = "There's a cat in reservation in this time frame already.";
+                    if (!(res.Arrival < arrival && res.Departure < departure && res.Departure < arrival && res.Arrival < departure || res.Arrival > arrival && res.Departure > departure && res.Departure > arrival && res.Arrival > departure))
+                    {
+                        cats.Add(GetCatInActiveCatServiceModel(catId));
+                    }
                 }
             }
 
-            return errorMessage;
+            if (cats.Count == 1)
+            {
+                errorMessage.AppendLine($"The cat: {cats.First().Name} - {cats.First().BreedName} is already in reservation in this time frame.");
+            }
+            else if (cats.Count > 1)
+            {
+                errorMessage.AppendLine("The cats: ");
+                foreach (var cat in cats)
+                {
+                    errorMessage.Append($"{cat.Name} - {cat.BreedName}, ");
+                }
+
+                errorMessage.Append("are already in reservation in this time frame.");
+            }
+
+            return errorMessage.ToString();
         }
 
         public IEnumerable<ResRoomTypeServiceModel> RoomTypes()
@@ -277,5 +297,15 @@
                     IsApproved = r.IsApproved
                 })
                 .ToList();
+
+        private ResActiveCatServiceModel GetCatInActiveCatServiceModel(string catId)
+            => _data.Cats
+                .Where(c => c.Id == catId)
+                .Select(c => new ResActiveCatServiceModel()
+                {
+                    Name = c.Name,
+                    BreedName = c.Breed.Name
+                })
+                .FirstOrDefault();
     }
 }

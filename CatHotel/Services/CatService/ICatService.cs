@@ -43,6 +43,8 @@
 
         bool DoesBreedExist(int breedId);
 
+        bool UserHasCats(string UserId);
+
         IEnumerable<CatBreedServiceModel> GetBreeds();
     }
 }
