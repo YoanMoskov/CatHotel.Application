@@ -121,21 +121,6 @@
             return true;
         }
 
-        public bool Delete(string catId)
-        {
-            var cat = _data.Cats.Find(catId);
-            if (cat == null)
-            {
-                return false;
-            }
-
-            cat.IsDeleted = true;
-
-            _data.SaveChanges();
-
-            return true;
-        }
-
         public bool AdminRestore(string catId)
         {
             var cat = _data.Cats.Find(catId);
@@ -151,7 +136,22 @@
             return true;
         }
 
-        public CatServiceModel Cat(string catId)
+        public bool Delete(string catId)
+        {
+            var cat = _data.Cats.Find(catId);
+            if (cat == null)
+            {
+                return false;
+            }
+
+            cat.IsDeleted = true;
+
+            _data.SaveChanges();
+
+            return true;
+        }
+
+        public CatServiceModel Get(string catId)
             => _data.Cats
                 .Where(c => c.Id == catId)
                 .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)

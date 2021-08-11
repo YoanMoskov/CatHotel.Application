@@ -39,7 +39,7 @@
 
         bool AdminRestore(string catId);
 
-        public CatServiceModel Cat(string catId);
+        public CatServiceModel Get(string catId);
 
         bool DoesBreedExist(int breedId);
 

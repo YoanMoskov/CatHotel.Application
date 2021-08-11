@@ -55,7 +55,7 @@
         [HttpPost]
         public IActionResult Edit(AdminEditCatFormModel c, string catId)
         {
-            var cat = _catService.Cat(catId);
+            var cat = _catService.Get(catId);
 
             if (!ModelState.IsValid)
             {
