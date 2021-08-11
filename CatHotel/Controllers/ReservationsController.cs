@@ -1,13 +1,14 @@
 ﻿namespace CatHotel.Controllers
 {
+    using Areas.Admin;
     using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Reservation.FormModels;
-    using Models.Reservation.ViewModels;
     using Services.CatService;
     using Services.ReservationService;
     using System.Linq;
+    using Data.Models.Enums;
 
     [Authorize]
     public class ReservationsController : Controller
@@ -65,25 +66,45 @@
 
             _resService.Create(res.Arrival, res.Departure, res.RoomTypeId, res.CatIds, User.GetId());
 
-            return RedirectToAction("All");
+            return RedirectToAction("PendingApproval");
         }
 
-        public IActionResult All()
+        public IActionResult Active()
         {
-            var resCollection = _resService.All(User.GetId())
-                .Select(r => new ResViewModel()
-                {
-                    Id = r.Id,
-                    DateOfReservation = r.DateOfReservation,
-                    Arrival = r.Arrival,
-                    Departure = r.Departure,
-                    RoomTypeName = r.RoomTypeName,
-                    TotalPrice = r.TotalPrice,
-                    Cats = r.Cats,
-                    ReservationState = r.ReservationState,
-                    IsApproved = r.IsApproved
-                })
-                .ToList();
+            if (User.IsInRole(AdminConstants.RoleName))
+            {
+                return Redirect("/Admin/Reservations/All");
+            }
+            var resCollection =
+                _resService
+                    .AllWithState(User.GetId(), ReservationState.Active, true)
+                    .ToList();
+            return View(resCollection);
+        }
+
+        public IActionResult Approved()
+        {
+            if (User.IsInRole(AdminConstants.RoleName))
+            {
+                return Redirect("/Admin/Reservations/All");
+            }
+            var resCollection =
+                _resService
+                    .AllWithState(User.GetId(), ReservationState.Pending, true)
+                    .ToList();
+            return View(resCollection);
+        }
+
+        public IActionResult PendingApproval()
+        {
+            if (User.IsInRole(AdminConstants.RoleName))
+            {
+                return Redirect("/Admin/Reservations/All");
+            }
+            var resCollection =
+                _resService
+                    .AllWithState(User.GetId(), ReservationState.Pending, false)
+                    .ToList();
             return View(resCollection);
         }
     }

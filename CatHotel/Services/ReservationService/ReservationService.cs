@@ -119,13 +119,13 @@
                 })
                 .ToList();
 
-        public IEnumerable<ResServiceModel> All(string userId)
+        public IEnumerable<ResServiceModel> AllWithState(string userId, ReservationState resState, bool isApproved)
         {
             FilterReservations(false, userId);
 
             var reservations = _data
                 .Reservations
-                .Where(r => r.UserId == userId && r.ReservationState != Expired)
+                .Where(r => r.UserId == userId && r.ReservationState == resState && r.IsApproved == isApproved)
                 .Select(r => new ResServiceModel()
                 {
                     Id = r.Id,
@@ -230,43 +230,34 @@
 
         private void FilterReservations(bool isAdmin, string userId = null)
         {
+            var reservations = new List<Reservation>();
             if (!isAdmin)
             {
-                var reservations = _data
+                reservations = _data
                     .Reservations
                     .Where(r => r.UserId == userId && r.ReservationState != Expired)
                     .ToList();
-
-                foreach (var res in reservations)
-                {
-                    if (res.Departure < DateTime.UtcNow)
-                    {
-                        res.ReservationState = Expired;
-
-                        _data.SaveChanges();
-                    }
-                }
             }
             else
             {
-                var reservations = _data.Reservations
+                reservations = _data.Reservations
                     .Where(r => r.ReservationState == Pending || r.ReservationState == Active)
                     .ToList();
+            }
 
-                foreach (var res in reservations)
+            foreach (var res in reservations)
+            {
+                if (res.Arrival < DateTime.UtcNow && res.Departure > DateTime.UtcNow && res.ReservationState != Active && res.IsApproved)
                 {
-                    if (res.Arrival < DateTime.UtcNow && res.Departure > DateTime.UtcNow && res.ReservationState != Active)
-                    {
-                        res.ReservationState = Active;
+                    res.ReservationState = Active;
 
-                        _data.SaveChanges();
-                    }
-                    else if (res.Departure < DateTime.UtcNow)
-                    {
-                        res.ReservationState = Expired;
+                    _data.SaveChanges();
+                }
+                else if (res.Departure < DateTime.UtcNow)
+                {
+                    res.ReservationState = Expired;
 
-                        _data.SaveChanges();
-                    }
+                    _data.SaveChanges();
                 }
             }
         }

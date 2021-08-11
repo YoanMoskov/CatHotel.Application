@@ -1,0 +1,35 @@
+﻿@model ResServiceModel
+<div class="col-md-4">
+    <div class="card mb-3 text-center">
+        <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png" alt="Reservation picture">
+        <div class="card-body">
+            <h5 class="card-title">Reservation</h5>
+            <p class="card-text">Arrival: @Model.Arrival</p>
+            <p class="card-text">Departure: @Model.Departure</p>
+            <p class="card-text">Room Type: @Model.RoomTypeName</p>
+            @if (@ViewData["area"] == AdminConstants.AreaName)
+            {
+                <p class="card-text">State: @Model.ReservationState</p>
+            }
+            <p>
+                <button class="btn primary-color" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails_@ViewData["counter"]" aria-expanded="false" aria-controls="collapseDetails_@ViewData["counter"]">
+                    Details
+                </button>
+                @if (ViewData["area"] == AdminConstants.AreaName && Model.IsApproved == false && Model.ReservationState == ReservationState.Pending)
+                {
+                    <a class="btn primary-color" asp-area="@AdminConstants.AreaName" asp-controller="Reservations" asp-action="Approve" asp-route-resId="@Model.Id">Approve</a>
+                }
+            </p>
+            <div class="collapse" id="collapseDetails_@ViewData["counter"]">
+                <ol class="card card-body center">
+                    <p class="card-text font-weight-bold center">Cats:</p>
+                    @foreach (var cat in @Model.Cats)
+                    {
+                        <li>@cat.Name - @cat.BreedName</li>
+                    }
+                </ol>
+                <p>Total price: @Model.TotalPrice</p>
+            </div>
+        </div>
+    </div>
+</div>

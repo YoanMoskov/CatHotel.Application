@@ -1,5 +1,6 @@
 ﻿namespace CatHotel.Controllers
 {
+    using Areas.Admin;
     using AutoMapper;
     using Data.Models;
     using Infrastructure;
@@ -53,7 +54,11 @@
 
         public IActionResult All()
         {
-            if (!_catService.UserHasCats(User.GetId()))
+            if (User.IsInRole(AdminConstants.RoleName))
+            {
+                return Redirect("/Admin/Cats/All");
+            }
+            if (!_catService.UserHasCats(User.GetId()) && !User.IsInRole(AdminConstants.RoleName))
             {
                 return RedirectToAction("Add");
             }
@@ -64,7 +69,7 @@
 
         public IActionResult Edit(string catId)
         {
-            var cat = _catService.Cat(catId);
+            var cat = _catService.Get(catId);
 
             return View(cat);
         }
@@ -77,7 +82,7 @@
                 return BadRequest();
             }
 
-            var cat = _catService.Cat(catId);
+            var cat = _catService.Get(catId);
 
             var catEditForm = _mapper.Map<CatServiceModel>(cat);
 

@@ -6,6 +6,7 @@
     using Models.Reservations.CommonArea;
     using System;
     using System.Collections.Generic;
+    using Data.Models.Enums;
     using Models.Cats.CommonArea;
 
     public interface IReservationService
@@ -17,7 +18,7 @@
             string[] catIds,
             string userId);
 
-        IEnumerable<ResServiceModel> All(string userId);
+        IEnumerable<ResServiceModel> AllWithState(string userId, ReservationState resState, bool isApproved);
 
         AdminQueryReservationServiceModel AdminAll(
             string roomName = null,
