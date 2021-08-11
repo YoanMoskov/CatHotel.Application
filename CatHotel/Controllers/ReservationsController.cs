@@ -1,21 +1,20 @@
 ﻿namespace CatHotel.Controllers
 {
     using Areas.Admin;
+    using Data.Models.Enums;
     using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Reservation.FormModels;
-    using Services.CatService;
     using Services.ReservationService;
     using System.Linq;
-    using Data.Models.Enums;
 
     [Authorize]
     public class ReservationsController : Controller
     {
         private readonly IReservationService _resService;
 
-        public ReservationsController(IReservationService resService, ICatService catService)
+        public ReservationsController(IReservationService resService)
         {
             this._resService = resService;
         }

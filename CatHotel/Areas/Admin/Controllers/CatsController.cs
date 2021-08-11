@@ -43,10 +43,7 @@
 
         public IActionResult Edit(string catId)
         {
-            var cat = _data.Cats
-                .Where(c => c.Id == catId)
-                .ProjectTo<AdminCatEditViewModel>(_mapper.ConfigurationProvider)
-                .FirstOrDefault();
+            var cat = _catService.AdminGet(catId);
             cat.Breeds = _catService.GetBreeds();
 
             return View(cat);
@@ -55,7 +52,8 @@
         [HttpPost]
         public IActionResult Edit(AdminEditCatFormModel c, string catId)
         {
-            var cat = _catService.Get(catId);
+            var cat = _catService.AdminGet(catId);
+            cat.Breeds = _catService.GetBreeds();
 
             if (!ModelState.IsValid)
             {

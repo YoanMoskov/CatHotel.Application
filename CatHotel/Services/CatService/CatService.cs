@@ -157,6 +157,12 @@
                 .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
+        public AdminCatEditServiceModel AdminGet(string catId)
+            => _data.Cats
+                .Where(c => c.Id == catId)
+                .ProjectTo<AdminCatEditServiceModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefault();
+
         public bool DoesBreedExist(int breedId)
             => this._data.Breeds.Any(b => b.Id == breedId);
 
