@@ -9,7 +9,6 @@
     using Services.ReservationService;
     using System.Linq;
 
-    [Authorize]
     public class ReservationsController : Controller
     {
         private readonly IReservationService _resService;
@@ -19,6 +18,7 @@
             this._resService = resService;
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return View(new ResFormModel()
@@ -29,6 +29,7 @@
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(ResFormModel res)
         {
             if (res == null)
@@ -68,6 +69,7 @@
             return RedirectToAction("PendingApproval");
         }
 
+        [Authorize]
         public IActionResult Active()
         {
             if (User.IsInRole(AdminConstants.RoleName))
@@ -81,6 +83,7 @@
             return View(resCollection);
         }
 
+        [Authorize]
         public IActionResult Approved()
         {
             if (User.IsInRole(AdminConstants.RoleName))
@@ -94,6 +97,7 @@
             return View(resCollection);
         }
 
+        [Authorize]
         public IActionResult PendingApproval()
         {
             if (User.IsInRole(AdminConstants.RoleName))

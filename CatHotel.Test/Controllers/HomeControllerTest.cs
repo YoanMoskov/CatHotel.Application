@@ -8,7 +8,7 @@
     public class HomeControllerTest
     {
         [Fact]
-        public void IndexShouldReturnViewWithNoModel()
+        public void GetIndexShouldReturnViewWithNoModel()
             => MyMvc
                 .Pipeline()
                 .ShouldMap("/")
@@ -20,7 +20,7 @@
                     .WithNoModel());
 
         [Fact]
-        public void ErrorShouldReturnViewWithModel()
+        public void GetErrorShouldReturnViewWithModel()
             => MyMvc
                 .Pipeline()
                 .ShouldMap("/Home/Error")
