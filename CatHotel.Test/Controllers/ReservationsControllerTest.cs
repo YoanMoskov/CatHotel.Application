@@ -8,10 +8,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Models.Reservation.ViewModels;
     using Xunit;
 
     using static Data.Reservations;
+    using static Data.Cats;
     using static WebConstants;
 
     public class ReservationsControllerTest

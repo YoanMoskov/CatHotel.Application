@@ -7,9 +7,11 @@
 
     public class EditCatFormModel
     {
+        [Required]
         [Range(MinAge, MaxAge, ErrorMessage = "Age can be between 1 and 20 years.")]
         public int Age { get; init; }
 
+        [Required]
         [Url(ErrorMessage = "Please provide a valid URL.")]
         [DisplayName("Photo Url")]
         public string PhotoUrl { get; init; }

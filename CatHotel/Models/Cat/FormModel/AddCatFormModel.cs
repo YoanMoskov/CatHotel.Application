@@ -10,16 +10,20 @@
 
     public class AddCatFormModel
     {
+        [Required]
         [StringLength(MaxNameLength, MinimumLength = MinNameLength)]
         public string Name { get; init; }
 
+        [Required]
         [Range(MinAge, MaxAge, ErrorMessage = "Age can be between 1 and 20 years.")]
         public int Age { get; init; }
 
+        [Required]
         [Url(ErrorMessage = "Please provide a valid URL.")]
         [DisplayName("Photo Url")]
         public string PhotoUrl { get; init; }
 
+        [Required]
         [Display(Name = "Breed")]
         public int BreedId { get; init; }
 

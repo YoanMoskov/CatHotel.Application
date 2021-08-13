@@ -1,31 +1,12 @@
 ﻿namespace CatHotel.Test.Data
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using CatHotel.Data.Models;
-    using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
-    using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
+
+    using static Cats;
 
     public static class Reservations
     {
-        public static Cat TestCat
-            => new Cat
-            {
-                Id = "1",
-                Name = "test",
-                Age = 2,
-                PhotoUrl = "",
-                DateAdded = DateTime.UtcNow,
-                BreedId = 1,
-                Breed = new Breed()
-                {
-                    Id = 1,
-                    Name = "Test"
-                },
-                UserId = "TestId"
-            };
-
         public static RoomType TestRoom
             => new RoomType
             {
