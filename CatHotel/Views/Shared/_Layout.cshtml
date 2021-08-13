@@ -5,20 +5,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CatHotel</title>
+    <title>@ViewBag.Title - CatHotel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/custom.css" />
 </head>
 
 @{
-    var area = User.IsInRole(AdminConstants.RoleName) ? AdminConstants.AreaName : string.Empty;
+    var area = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
 }
 
 <body>
     <header>
         <nav class="navbar navbar-expand-lg primary-color">
             <div class="container">
-                <a class="navbar-brand" asp-area="@ViewBag.Area" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" style="width: 50px; height: 50px" alt="Logo" /></a>
+                <a class="navbar-brand" asp-area="@area" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" style="width: 50px; height: 50px" alt="Logo" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            @if (area == AdminConstants.AreaName)
+                            @if (area == AdminConstants.AdminAreaName)
                             {
                                 <a type="button" class="btn btn-toolbar" asp-area="@area" asp-controller="Cats" asp-action="All">Cats</a>
                             }
@@ -45,9 +45,9 @@
                         </li>
                         <li class="nav-item">
 
-                            @if (area == AdminConstants.AreaName)
+                            @if (area == AdminConstants.AdminAreaName)
                             {
-                                <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AreaName" asp-controller="Reservations" asp-action="All">Reservations</a>
+                                <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="Reservations" asp-action="All">Reservations</a>
                             }
                             else if (User.Identity.IsAuthenticated)
                             {

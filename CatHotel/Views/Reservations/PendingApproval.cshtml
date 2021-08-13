@@ -6,7 +6,7 @@
 
     var counter = 0;
 
-    ViewData["area"] = User.IsInRole(AdminConstants.RoleName) ? AdminConstants.AreaName : string.Empty;
+    ViewData["area"] = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
 }
 
 @if (@Model.Any())

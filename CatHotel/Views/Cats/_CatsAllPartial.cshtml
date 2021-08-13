@@ -1,9 +1,9 @@
 ﻿@{
-    var area = User.IsInRole(AdminConstants.RoleName) ? AdminConstants.AreaName : string.Empty;
+    var area = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
 }
 <div class="container">
-<div class="row">
-        @foreach (var cat in area == AdminConstants.AreaName ? @Model.Cats : @Model)
+    <div class="row">
+        @foreach (var cat in area == AdminConstants.AdminAreaName ? @Model.Cats : @Model)
         {
             <div class="col-md-4 d-flex align-items-stretch">
                 <div class="card mb-3">
@@ -14,9 +14,9 @@
                         <p class="mt-auto">Breed: @cat.BreedName</p>
                         <p class="mt-auto">
                             <a asp-area="@area" asp-action="Edit" class="btn primary-color" asp-route-catId="@cat.Id">Edit</a>
-                            @if (area == AdminConstants.AreaName && cat.IsDeleted)
+                            @if (area == AdminConstants.AdminAreaName && cat.IsDeleted)
                             {
-                                <a asp-area="@AdminConstants.AreaName" asp-action="Restore" class="btn primary-color" asp-route-catId="@cat.Id">Restore</a>
+                                <a asp-area="@AdminConstants.AdminAreaName" asp-action="Restore" class="btn primary-color" asp-route-catId="@cat.Id">Restore</a>
                             }
                             else
                             {

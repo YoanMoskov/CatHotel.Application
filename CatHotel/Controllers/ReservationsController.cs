@@ -1,6 +1,5 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Areas.Admin;
     using Data.Models.Enums;
     using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
@@ -8,6 +7,8 @@
     using Models.Reservation.FormModels;
     using Services.ReservationService;
     using System.Linq;
+
+    using static WebConstants;
 
     public class ReservationsController : Controller
     {
@@ -18,7 +19,6 @@
             this._resService = resService;
         }
 
-        [Authorize]
         public IActionResult Create()
         {
             return View(new ResFormModel()
@@ -29,7 +29,7 @@
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = UserRoleName)]
         public IActionResult Create(ResFormModel res)
         {
             if (res == null)
@@ -69,13 +69,8 @@
             return RedirectToAction("PendingApproval");
         }
 
-        [Authorize]
         public IActionResult Active()
         {
-            if (User.IsInRole(AdminConstants.RoleName))
-            {
-                return Redirect("/Admin/Reservations/All");
-            }
             var resCollection =
                 _resService
                     .AllWithState(User.GetId(), ReservationState.Active, true)
@@ -83,13 +78,8 @@
             return View(resCollection);
         }
 
-        [Authorize]
         public IActionResult Approved()
         {
-            if (User.IsInRole(AdminConstants.RoleName))
-            {
-                return Redirect("/Admin/Reservations/All");
-            }
             var resCollection =
                 _resService
                     .AllWithState(User.GetId(), ReservationState.Pending, true)
@@ -97,13 +87,8 @@
             return View(resCollection);
         }
 
-        [Authorize]
         public IActionResult PendingApproval()
         {
-            if (User.IsInRole(AdminConstants.RoleName))
-            {
-                return Redirect("/Admin/Reservations/All");
-            }
             var resCollection =
                 _resService
                     .AllWithState(User.GetId(), ReservationState.Pending, false)

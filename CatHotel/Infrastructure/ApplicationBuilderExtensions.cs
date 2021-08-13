@@ -11,6 +11,7 @@
     using System.Threading.Tasks;
 
     using static Areas.Admin.AdminConstants;
+    using static WebConstants;
 
     public static class ApplicationBuilderExtensions
     {
@@ -24,6 +25,7 @@
 
             SeedBreeds(services);
             SeedRoomTypes(services);
+            SeedRoles(services);
             SeedAdmin(services);
 
             return app;
@@ -75,20 +77,10 @@
         private static void SeedAdmin(IServiceProvider services)
         {
             var userManager = services.GetRequiredService<UserManager<User>>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
             Task
                 .Run(async () =>
                 {
-                    if (await roleManager.RoleExistsAsync(RoleName))
-                    {
-                        return;
-                    }
-
-                    var role = new IdentityRole { Name = RoleName };
-
-                    await roleManager.CreateAsync(role);
-
                     const string adminEmail = "admin@ch.com";
                     const string adminPassword = "catHotel12";
 
@@ -102,7 +94,28 @@
 
                     await userManager.CreateAsync(user, adminPassword);
 
-                    await userManager.AddToRoleAsync(user, role.Name);
+                    await userManager.AddToRoleAsync(user, AdminRoleName);
+                })
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        private static void SeedRoles(IServiceProvider services)
+        {
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task
+                .Run(async () =>
+                {
+                    if (!await roleManager.RoleExistsAsync(AdminRoleName))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(AdminRoleName));
+                    }
+
+                    if (!await roleManager.RoleExistsAsync(UserRoleName))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(UserRoleName));
+                    }
                 })
                 .GetAwaiter()
                 .GetResult();

@@ -13,12 +13,12 @@
         [Arrival]
         [Required]
         [BindProperty, DataType(DataType.Date)]
-        public DateTime Arrival { get; set; } = DateTime.UtcNow.ToLocalTime();
+        public DateTime Arrival { get; set; }
 
         [Required]
         [Departure]
         [BindProperty, DataType(DataType.Date)]
-        public DateTime Departure { get; set; } = DateTime.UtcNow.ToLocalTime();
+        public DateTime Departure { get; set; }
 
         [CatIds]
         public string[] CatIds { get; set; }

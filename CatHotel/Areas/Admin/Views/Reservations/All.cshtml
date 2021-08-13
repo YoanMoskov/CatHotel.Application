@@ -6,7 +6,7 @@
 
     var counter = 0;
 
-    ViewData["area"] = User.IsInRole(AdminConstants.RoleName) ? AdminConstants.AreaName : string.Empty;
+    ViewData["area"] = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
     ViewData["counter"] = counter;
 }
 <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
@@ -98,7 +98,7 @@ else
         @foreach (var res in @Model.Reservations)
         {
             ViewData["counter"] = counter;
-            <partial name="~/Views/Reservations/_ReservationPartial.cshtml" for="@res" view-data="ViewData"/>
+            <partial name="~/Views/Reservations/_ReservationPartial.cshtml" for="@res" view-data="ViewData" />
             counter += 1;
         }
     </div>

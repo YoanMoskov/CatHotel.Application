@@ -1,12 +1,10 @@
 ﻿namespace CatHotel.Areas.Admin.Controllers
 {
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
     using Data;
     using Microsoft.AspNetCore.Mvc;
     using Models.Cats;
     using Services.CatService;
-    using System.Linq;
 
     public class CatsController : AdminController
     {
@@ -67,7 +65,7 @@
 
         public IActionResult Restore(string catId)
         {
-            if (!User.IsInRole(AdminConstants.RoleName))
+            if (!User.IsInRole(AdminConstants.AdminRoleName))
             {
                 return Unauthorized();
             }

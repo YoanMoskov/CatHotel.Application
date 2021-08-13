@@ -8,6 +8,8 @@
     using Models.User.FormModel;
     using System.Threading.Tasks;
 
+    using static WebConstants;
+
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
@@ -47,9 +49,11 @@
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber
                 };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, UserRoleName);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }

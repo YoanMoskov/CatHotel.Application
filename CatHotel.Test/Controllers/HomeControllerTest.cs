@@ -9,23 +9,18 @@
     {
         [Fact]
         public void GetIndexShouldReturnViewWithNoModel()
-            => MyMvc
-                .Pipeline()
-                .ShouldMap("/")
-                .To<HomeController>(h => h.Index())
-                .Which(controller => controller
-                    .WithUser("TestUser"))
+            => MyController<HomeController>
+                .Instance()
+                .Calling(c => c.Index())
                 .ShouldReturn()
                 .View(view => view
                     .WithNoModel());
 
         [Fact]
         public void GetErrorShouldReturnViewWithModel()
-            => MyMvc
-                .Pipeline()
-                .ShouldMap("/Home/Error")
-                .To<HomeController>(a => a.Error())
-                .Which()
+            => MyController<HomeController>
+                .Instance()
+                .Calling(c => c.Error())
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ErrorViewModel>());

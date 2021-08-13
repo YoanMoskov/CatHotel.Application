@@ -10,7 +10,9 @@
     using Services.CatService;
     using Services.Models.Cats.CommonArea;
 
-    [Authorize]
+    using static WebConstants;
+
+    [Authorize(Roles = UserRoleName)]
     public class CatsController : Controller
     {
         private readonly ICatService _catService;
@@ -54,11 +56,7 @@
 
         public IActionResult All()
         {
-            if (User.IsInRole(AdminConstants.RoleName))
-            {
-                return Redirect("/Admin/Cats/All");
-            }
-            if (!_catService.UserHasCats(User.GetId()) && !User.IsInRole(AdminConstants.RoleName))
+            if (!_catService.UserHasCats(User.GetId()) && !User.IsInRole(AdminConstants.AdminRoleName))
             {
                 return RedirectToAction("Add");
             }
