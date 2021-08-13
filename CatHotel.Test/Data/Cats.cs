@@ -28,5 +28,12 @@
                 Id = 1,
                 Name = "TestBreed"
             };
+
+        public static Breed TestBreed2
+            => new Breed()
+            {
+                Id = 2,
+                Name = "TestBreed2"
+            };
     }
 }

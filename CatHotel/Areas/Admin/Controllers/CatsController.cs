@@ -9,16 +9,10 @@
     public class CatsController : AdminController
     {
         private readonly ICatService _catService;
-        private readonly IMapper _mapper;
-        private readonly ApplicationDbContext _data;
 
-        public CatsController(
-            ICatService catService,
-            IMapper mapper, ApplicationDbContext data)
+        public CatsController(ICatService catService)
         {
             _catService = catService;
-            _mapper = mapper;
-            _data = data;
         }
 
         public IActionResult All([FromQuery] AdminAllCatsQueryModel query)
@@ -65,11 +59,6 @@
 
         public IActionResult Restore(string catId)
         {
-            if (!User.IsInRole(AdminConstants.AdminRoleName))
-            {
-                return Unauthorized();
-            }
-
             _catService.AdminRestore(catId);
 
             return RedirectToAction("All");
