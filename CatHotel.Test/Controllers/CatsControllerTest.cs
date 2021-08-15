@@ -8,6 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
+
     using static Data.Cats;
     using static WebConstants;
 
@@ -159,11 +160,32 @@
                 .InvalidModelState();
 
         [Fact]
-        public void DeleteShouldBeForUserRoleAndReturnNoView()
+        public void DeleteWithNullCatIdShouldBeForUserRoleAndRedirectToView()
             => MyController<CatsController>
                 .Instance(controller => controller
-                    .WithUser(c => c.InRole(UserRoleName)))
+                    .WithUser(c => c.InRole(UserRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestCat))))
                 .Calling(c => c.Delete(null))
+                .ShouldReturn()
+                .RedirectToAction("All");
+
+        [Fact]
+        public void DeleteShouldBeForUserRoleAndRedirectToViewSetCatIsDeletedTrue()
+            => MyController<CatsController>
+                .Instance(controller => controller
+                    .WithUser(c => c.InRole(UserRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestCat))))
+                .Calling(c => c.Delete(TestCat.Id))
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Cat>(cats => cats
+                        .Any(c =>
+                        c.IsDeleted)))
+                .AndAlso()
                 .ShouldReturn()
                 .RedirectToAction("All");
     }

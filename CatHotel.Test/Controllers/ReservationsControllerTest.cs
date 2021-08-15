@@ -8,6 +8,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CatHotel.Data.Models.Enums;
     using Xunit;
 
     using static Data.Reservations;
@@ -28,7 +29,7 @@
 
         [Theory]
         [InlineData(1, 2)]
-        public void PostCreateShouldBeForUserRoleAndReturnRedirectWithValidModel(
+        public void PostCreateCatShouldBeForUserRoleAndReturnRedirectWithValidModel(
             double daysAddArrival,
             double daysAddDeparture)
         {
@@ -136,34 +137,98 @@
                     .WithModelOfType<ResFormModel>());
 
         [Fact]
-        public void GetActiveShouldBeForUserRoleAndReturnViewWithModel()
+        public void PostCreateWithTwoCatsShouldBeWithInvalidModelStateIfThereAreCatsInOtherReservationInThisTimeFrame()
+            => MyController<ReservationsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(UserRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestReservation, TestCatReservations[0], TestCatReservations[1], TestRoom, TestCats[0], TestCats[1]))))
+                .Calling(c => c.Create(new ResFormModel()
+                {
+                    RoomTypeId = TestRoom.Id,
+                    CatIds = new[] { TestCats[0].Id, TestCats[1].Id },
+                    Arrival = TestReservation.Arrival,
+                    Departure = TestReservation.Departure
+                }))
+                .ShouldHave()
+                .ActionAttributes(attr => attr
+                    .RestrictingForHttpMethod(HttpMethod.Post))
+                .InvalidModelState()
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ResFormModel>());
 
-=> MyController<ReservationsController>
-    .Instance(controller => controller
-        .WithUser(c => c.InRole(UserRoleName)))
-    .Calling(c => c.Active())
-    .ShouldReturn()
-    .View(view => view
-        .WithModelOfType<List<ResServiceModel>>());
+        [Fact]
+        public void GetActiveShouldBeForUserRoleAndReturnViewWithModel()
+            => MyController<ReservationsController>
+                .Instance(controller => controller
+                    .WithUser(c => c.InRole(UserRoleName)).
+                    WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestActiveReservation))))
+                .Calling(c => c.Active())
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<List<ResServiceModel>>(model => model.Count == 1));
+
+        [Fact]
+        public void GetActiveWithPendingReservationShouldBecomeActive()
+           => MyController<ReservationsController>
+               .Instance(controller => controller
+                   .WithUser(c => c.InRole(UserRoleName)).
+                   WithData(data => data
+                       .WithEntities(entities => entities
+                           .AddRange(TestActiveFromPendingReservation))))
+               .Calling(c => c.Active())
+               .ShouldHave()
+               .Data(data => data
+                   .WithSet<Reservation>(reservations => reservations
+                       .Any(r =>
+                           r.ReservationState == ReservationState.Active)))
+               .AndAlso()
+               .ShouldReturn()
+               .View(view => view
+                   .WithModelOfType<List<ResServiceModel>>(model => model.Count == 1));
+
+        [Fact]
+        public void GetExpiredWithActiveReservationShouldBecomeExpired()
+            => MyController<ReservationsController>
+                .Instance(controller => controller
+                    .WithUser(c => c.InRole(UserRoleName)).
+                    WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestExpiredFromActiveReservation))))
+                .Calling(c => c.Active())
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Reservation>(reservations => reservations
+                        .Any(r =>
+                            r.ReservationState == ReservationState.Expired)))
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<List<ResServiceModel>>(model => model.Count == 0));
 
         [Fact]
         public void GetApprovedShouldBeForUserRoleAndReturnViewWithModel()
-            => MyController<ReservationsController>
-                .Instance(controller => controller
-                    .WithUser(c => c.InRole(UserRoleName)))
-                .Calling(c => c.Approved())
-                .ShouldReturn()
-                .View(view => view
-                    .WithModelOfType<List<ResServiceModel>>());
+             => MyController<ReservationsController>
+                 .Instance(controller => controller
+                     .WithUser(c => c.InRole(UserRoleName)))
+                 .Calling(c => c.Approved())
+                 .ShouldReturn()
+                 .View(view => view
+                     .WithModelOfType<List<ResServiceModel>>());
 
         [Fact]
         public void GetPendingApprovalShouldBeForUserRoleAndReturnViewWithModel()
-            => MyController<ReservationsController>
-                .Instance(controller => controller
-                    .WithUser(c => c.InRole(UserRoleName)))
-                .Calling(c => c.PendingApproval())
-                .ShouldReturn()
-                .View(view => view
-                    .WithModelOfType<List<ResServiceModel>>());
+             => MyController<ReservationsController>
+                 .Instance(controller => controller
+                     .WithUser(c => c.InRole(UserRoleName)))
+                 .Calling(c => c.PendingApproval())
+                 .ShouldReturn()
+                 .View(view => view
+                     .WithModelOfType<List<ResServiceModel>>());
     }
 }
