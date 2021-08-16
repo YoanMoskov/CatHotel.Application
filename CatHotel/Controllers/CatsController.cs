@@ -60,6 +60,7 @@
             {
                 return RedirectToAction("Add");
             }
+
             var catCollection = _catService.All(User.GetId());
 
             return View(catCollection);

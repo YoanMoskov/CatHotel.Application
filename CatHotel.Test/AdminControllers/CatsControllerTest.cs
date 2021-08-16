@@ -1,9 +1,14 @@
-﻿namespace CatHotel.Test.AdminControllers
+﻿using System.Linq;
+using CatHotel.Areas.Admin.Models.Enums.Cats;
+using CatHotel.Areas.Admin.Models.Enums.Reservations;
+using CatHotel.Areas.Admin.Models.Reservations;
+using CatHotel.Data.Models;
+
+namespace CatHotel.Test.AdminControllers
 {
     using Areas.Admin.Controllers;
     using Areas.Admin.Models.Cats;
     using MyTested.AspNetCore.Mvc;
-    using RestSharp;
     using Services.Models.Cats.AdminArea;
     using Xunit;
 
@@ -23,6 +28,48 @@
                     .WithModelOfType<AdminAllCatsQueryModel>());
 
         [Fact]
+        public void AllWithFilteringAvailableAndSortingOldestShouldWithReturnViewWithModelWithMatchingFilteringSorting()
+            => MyController<CatsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(AdminRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestAvailableCat, TestBreed))))
+                .Calling(c => c.All(new AdminAllCatsQueryModel()
+                {
+                    Breed = TestCat.Breed.Id.ToString(),
+                    Filtering = CatFiltering.Available,
+                    Sorting = CatSorting.Oldest
+                }))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<AdminAllCatsQueryModel>(c =>
+                        c.Breed == TestCat.Breed.Id.ToString() &&
+                        c.Filtering == CatFiltering.Available &&
+                        c.Sorting == CatSorting.Oldest &&
+                        c.TotalCats == 1));
+
+        [Fact]
+        public void AllWithFilteringDeletedShouldWithReturnViewWithModelWithMatchingFiltering()
+            => MyController<CatsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(AdminRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestDeletedCatCat, TestBreed))))
+                .Calling(c => c.All(new AdminAllCatsQueryModel()
+                {
+                    Breed = TestCat.Breed.Id.ToString(),
+                    Filtering = CatFiltering.Deleted
+                }))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<AdminAllCatsQueryModel>(c =>
+                        c.Breed == TestCat.Breed.Id.ToString() &&
+                        c.Filtering == CatFiltering.Deleted &&
+                        c.TotalCats == 1));
+
+        [Fact]
         public void EditShouldReturnViewWithModel()
             => MyController<CatsController>
                 .Instance(controller => controller
@@ -34,6 +81,15 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AdminCatEditServiceModel>());
+
+        [Fact]
+        public void EditWithInvalidIdShouldReturnBadRequest()
+            => MyController<CatsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(AdminRoleName)))
+                .Calling(c => c.Edit("InvalidId"))
+                .ShouldReturn()
+                .BadRequest();
 
         [Fact]
         public void PostEditShouldPassAndRedirectToAction()
@@ -56,6 +112,19 @@
                 .AndAlso()
                 .ShouldReturn()
                 .RedirectToAction("All");
+
+        [Fact]
+        public void PostEditWithInvalidIdShouldAndReturnBadRequest()
+            => MyController<CatsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(AdminRoleName)))
+                .Calling(c => c.Edit(new AdminEditCatFormModel(), "Invalid"))
+                .ShouldHave()
+                .ActionAttributes(attr => attr
+                    .RestrictingForHttpMethod(HttpMethod.Post))
+                .AndAlso()
+                .ShouldReturn()
+                .BadRequest();
 
         [Fact]
         public void PostEditShouldReturnViewWithInvalidModelState()
@@ -81,9 +150,31 @@
         public void RestoreShouldRedirectToAction()
             => MyController<CatsController>
                 .Instance(controller => controller
-                    .WithUser(u => u.InRole(AdminRoleName)))
+                    .WithUser(u => u.InRole(AdminRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestCat))))
                 .Calling(c => c.Restore(TestCat.Id))
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Cat>(cats => cats
+                        .Any(c =>
+                            c.Id == TestCat.Id &&
+                            c.IsDeleted == false)))
+                .AndAlso()
                 .ShouldReturn()
                 .RedirectToAction("All");
+
+        [Fact]
+        public void RestoreWithInvalidIdShouldReturnBadRequest()
+            => MyController<CatsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(AdminRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestCat))))
+                .Calling(c => c.Restore("Invalid"))
+                .ShouldReturn()
+                .BadRequest();
     }
 }

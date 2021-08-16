@@ -72,5 +72,30 @@
                 Id = 2,
                 Name = "TestBreed2"
             };
+
+        public static Cat TestAvailableCat
+            => new Cat
+            {
+                Id = "1",
+                Name = "test",
+                Age = 2,
+                PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                DateAdded = DateTime.UtcNow,
+                BreedId = 1,
+                UserId = "TestId",
+                IsDeleted = false
+            };
+        public static Cat TestDeletedCatCat
+            => new Cat
+            {
+                Id = "1",
+                Name = "test",
+                Age = 2,
+                PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                DateAdded = DateTime.UtcNow,
+                BreedId = 1,
+                UserId = "TestId",
+                IsDeleted = true
+            };
     }
 }

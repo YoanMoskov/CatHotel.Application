@@ -31,7 +31,7 @@
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
-                Arrival = DateTime.UtcNow.AddDays(1),
+                Arrival = DateTime.UtcNow.AddDays(-2),
                 Departure = DateTime.UtcNow.AddDays(2),
                 UserId = "TestId",
                 ReservationState = ReservationState.Active,
@@ -70,6 +70,74 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Active,
                 IsApproved = true,
+                Payment = new Payment()
+                {
+                    TotalPrice = 0
+                },
+                RoomType = TestRoom
+            };
+
+        public static Reservation TestExpiredReservation
+            => new Reservation()
+            {
+                Id = "1",
+                DateOfReservation = DateTime.UtcNow,
+                Arrival = DateTime.UtcNow.AddDays(-10),
+                Departure = DateTime.UtcNow.AddDays(-8),
+                UserId = "TestId",
+                ReservationState = ReservationState.Expired,
+                IsApproved = true,
+                Payment = new Payment()
+                {
+                    TotalPrice = 0
+                },
+                RoomType = TestRoom
+            };
+
+        public static Reservation TestPendingReservation
+            => new Reservation()
+            {
+                Id = "1",
+                DateOfReservation = DateTime.UtcNow,
+                Arrival = DateTime.UtcNow.AddDays(8),
+                Departure = DateTime.UtcNow.AddDays(10),
+                UserId = "TestId",
+                ReservationState = ReservationState.Pending,
+                IsApproved = true,
+                Payment = new Payment()
+                {
+                    TotalPrice = 0
+                },
+                RoomType = TestRoom
+            };
+
+        public static Reservation TestApprovedReservation
+            => new Reservation()
+            {
+                Id = "1",
+                DateOfReservation = DateTime.UtcNow,
+                Arrival = DateTime.UtcNow.AddDays(8),
+                Departure = DateTime.UtcNow.AddDays(10),
+                UserId = "TestId",
+                ReservationState = ReservationState.Pending,
+                IsApproved = true,
+                Payment = new Payment()
+                {
+                    TotalPrice = 0
+                },
+                RoomType = TestRoom
+            };
+
+        public static Reservation TestPendingApprovalReservation
+            => new Reservation()
+            {
+                Id = "1",
+                DateOfReservation = DateTime.UtcNow,
+                Arrival = DateTime.UtcNow.AddDays(1),
+                Departure = DateTime.UtcNow.AddDays(2),
+                UserId = "TestId",
+                ReservationState = ReservationState.Pending,
+                IsApproved = false,
                 Payment = new Payment()
                 {
                     TotalPrice = 0

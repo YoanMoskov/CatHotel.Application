@@ -87,11 +87,6 @@
         {
             var cat = FindCatById(catId);
 
-            if (cat == null)
-            {
-                return false;
-            }
-
             cat.Age = age;
             cat.PhotoUrl = photoUrl;
             cat.AdditionalInformation = additionalInformation;
@@ -104,11 +99,6 @@
         public bool AdminEdit(string name, int age, string photoUrl, int breedId, string additionalInformation, string catId)
         {
             var cat = FindCatById(catId);
-
-            if (cat == null)
-            {
-                return false;
-            }
 
             cat.Name = name;
             cat.Age = age;
@@ -124,6 +114,7 @@
         public bool AdminRestore(string catId)
         {
             var cat = _data.Cats.Find(catId);
+
             if (cat == null)
             {
                 return false;

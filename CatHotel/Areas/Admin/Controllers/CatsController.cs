@@ -36,6 +36,12 @@
         public IActionResult Edit(string catId)
         {
             var cat = _catService.AdminGet(catId);
+
+            if (cat == null)
+            {
+                return BadRequest();
+            }
+            
             cat.Breeds = _catService.GetBreeds();
 
             return View(cat);
@@ -45,6 +51,12 @@
         public IActionResult Edit(AdminEditCatFormModel c, string catId)
         {
             var cat = _catService.AdminGet(catId);
+
+            if (cat == null)
+            {
+                return BadRequest();
+            }
+
             cat.Breeds = _catService.GetBreeds();
 
             if (!ModelState.IsValid)
@@ -59,7 +71,10 @@
 
         public IActionResult Restore(string catId)
         {
-            _catService.AdminRestore(catId);
+            if (!_catService.AdminRestore(catId))
+            {
+                return BadRequest();
+            }
 
             return RedirectToAction("All");
         }
