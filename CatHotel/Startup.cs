@@ -13,7 +13,6 @@ namespace CatHotel
     using Microsoft.Extensions.Hosting;
     using Services.CatService;
     using Services.ReservationService;
-    using Services.UserService;
 
     public class Startup
     {
@@ -54,7 +53,6 @@ namespace CatHotel
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services
-                .AddTransient<IUserService, UserService>()
                 .AddTransient<ICatService, CatService>()
                 .AddTransient<IReservationService, ReservationService>();
 

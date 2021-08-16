@@ -1,7 +1,5 @@
 ﻿namespace CatHotel.Areas.Admin.Controllers
 {
-    using AutoMapper;
-    using Data;
     using Microsoft.AspNetCore.Mvc;
     using Models.Cats;
     using Services.CatService;

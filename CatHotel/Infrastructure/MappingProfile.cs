@@ -1,6 +1,5 @@
 ﻿namespace CatHotel.Infrastructure
 {
-    using Areas.Admin.Models.Cats;
     using AutoMapper;
     using Data.Models;
     using Models.Cat.FormModel;

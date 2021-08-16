@@ -7,7 +7,6 @@
     using System;
     using System.Collections.Generic;
     using Data.Models.Enums;
-    using Models.Cats.CommonArea;
 
     public interface IReservationService
     {

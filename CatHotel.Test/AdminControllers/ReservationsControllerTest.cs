@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using CatHotel.Areas.Admin.Models.Enums.Reservations;
-using CatHotel.Data.Models;
-
-namespace CatHotel.Test.AdminControllers
+﻿namespace CatHotel.Test.AdminControllers
 {
+    using System.Linq;
+    using CatHotel.Areas.Admin.Models.Enums.Reservations;
+    using CatHotel.Data.Models;
     using Areas.Admin.Controllers;
     using Areas.Admin.Models.Reservations;
     using MyTested.AspNetCore.Mvc;

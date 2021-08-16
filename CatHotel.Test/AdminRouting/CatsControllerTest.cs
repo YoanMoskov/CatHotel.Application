@@ -1,7 +1,6 @@
 ﻿namespace CatHotel.Test.AdminRouting
 {
     using Areas.Admin.Controllers;
-    using Areas.Admin;
     using MyTested.AspNetCore.Mvc;
     using Xunit;
 

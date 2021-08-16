@@ -1,7 +1,6 @@
 ﻿namespace CatHotel.Test.Data
 {
     using System;
-    using System.Collections.Generic;
     using CatHotel.Data.Models;
 
     public static class Cats
@@ -85,6 +84,7 @@
                 UserId = "TestId",
                 IsDeleted = false
             };
+
         public static Cat TestDeletedCatCat
             => new Cat
             {
