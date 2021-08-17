@@ -4,14 +4,16 @@ using CatHotel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CatHotel.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210817142736_FixedStyleAndGrooming")]
+    partial class FixedStyleAndGrooming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,13 +115,15 @@ namespace CatHotel.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("Appointment")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("StyleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("StyleId");
 
@@ -492,13 +496,13 @@ namespace CatHotel.Data.Migrations
             modelBuilder.Entity("CatHotel.Data.Models.CatGrooming", b =>
                 {
                     b.HasOne("CatHotel.Data.Models.Cat", "Cat")
-                        .WithMany("CatsGroomings")
+                        .WithMany("CatGroomings")
                         .HasForeignKey("CatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CatHotel.Data.Models.Grooming", "Grooming")
-                        .WithMany("CatsGroomings")
+                        .WithMany("CatGroomings")
                         .HasForeignKey("GroomingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -529,11 +533,17 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
+                    b.HasOne("CatHotel.Data.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
                     b.HasOne("CatHotel.Data.Models.Style", "Style")
                         .WithMany()
                         .HasForeignKey("StyleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Payment");
 
                     b.Navigation("Style");
                 });
@@ -629,14 +639,14 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Cat", b =>
                 {
-                    b.Navigation("CatsGroomings");
+                    b.Navigation("CatGroomings");
 
                     b.Navigation("CatsReservations");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
-                    b.Navigation("CatsGroomings");
+                    b.Navigation("CatGroomings");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<GroomingCatViewModel>
+
+@{ ViewBag.Title = "Select Cat"; }
+
+<h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
+<hr />
+<div class="container">
+    <div class="row">
+        @foreach (var cat in @Model)
+        {
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card mb-3">
+                    <img class="card-img-top mx-auto card-img-resize" style="width: 30rem; margin-top:1.5rem" src="@cat.PhotoUrl" alt="Cat picture">
+                    <div class="card-body text-center d-flex flex-column align-items-center">
+                        <h5 class="card-title">@cat.Name</h5>
+                        <p class="mt-auto">Breed: @cat.BreedName</p>
+                        <p class="mt-auto">
+                            <a asp-action="Complete" class="btn primary-color" asp-route-styleId="@cat.StyleId" asp-route-catId="@cat.Id">Select</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

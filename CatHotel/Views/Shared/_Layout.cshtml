@@ -1,5 +1,6 @@
 ﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using CatHotel.Infrastructure
+@using CatHotel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,74 +16,101 @@
 }
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg primary-color">
-            <div class="container">
-                <a class="navbar-brand" asp-area="@area" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" style="width: 50px; height: 50px" alt="Logo" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            @if (area == AdminConstants.AdminAreaName)
-                            {
-                                <a type="button" class="btn btn-toolbar" asp-area="@area" asp-controller="Cats" asp-action="All">Cats</a>
-                            }
-                            else if (User.Identity.IsAuthenticated)
-                            {
-                                <div class="dropdown">
-                                    <a class="btn btn-toolbar dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
-                                        Cats
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <li><a class="dropdown-item" asp-controller="Cats" asp-action="Add">Add</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Cats" asp-action="All">All</a></li>
-                                    </ul>
-                                </div>
-                            }
-                        </li>
-                        <li class="nav-item">
-
-                            @if (area == AdminConstants.AdminAreaName)
-                            {
-                                <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="Reservations" asp-action="All">Reservations</a>
-                            }
-                            else if (User.Identity.IsAuthenticated)
-                            {
-                                <div class="dropdown">
-                                    <a class="btn btn-toolbar dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
-                                        Reservations
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Active">Active</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Approved">Approved</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Reservations" asp-action="PendingApproval">Pending Approval</a></li>
-                                    </ul>
-                                </div>
-                            }
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+<header>
+    <nav class="navbar navbar-expand-lg primary-color">
         <div class="container">
-        </div>
-    </footer>
+            <a class="navbar-brand" asp-area="@area" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" style="width: 50px; height: 50px" alt="Logo" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        @if (area == AdminConstants.AdminAreaName)
+                        {
+                            <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="Cats" asp-action="All">Cats</a>
+                        }
+                        else if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="dropdown">
+                                <a class="btn btn-toolbar dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
+                                    Cats
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" asp-controller="Cats" asp-action="Add">Add</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Cats" asp-action="All">All</a></li>
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                    <li class="nav-item">
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+                        @if (area == AdminConstants.AdminAreaName)
+                        {
+                            <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="Reservations" asp-action="All">Reservations</a>
+                        }
+                        else if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="dropdown">
+                                <a class="btn btn-toolbar dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
+                                    Reservations
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Create">Create</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Active">Active</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Approved">Approved</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="PendingApproval">Pending Approval</a></li>
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                    <li class="nav-item">
+                        @if (area == AdminConstants.AdminAreaName)
+                        {
+                            <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="" asp-action="All">Cats</a>
+                        }
+                        else if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="dropdown">
+                                <a class="btn btn-toolbar dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
+                                    Groomings
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" asp-controller="Groomings" asp-action="Styles">Choose Style</a></li>
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    @if (TempData.ContainsKey(WebConstants.GlobalMessageKey))
+    {
+        <div class="alert alert-primary alert-dismissible fade show text-center" style="margin-top: 1%" role="alert">
+            @TempData[WebConstants.GlobalMessageKey]
+            <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>
+    }
+</div>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -41,6 +41,6 @@
 
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
 
-        public ICollection<CatReservation> CatsReservations { get; set; }
+        public ICollection<CatReservation> CatsReservations { get; set; } = new List<CatReservation>();
     }
 }

@@ -1,0 +1,46 @@
+﻿@model AddGroomingModel
+
+@{ ViewBag.Title = "Grooming Appointment"; }
+
+<h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
+<hr />
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm-6">
+            <div class="card">
+                <img class="card-img-top mx-auto card-img-resize" style="margin-top: 1.5rem; width: 30rem;" src="@Model.Cat.PhotoUrl" alt="Cat picture">
+                <div class="card-body text-center d-flex flex-column align-items-center">
+                    <h5 class="card-title">@Model.Cat.Name</h5>
+                    <p class="mt-auto">Breed: @Model.Cat.BreedName</p>
+                    <button class="btn primary-color" disabled="disabled">Selected</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <img class="card-img-top mx-auto card-img-resize40" style="margin-top: 1.5rem; width: 15rem;" src="@Model.Style.PhotoUrl" alt="Style">
+                <div class="card-body text-center d-flex flex-column align-items-center">
+                    <h5 class="card-title">@Model.Style.Name - @Model.Style.Price.ToString("f2") $</h5>
+                    <p class="mt-auto">@Model.Style.Description</p>
+                    <button class="btn primary-color" disabled="disabled">Selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="post">
+        <div class="form-group text-center" style="margin-top: 1%">
+            <label asp-for="Appointment"></label>
+            <input asp-for="Appointment" class="form-control" placeholder="">
+            <span asp-validation-for="Appointment" class="small text-danger"></span>
+        </div>
+        <p class="text-center my-sm-3">
+            <input class="btn primary-color " type="submit" value="Complete" />
+        </p>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

@@ -17,16 +17,6 @@
 
     public class ReservationsControllerTest
     {
-        [Fact]
-        public void CreateShouldBeForUserRoleAndReturnViewWithModel()
-            => MyController<ReservationsController>
-                .Instance(controller => controller
-                    .WithUser(c => c.InRole(UserRoleName)))
-                .Calling(c => c.Create())
-                .ShouldReturn()
-                .View(view => view
-                    .WithModelOfType<ResFormModel>());
-
         [Theory]
         [InlineData(1, 2)]
         public void PostCreateCatShouldBeForUserRoleAndReturnRedirectWithValidModel(

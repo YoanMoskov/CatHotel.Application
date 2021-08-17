@@ -4,14 +4,16 @@ using CatHotel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CatHotel.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210817093435_AddedStyleToGrooming")]
+    partial class AddedStyleToGrooming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,15 +115,15 @@ namespace CatHotel.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("Appointment")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StyleId")
+                    b.Property<int>("Style")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StyleId");
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("Groomings");
                 });
@@ -229,32 +231,6 @@ namespace CatHotel.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomTypes");
-                });
-
-            modelBuilder.Entity("CatHotel.Data.Models.Style", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhotoUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("MONEY");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Styles");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.User", b =>
@@ -492,13 +468,13 @@ namespace CatHotel.Data.Migrations
             modelBuilder.Entity("CatHotel.Data.Models.CatGrooming", b =>
                 {
                     b.HasOne("CatHotel.Data.Models.Cat", "Cat")
-                        .WithMany("CatsGroomings")
+                        .WithMany("CatGroomings")
                         .HasForeignKey("CatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CatHotel.Data.Models.Grooming", "Grooming")
-                        .WithMany("CatsGroomings")
+                        .WithMany("CatGroomings")
                         .HasForeignKey("GroomingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -529,13 +505,11 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
-                    b.HasOne("CatHotel.Data.Models.Style", "Style")
+                    b.HasOne("CatHotel.Data.Models.Payment", "Payment")
                         .WithMany()
-                        .HasForeignKey("StyleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PaymentId");
 
-                    b.Navigation("Style");
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
@@ -629,14 +603,14 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Cat", b =>
                 {
-                    b.Navigation("CatsGroomings");
+                    b.Navigation("CatGroomings");
 
                     b.Navigation("CatsReservations");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
-                    b.Navigation("CatsGroomings");
+                    b.Navigation("CatGroomings");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>

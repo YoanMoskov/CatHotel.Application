@@ -13,18 +13,20 @@
         [Arrival]
         [Required]
         [BindProperty, DataType(DataType.Date)]
-        public DateTime Arrival { get; set; }
+        public DateTime Arrival { get; set; } = DateTime.UtcNow;
 
         [Required]
         [Departure]
         [BindProperty, DataType(DataType.Date)]
-        public DateTime Departure { get; set; }
+        public DateTime Departure { get; set; } = DateTime.UtcNow;
 
         [CatIds]
+        [Display(Name = "Cats")]
         public string[] CatIds { get; set; }
 
         public IEnumerable<SelectListItem> Cats { get; set; }
 
+        [Display(Name = "Room Type")]
         public int RoomTypeId { get; set; }
 
         public IEnumerable<ResRoomTypeServiceModel> RoomTypes { get; set; }

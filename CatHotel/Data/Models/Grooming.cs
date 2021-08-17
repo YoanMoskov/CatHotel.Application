@@ -1,17 +1,21 @@
 ﻿namespace CatHotel.Data.Models
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class Grooming
     {
-        public string Id { get; set; }
+        [Key] 
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string DescribePreferredStyle { get; set; }
+        [Required] 
+        public int StyleId { get; set; }
 
-        public IEnumerable<Cat> Cats { get; set; } = new List<Cat>();
+        public Style Style { get; set; }
 
-        public string PaymentId { get; set; }
+        public DateTime Appointment { get; set; }
 
-        public Payment Payment { get; set; }
+        public ICollection<CatGrooming> CatsGroomings { get; set; } = new List<CatGrooming>();
     }
 }

@@ -3,6 +3,8 @@
     using AutoMapper;
     using Data.Models;
     using Models.Cat.FormModel;
+    using Models.Grooming.FormModel;
+    using Models.Grooming.ViewModel;
     using Models.Reservation.ViewModels;
     using Services.Models.Cats.AdminArea;
     using Services.Models.Cats.CommonArea;
@@ -21,6 +23,9 @@
 
             CreateMap<ResServiceModel, ResViewModel>();
             CreateMap<Reservation, ResServiceModel>();
+
+            CreateMap<Style, GroomingStyleModel>();
+            CreateMap<Cat, GroomingCatViewModel>();
         }
     }
 }

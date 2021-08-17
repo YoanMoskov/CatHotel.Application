@@ -7,20 +7,30 @@
     using Models.Reservation.FormModels;
     using Services.ReservationService;
     using System.Linq;
-
+    using Services.CatService;
     using static WebConstants;
 
+    [Authorize(Roles = UserRoleName)]
     public class ReservationsController : Controller
     {
         private readonly IReservationService _resService;
+        private readonly ICatService _catService;
 
-        public ReservationsController(IReservationService resService)
+        public ReservationsController(IReservationService resService, ICatService catService)
         {
             this._resService = resService;
+            _catService = catService;
         }
 
         public IActionResult Create()
         {
+            if (!_catService.UserHasCats(User.GetId()))
+            {
+                TempData[GlobalMessageKey] = "You have to add a cat before creating a reservation.";
+
+                return RedirectToAction("Add", "Cats");
+            }
+
             return View(new ResFormModel()
             {
                 Cats = _resService.CatsSelectList(User.GetId()),
@@ -29,7 +39,6 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = UserRoleName)]
         public IActionResult Create(ResFormModel res)
         {
             if (res == null)
@@ -37,20 +46,12 @@
                 return BadRequest();
             }
 
-            foreach (var catId in res.CatIds)
-            {
-                if (!_resService.DoesCatExist(catId))
-                {
-                    return BadRequest();
-                }
-            }
-
             if (!_resService.DoesRoomTypeExist(res.RoomTypeId))
             {
                 return BadRequest();
             }
 
-            if (_resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure) != string.Empty)
+            if (res.CatIds != null && _resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure) != string.Empty)
             {
                 ModelState.AddModelError("CatIds", _resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure));
             }

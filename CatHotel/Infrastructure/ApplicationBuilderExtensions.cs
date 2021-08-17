@@ -11,6 +11,7 @@
     using System.Threading.Tasks;
 
     using static Areas.Admin.AdminConstants;
+    using static Data.DataConstants.Style;
     using static WebConstants;
 
     public static class ApplicationBuilderExtensions
@@ -24,6 +25,7 @@
             MigrateDatabase(services);
 
             SeedBreeds(services);
+            SeedStyles(services);
             SeedRoomTypes(services);
             SeedRoles(services);
             SeedAdmin(services);
@@ -49,8 +51,61 @@
 
             data.Breeds.AddRange(new[]
             {
-                new Breed() {Name = "Special"},
-                new Breed() {Name = "Very special"}
+                new Breed() {Name = "Abyssinian"},
+                new Breed() {Name = "American Bob Tail"},
+                new Breed() {Name = "American Maine Coon"},
+                new Breed() {Name = "American Shorthair"},
+                new Breed() {Name = "American Wirehair"},
+                new Breed() {Name = "Angora"},
+                new Breed() {Name = "Australian Mist"},
+                new Breed() {Name = "Balinese"},
+                new Breed() {Name = "Bengal"},
+                new Breed() {Name = "Birman"},
+                new Breed() {Name = "Bombay"},
+                new Breed() {Name = "British Shorthair"},
+                new Breed() {Name = "Burmese"},
+                new Breed() {Name = "Burmilla"},
+                new Breed() {Name = "Chartreaux"},
+                new Breed() {Name = "Chausie"},
+                new Breed() {Name = "Chinchilla"},
+                new Breed() {Name = "Cornish Rex"},
+                new Breed() {Name = "Devon Rex"},
+                new Breed() {Name = "Domestic Long Hair"},
+                new Breed() {Name = "Domestic Medium Hair"},
+                new Breed() {Name = "Domestic Short Hair"},
+                new Breed() {Name = "Egyptian Mau"},
+                new Breed() {Name = "Exotic Short Hair"},
+                new Breed() {Name = "Foreign White"},
+                new Breed() {Name = "Havana"},
+                new Breed() {Name = "Himalayan"},
+                new Breed() {Name = "Japanese Bobtail"},
+                new Breed() {Name = "Korat"},
+                new Breed() {Name = "LaPerm Long Hair"},
+                new Breed() {Name = "LaPerm Short Hair"},
+                new Breed() {Name = "Maine Coon"},
+                new Breed() {Name = "Manx"},
+                new Breed() {Name = "Munchkin"},
+                new Breed() {Name = "Norwegian Forest Cat"},
+                new Breed() {Name = "Other"}
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedStyles(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<ApplicationDbContext>();
+
+            if (data.Styles.Any())
+            {
+                return;
+            }
+
+            data.Styles.AddRange(new[]
+            {
+                new Style() {Description = NaturalStyleDesc, Name = NaturalStyleName, Price = NaturalStylePrice, PhotoUrl = NaturalPhotoUrl},
+                new Style() {Description = TigonStyleDesc, Name = TigonStyleName, Price = TigonStylePrice, PhotoUrl = TigonPhotoUrl},
+                new Style() {Description = LionStyleDesc, Name = LionStyleName, Price = LionStylePrice, PhotoUrl = LionPhotoUrl}
             });
 
             data.SaveChanges();

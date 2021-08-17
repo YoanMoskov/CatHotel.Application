@@ -28,8 +28,6 @@
 
         public string AdditionalInformation { get; set; }
 
-        public CatSize CatSize { get; set; }
-
         [Required]
         public int BreedId { get; set; }
 
@@ -42,10 +40,9 @@
 
         public bool IsDeleted { get; set; }
 
-        public string GroomingId { get; set; }
-
-        public Grooming Grooming { get; set; }
-
         public ICollection<CatReservation> CatsReservations { get; set; } = new List<CatReservation>();
+
+        public ICollection<CatGrooming> CatsGroomings { get; set; } = new List<CatGrooming>();
+
     }
 }

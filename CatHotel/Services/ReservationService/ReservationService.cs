@@ -48,7 +48,7 @@
                     TotalPrice = price,
                     isPaid = false,
                 },
-                ReservationState = Pending
+                ReservationState = Pending,
             };
 
             var allCatsReservation = catIds.Select(catId
@@ -93,7 +93,7 @@
 
             if (cats.Count == 1)
             {
-                errorMessage.AppendLine($"The cat: {cats.First().Name} - {cats.First().BreedName} is already in reservation in this time frame.");
+                errorMessage.AppendLine($"The cat: {cats.First().Name} - {cats.First().BreedName} is already in a reservation in this time frame.");
             }
             else if (cats.Count > 1)
             {
@@ -115,7 +115,8 @@
                 .Select(rt => new ResRoomTypeServiceModel()
                 {
                     Id = rt.Id,
-                    Name = rt.Name
+                    Name = rt.Name,
+                    PricePerDay = rt.PricePerDay
                 })
                 .ToList();
 

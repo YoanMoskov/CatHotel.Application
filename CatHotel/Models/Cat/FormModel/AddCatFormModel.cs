@@ -1,6 +1,5 @@
 ﻿namespace CatHotel.Models.Cat.FormModel
 {
-    using Services.Models.Cats;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
