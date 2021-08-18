@@ -2,27 +2,27 @@
     var area = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
 }
 
-        @foreach (var cat in area == AdminConstants.AdminAreaName ? @Model.Cats : @Model)
-        {
-            <div class="col-md-4 d-flex align-items-stretch">
-                <div class="card mb-3">
-                    <img class="card-img-top mx-auto card-img-resize" style="width: 30rem; margin-top:1.5rem" src="@cat.PhotoUrl" alt="Cat picture">
-                    <div class="card-body text-center d-flex flex-column align-items-center">
-                        <h5 class="card-title">@cat.Name</h5>
-                        <p class="mt-auto">Age: @cat.Age</p>
-                        <p class="mt-auto">Breed: @cat.BreedName</p>
-                        <p class="mt-auto">
-                            <a asp-area="@area" asp-action="Edit" class="btn primary-color" asp-route-catId="@cat.Id">Edit</a>
-                            @if (area == AdminConstants.AdminAreaName && cat.IsDeleted)
-                            {
-                                <a asp-area="@AdminConstants.AdminAreaName" asp-action="Restore" class="btn primary-color" asp-route-catId="@cat.Id">Restore</a>
-                            }
-                            else
-                            {
-                                <a asp-area="@area" asp-action="Delete" class="btn primary-color" asp-route-catId="@cat.Id">Delete</a>
-                            }
-                        </p>
-                    </div>
-                </div>
+@foreach (var cat in area == AdminConstants.AdminAreaName ? Model.Cats : Model)
+{
+    <div class="col-md-4 d-flex align-items-stretch">
+        <div class="card mb-3">
+            <img class="card-img-top mx-auto card-img-resize" style="margin-top: 1.5rem; width: 30rem;" src="@cat.PhotoUrl" alt="Cat picture">
+            <div class="card-body text-center d-flex flex-column align-items-center">
+                <h5 class="card-title">@cat.Name</h5>
+                <p class="mt-auto">Age: @cat.Age</p>
+                <p class="mt-auto">Breed: @cat.BreedName</p>
+                <p class="mt-auto">
+                    <a asp-area="@area" asp-action="Edit" class="btn primary-color" asp-route-catId="@cat.Id">Edit</a>
+                    @if (area == AdminConstants.AdminAreaName && cat.IsDeleted)
+                    {
+                        <a asp-area="@AdminConstants.AdminAreaName" asp-action="Restore" class="btn primary-color" asp-route-catId="@cat.Id">Restore</a>
+                    }
+                    else if (area == string.Empty)
+                    {
+                        <a asp-area="@area" asp-action="Delete" class="btn primary-color" asp-route-catId="@cat.Id">Delete</a>
+                    }
+                </p>
             </div>
-        }
+        </div>
+    </div>
+}

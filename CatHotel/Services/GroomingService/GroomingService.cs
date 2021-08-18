@@ -70,8 +70,9 @@
 
             groomsQuery = filtering switch
             {
-                GroomsFiltering.Approved => groomsQuery.Where(g => g.IsApproved),
-                GroomsFiltering.PendingApproval or _ => groomsQuery.Where(g => g.IsApproved == false)
+                GroomsFiltering.Approved => groomsQuery.Where(g => g.IsApproved && g.IsExpired == false),
+                GroomsFiltering.Expired => groomsQuery.Where(g => g.IsExpired),
+                GroomsFiltering.PendingApproval or _ => groomsQuery.Where(g => g.IsApproved == false && g.IsExpired == false)
             };
 
             groomsQuery = sorting switch

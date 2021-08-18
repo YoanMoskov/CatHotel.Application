@@ -4,5 +4,6 @@
     {
         Approved = 10,
         PendingApproval = 20,
+        Expired = 30
     }
 }

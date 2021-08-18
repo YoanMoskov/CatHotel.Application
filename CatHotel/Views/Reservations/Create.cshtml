@@ -31,9 +31,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="CatIds"></label>
-                <select class="form-select" asp-for="CatIds" asp-items="@Model.Cats" multiple="multiple">
+                <select class="custom-select" asp-for="CatIds" asp-items="@Model.Cats" multiple="multiple">
                     <option disabled="disabled">Select the cats for the reservation.</option>
-                </select>e
+                </select>
                 <span asp-validation-for="CatIds" class="text-danger"></span>
             </div>
             <div class="form-group text-center my-sm-3">

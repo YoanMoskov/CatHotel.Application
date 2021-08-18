@@ -62,6 +62,25 @@
                         q.StyleId == TestApprovedGrooming.StyleId.ToString() &&
                         q.Filtering == GroomsFiltering.Approved &&
                         q.Sorting == GroomsSorting.Oldest));
+        [Fact]
+
+        public void GetAllWithFilterAndSortShouldReturnViewWithModelsMatchingTheFilterAndSort()
+            => MyController<GroomingsController>
+                .Instance(controller => controller
+                    .WithUser(u => u.InRole(AdminRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestApprovedGrooming))))
+                .Calling(c => c.All(new AdminAllGroomingsQueryModel
+                {
+                    Filtering = GroomsFiltering.Expired,
+                    Sorting = GroomsSorting.Oldest
+                }))
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<AdminAllGroomingsQueryModel>(q =>
+                        q.Filtering == GroomsFiltering.Expired &&
+                        q.Sorting == GroomsSorting.Oldest));
 
         [Fact]
         public void GetApproveShouldRedirectToAction()
