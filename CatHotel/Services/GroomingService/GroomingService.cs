@@ -42,7 +42,7 @@
             FilterGroomings(false, userId);
 
             var groomings = _data.Groomings
-                .Where(u => u.IsExpired == false && u.User.Id == userId)
+                .Where(g => g.IsExpired == false && g.UserId == userId)
                 .Select(g => new GroomingServiceModel
                 {
                     CatName = g.Cat.Name,

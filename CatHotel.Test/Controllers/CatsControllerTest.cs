@@ -1,14 +1,13 @@
 ﻿namespace CatHotel.Test.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using CatHotel.Controllers;
     using CatHotel.Data.Models;
     using Models.Cat.FormModel;
     using MyTested.AspNetCore.Mvc;
     using Services.Models.Cats.CommonArea;
-    using System.Collections.Generic;
-    using System.Linq;
     using Xunit;
-
     using static Data.Cats;
     using static WebConstants;
 
@@ -20,6 +19,10 @@
                 .Instance(controller => controller
                     .WithUser(c => c.InRole(UserRoleName)))
                 .Calling(c => c.Add())
+                .ShouldHave()
+                .MemoryCache(cache => cache
+                    .ContainingEntryWithKey(breedsCacheKey))
+                .AndAlso()
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<AddCatFormModel>());
@@ -32,7 +35,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestBreed))))
-                .Calling(c => c.Add(new AddCatFormModel()
+                .Calling(c => c.Add(new AddCatFormModel
                 {
                     Name = TestCat.Name,
                     Age = TestCat.Age,
@@ -59,7 +62,7 @@
             => MyController<CatsController>
                 .Instance(controller => controller
                     .WithUser(u => u.InRole(UserRoleName)))
-                .Calling(c => c.Add(new AddCatFormModel()
+                .Calling(c => c.Add(new AddCatFormModel
                 {
                     BreedId = 404
                 }))
@@ -76,14 +79,14 @@
         public void AllShouldBeForUserRoleAndReturnViewWithModel()
             => MyController<CatsController>
                 .Instance(controller => controller
-                .WithUser(c => c.InRole(UserRoleName))
-                .WithData(data => data
-                    .WithEntities(entities => entities
-                        .AddRange(TestCat))))
+                    .WithUser(c => c.InRole(UserRoleName))
+                    .WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestCat))))
                 .Calling(c => c.All())
                 .ShouldReturn()
                 .View(view => view
-                .WithModelOfType<List<CatServiceModel>>());
+                    .WithModelOfType<List<CatServiceModel>>());
 
         [Fact]
         public void AllShouldBeRedirectingIfUserHasNoCats()
@@ -115,7 +118,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestCat))))
-                .Calling(c => c.Edit(new EditCatFormModel()
+                .Calling(c => c.Edit(new EditCatFormModel
                 {
                     Age = TestCat.Age + 1,
                     PhotoUrl = TestCat.PhotoUrl
@@ -149,7 +152,7 @@
             => MyController<CatsController>
                 .Instance(controller => controller
                     .WithUser(u => u.InRole(UserRoleName)))
-                .Calling(c => c.Edit(new EditCatFormModel()
+                .Calling(c => c.Edit(new EditCatFormModel
                 {
                     Age = 0,
                     PhotoUrl = "InvalidUrl"
@@ -184,7 +187,7 @@
                 .Data(data => data
                     .WithSet<Cat>(cats => cats
                         .Any(c =>
-                        c.IsDeleted)))
+                            c.IsDeleted)))
                 .AndAlso()
                 .ShouldReturn()
                 .RedirectToAction("All");

@@ -9,7 +9,7 @@
     {
         public const int GroomsPerPage = 6;
 
-        [Display(Name = "Style")]
+        [Display(Name = "Style")] 
         public string StyleId { get; set; }
 
         public int CurrentPage { get; set; } = 1;

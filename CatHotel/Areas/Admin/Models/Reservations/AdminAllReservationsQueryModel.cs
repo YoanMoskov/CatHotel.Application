@@ -1,8 +1,8 @@
 ﻿namespace CatHotel.Areas.Admin.Models.Reservations
 {
+    using System.Collections.Generic;
     using Enums.Reservations;
     using Services.Models.Reservations.CommonArea;
-    using System.Collections.Generic;
 
     public class AdminAllReservationsQueryModel
     {

@@ -1,8 +1,10 @@
 ﻿namespace CatHotel.Test.Routing
 {
     using CatHotel.Controllers;
+    using Models.Cat.FormModel;
     using MyTested.AspNetCore.Mvc;
     using Xunit;
+    using static Data.Cats;
 
     public class CatsControllerTest
     {
@@ -24,7 +26,7 @@
 
         [Fact]
         public void AllRouteShouldBeMapped()
-             => MyRouting
+            => MyRouting
                 .Configuration()
                 .ShouldMap("/Cats/All")
                 .To<CatsController>(c => c.All());
@@ -42,8 +44,8 @@
         public void EditRouteShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Cats/Edit")
-                .To<CatsController>(c => c.Edit(null));
+                .ShouldMap("/Cats/Edit?catId=1")
+                .To<CatsController>(c => c.Edit(TestCat.Id));
 
         [Fact]
         public void PostEditRouteShouldBeMapped()
@@ -51,14 +53,22 @@
                 .Configuration()
                 .ShouldMap(request => request
                     .WithMethod(HttpMethod.Post)
-                    .WithPath("/Cats/Edit"))
-                .To<CatsController>(c => c.Edit(null));
+                    .WithLocation("/Cats/Edit?catId=1")
+                    .WithFormFields(new
+                    {
+                        Age = TestCat.Age.ToString(), TestCat.PhotoUrl
+                    }))
+                .To<CatsController>(c => c.Edit(new EditCatFormModel
+                {
+                    Age = TestCat.Age,
+                    PhotoUrl = TestCat.PhotoUrl
+                }, TestCat.Id));
 
         [Fact]
         public void DeleteRouteShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Cats/Delete")
-                .To<CatsController>(c => c.Delete(null));
+                .ShouldMap("/Cats/Delete?catId=1")
+                .To<CatsController>(c => c.Delete(TestCat.Id));
     }
 }

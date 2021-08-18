@@ -6,18 +6,18 @@
 }
 
 <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-action="Create">
             <div class="form-group">
                 <label asp-for="Arrival" class="control-label"></label>
-                <input asp-for="Arrival" class="form-control" />
+                <input asp-for="Arrival" class="form-control"/>
                 <span asp-validation-for="Arrival" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Departure" class="control-label"></label>
-                <input asp-for="Departure" class="form-control" />
+                <input asp-for="Departure" class="form-control"/>
                 <span asp-validation-for="Departure" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,13 +31,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="CatIds"></label>
-                <select class="custom-select" asp-for="CatIds" asp-items="@Model.Cats" class="form-select" multiple="multiple">
+                <select class="form-select" asp-for="CatIds" asp-items="@Model.Cats" multiple="multiple">
                     <option disabled="disabled">Select the cats for the reservation.</option>
-                </select>
+                </select>e
                 <span asp-validation-for="CatIds" class="text-danger"></span>
             </div>
             <div class="form-group text-center my-sm-3">
-                <input type="submit" value="Create" class="btn primary-color" />
+                <input type="submit" value="Create" class="btn primary-color"/>
             </div>
         </form>
     </div>

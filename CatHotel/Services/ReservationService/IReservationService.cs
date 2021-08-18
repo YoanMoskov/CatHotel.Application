@@ -1,12 +1,11 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
+    using System;
+    using System.Collections.Generic;
     using Areas.Admin.Models.Enums.Reservations;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Models.Reservations.AdminArea;
     using Models.Reservations.CommonArea;
-    using System;
-    using System.Collections.Generic;
-    using Data.Models.Enums;
 
     public interface IReservationService
     {
@@ -24,7 +23,7 @@
             int currentPage = 1,
             ResSorting sorting = ResSorting.Newest,
             ResFiltering filtering = ResFiltering.Pending,
-            int resPerPage = Int32.MaxValue);
+            int resPerPage = int.MaxValue);
 
         bool AdminApprove(string resId);
 

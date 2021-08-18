@@ -1,44 +1,58 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Areas.Admin;
+    using System;
+    using System.Collections.Generic;
     using AutoMapper;
-    using Data.Models;
-    using Infrastructure;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
     using Models.Cat.FormModel;
     using Services.CatService;
     using Services.Models.Cats.CommonArea;
-
     using static WebConstants;
 
     [Authorize(Roles = UserRoleName)]
     public class CatsController : Controller
     {
+        private readonly IMemoryCache _cache;
         private readonly ICatService _catService;
         private readonly IMapper _mapper;
 
         public CatsController(
             ICatService catService,
-            IMapper mapper)
+            IMapper mapper, IMemoryCache cache)
         {
-            this._catService = catService;
-            this._mapper = mapper;
+            _catService = catService;
+            _mapper = mapper;
+            _cache = cache;
         }
 
-        public IActionResult Add() => View(new AddCatFormModel()
+        public IActionResult Add()
         {
-            Breeds = _catService.GetBreeds()
-        });
+            var breeds = _cache.Get<IEnumerable<CatBreedServiceModel>>(breedsCacheKey);
+
+            if (breeds == null)
+            {
+                breeds = _catService.GetBreeds();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+
+                _cache.Set(breedsCacheKey, breeds, cacheOptions);
+            }
+
+            return View(new AddCatFormModel
+            {
+                Breeds = breeds
+            });
+        }
 
         [HttpPost]
         public IActionResult Add(AddCatFormModel cat)
         {
             if (!_catService.DoesBreedExist(cat.BreedId))
-            {
-                this.ModelState.AddModelError(nameof(cat.BreedId), "Breed does not exist.");
-            }
+                ModelState.AddModelError(nameof(cat.BreedId), "Breed does not exist.");
 
             if (!ModelState.IsValid)
             {
@@ -55,11 +69,6 @@
 
         public IActionResult All()
         {
-            if (!_catService.UserHasCats(User.GetId()) && !User.IsInRole(AdminConstants.AdminRoleName))
-            {
-                return RedirectToAction("Add");
-            }
-
             var catCollection = _catService.All(User.GetId());
 
             return View(catCollection);
@@ -75,19 +84,13 @@
         [HttpPost]
         public IActionResult Edit(EditCatFormModel c, string catId)
         {
-            if (c == null)
-            {
-                return BadRequest();
-            }
+            if (c == null) return BadRequest();
 
             var cat = _catService.Get(catId);
 
             var catEditForm = _mapper.Map<CatServiceModel>(cat);
 
-            if (!ModelState.IsValid)
-            {
-                return View(catEditForm);
-            }
+            if (!ModelState.IsValid) return View(catEditForm);
 
             _catService.Edit(c.Age, c.PhotoUrl, c.AdditionalInformation, catId);
 

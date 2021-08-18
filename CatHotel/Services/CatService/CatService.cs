@@ -1,5 +1,8 @@
 ﻿namespace CatHotel.Services.CatService
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Areas.Admin.Models.Enums.Cats;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
@@ -7,9 +10,6 @@
     using Data.Models;
     using Models.Cats.AdminArea;
     using Models.Cats.CommonArea;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class CatService : ICatService
     {
@@ -20,13 +20,13 @@
             IMapper mapper,
             ApplicationDbContext data)
         {
-            this._mapper = mapper;
-            this._data = data;
+            _mapper = mapper;
+            _data = data;
         }
 
         public string Add(CatServiceModel cat, string userId)
         {
-            var newCat = new Cat()
+            var newCat = new Cat
             {
                 Name = cat.Name,
                 Age = cat.Age,
@@ -46,7 +46,7 @@
         public List<CatServiceModel> All(string userId)
             => _data.Cats
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
-                .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
+                .ProjectTo<CatServiceModel>(_mapper.ConfigurationProvider)
                 .ToList();
 
         public AdminCatQueryServiceModel AdminAll(
@@ -54,19 +54,16 @@
             int currentPage = 1,
             CatSorting sorting = CatSorting.Newest,
             CatFiltering filtering = CatFiltering.All,
-            int catsPerPage = Int32.MaxValue)
+            int catsPerPage = int.MaxValue)
         {
             IQueryable<Cat> catsQuery = _data.Cats;
 
-            if (!string.IsNullOrWhiteSpace(breed))
-            {
-                catsQuery = catsQuery.Where(c => c.Breed.Id == int.Parse(breed));
-            }
+            if (!string.IsNullOrWhiteSpace(breed)) catsQuery = catsQuery.Where(c => c.Breed.Id == int.Parse(breed));
 
             catsQuery = filtering switch
             {
                 CatFiltering.Available => catsQuery.Where(c => c.IsDeleted == false),
-                CatFiltering.Deleted => catsQuery.Where(c => c.IsDeleted == true),
+                CatFiltering.Deleted => catsQuery.Where(c => c.IsDeleted),
                 CatFiltering.All or _ => catsQuery
             };
 
@@ -82,7 +79,7 @@
                 .Skip((currentPage - 1) * catsPerPage)
                 .Take(catsPerPage));
 
-            return new AdminCatQueryServiceModel()
+            return new AdminCatQueryServiceModel
             {
                 TotalCats = totalCats,
                 CurrentPage = currentPage,
@@ -104,7 +101,8 @@
             return true;
         }
 
-        public bool AdminEdit(string name, int age, string photoUrl, int breedId, string additionalInformation, string catId)
+        public bool AdminEdit(string name, int age, string photoUrl, int breedId, string additionalInformation,
+            string catId)
         {
             var cat = FindCatById(catId);
 
@@ -123,10 +121,7 @@
         {
             var cat = _data.Cats.Find(catId);
 
-            if (cat == null)
-            {
-                return false;
-            }
+            if (cat == null) return false;
 
             cat.IsDeleted = false;
 
@@ -138,10 +133,7 @@
         public bool Delete(string catId)
         {
             var cat = _data.Cats.Find(catId);
-            if (cat == null)
-            {
-                return false;
-            }
+            if (cat == null) return false;
 
             cat.IsDeleted = true;
 
@@ -153,7 +145,7 @@
         public CatServiceModel Get(string catId)
             => _data.Cats
                 .Where(c => c.Id == catId)
-                .ProjectTo<CatServiceModel>(this._mapper.ConfigurationProvider)
+                .ProjectTo<CatServiceModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
         public AdminCatEditServiceModel AdminGet(string catId)
@@ -163,7 +155,7 @@
                 .FirstOrDefault();
 
         public bool DoesBreedExist(int breedId)
-            => this._data.Breeds.Any(b => b.Id == breedId);
+            => _data.Breeds.Any(b => b.Id == breedId);
 
         public bool DoesCatExist(string catId)
             => _data.Cats
@@ -173,9 +165,9 @@
             => _data.Cats.Any(c => c.UserId == UserId);
 
         public IEnumerable<CatBreedServiceModel> GetBreeds()
-            => this._data
+            => _data
                 .Breeds
-                .ProjectTo<CatBreedServiceModel>(this._mapper.ConfigurationProvider)
+                .ProjectTo<CatBreedServiceModel>(_mapper.ConfigurationProvider)
                 .ToList();
 
         private Cat FindCatById(string catId)

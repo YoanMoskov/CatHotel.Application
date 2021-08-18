@@ -1,9 +1,10 @@
 ﻿namespace CatHotel.Test.AdminRouting
 {
-    using MyTested.AspNetCore.Mvc;
     using Areas.Admin.Controllers;
+    using Areas.Admin.Models.Reservations;
+    using MyTested.AspNetCore.Mvc;
     using Xunit;
-
+    using static Data.Reservations;
     using static Areas.Admin.AdminConstants;
 
     public class ReservationsControllerTest
@@ -15,7 +16,7 @@
                 .ShouldMap(request => request
                     .WithUser(u => u.InRole(AdminRoleName))
                     .WithPath("/Admin/Reservations/All"))
-                .To<ReservationsController>(c => c.All(null));
+                .To<ReservationsController>(c => c.All(new AdminAllReservationsQueryModel()));
 
         [Fact]
         public void ApproveRouteShouldBeMapped()
@@ -23,7 +24,7 @@
                 .Configuration()
                 .ShouldMap(request => request
                     .WithUser(u => u.InRole(AdminRoleName))
-                    .WithPath("/Admin/Reservations/Approve"))
-                .To<ReservationsController>();
+                    .WithLocation("/Admin/Reservations/Approve?resId=1"))
+                .To<ReservationsController>(c => c.Approve(TestReservation.Id));
     }
 }

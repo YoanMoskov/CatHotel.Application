@@ -1,6 +1,7 @@
 ﻿namespace CatHotel.Test.Routing
 {
     using CatHotel.Controllers;
+    using Models.Reservation.FormModels;
     using MyTested.AspNetCore.Mvc;
     using Xunit;
 
@@ -18,9 +19,9 @@
             => MyRouting
                 .Configuration()
                 .ShouldMap(request => request
-                    .WithPath("/Reservations/Create")
+                    .WithLocation("/Reservations/Create")
                     .WithMethod(HttpMethod.Post))
-                .To<ReservationsController>(c => c.Create());
+                .To<ReservationsController>(c => c.Create(new ResFormModel()));
 
         [Fact]
         public void AllRouteShouldBeMapped()

@@ -1,6 +1,5 @@
 ﻿namespace CatHotel.Areas.Admin.Models.Cats
 {
-    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using static Data.DataConstants.Cat;
@@ -16,10 +15,10 @@
         [DisplayName("Photo Url")]
         public string PhotoUrl { get; init; }
 
-        [DisplayName("Breed")]
-        public int BreedId { get; set; }
+        [DisplayName("Breed")] public int BreedId { get; set; }
 
-        [StringLength(Int32.MaxValue, MinimumLength = MinAdditionalInformation, ErrorMessage = "Additional Information can't be less then 10 characters long.")]
+        [StringLength(int.MaxValue, MinimumLength = MinAdditionalInformation,
+            ErrorMessage = "Additional Information can't be less then 10 characters long.")]
         [DisplayName("Additional Information")]
         public string AdditionalInformation { get; set; }
     }

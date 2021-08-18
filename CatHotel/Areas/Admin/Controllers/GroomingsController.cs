@@ -1,7 +1,6 @@
 ﻿namespace CatHotel.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Models;
     using Models.Groomings;
     using Services.GroomingService;
 
@@ -29,12 +28,10 @@
 
             return View(query);
         }
+
         public IActionResult Approve(string groomId)
         {
-            if (!_groomingService.AdminApprove(groomId))
-            {
-                return BadRequest();
-            }
+            if (!_groomingService.AdminApprove(groomId)) return BadRequest();
 
             return RedirectToAction("All");
         }

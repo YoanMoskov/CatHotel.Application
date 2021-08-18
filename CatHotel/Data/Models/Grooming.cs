@@ -19,9 +19,9 @@
 
         public Style Style { get; set; }
 
-        public DateTime DateOfCreation { get; set; }
+        [Required] public DateTime DateOfCreation { get; set; }
 
-        public DateTime Appointment { get; set; }
+       [Required] public DateTime Appointment { get; set; }
 
         public bool IsApproved { get; set; }
 

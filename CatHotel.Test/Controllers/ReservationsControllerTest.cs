@@ -1,16 +1,15 @@
 ﻿namespace CatHotel.Test.Controllers
 {
-    using CatHotel.Controllers;
-    using CatHotel.Data.Models;
-    using Models.Reservation.FormModels;
-    using MyTested.AspNetCore.Mvc;
-    using Services.Models.Reservations.CommonArea;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CatHotel.Controllers;
+    using CatHotel.Data.Models;
     using CatHotel.Data.Models.Enums;
+    using Models.Reservation.FormModels;
+    using MyTested.AspNetCore.Mvc;
+    using Services.Models.Reservations.CommonArea;
     using Xunit;
-
     using static Data.Reservations;
     using static Data.Cats;
     using static WebConstants;
@@ -25,6 +24,10 @@
                         .WithEntities(entities => entities
                             .AddRange(TestCat))))
                 .Calling(c => c.Create())
+                .ShouldHave()
+                .MemoryCache(cache => cache
+                    .ContainingEntryWithKey(roomTypesCacheKey))
+                .AndAlso()
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<ResFormModel>());
@@ -38,7 +41,7 @@
                 .ShouldReturn()
                 .RedirectToAction("Add", "Cats");
 
-    [Theory]
+        [Theory]
         [InlineData(1, 2)]
         public void PostCreateResShouldReturnRedirectWithValidModel(
             double daysAddArrival,
@@ -48,7 +51,7 @@
             var departure = DateTime.UtcNow.AddDays(daysAddDeparture);
 
             var roomTypeId = 1;
-            var catIds = new string[] { "1" };
+            var catIds = new[] {"1"};
 
             MyController<ReservationsController>
                 .Instance(controller => controller
@@ -56,7 +59,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities.AddRange(
                             TestCat, TestRoom))))
-                .Calling(c => c.Create(new ResFormModel()
+                .Calling(c => c.Create(new ResFormModel
                 {
                     Arrival = arrival,
                     Departure = departure,
@@ -92,9 +95,9 @@
             => MyController<ReservationsController>
                 .Instance(controller => controller
                     .WithUser(u => u.InRole(UserRoleName)))
-                .Calling(c => c.Create(new ResFormModel()
+                .Calling(c => c.Create(new ResFormModel
                 {
-                    CatIds = new[] { "nonexistent" }
+                    CatIds = new[] {"nonexistent"}
                 }))
                 .ShouldHave()
                 .ActionAttributes(attr => attr
@@ -111,9 +114,9 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestCat))))
-                .Calling(c => c.Create(new ResFormModel()
+                .Calling(c => c.Create(new ResFormModel
                 {
-                    CatIds = new[] { TestCat.Id },
+                    CatIds = new[] {TestCat.Id},
                     RoomTypeId = 404
                 }))
                 .ShouldHave()
@@ -131,10 +134,10 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestReservation, TestCatReservation, TestRoom, TestCat))))
-                .Calling(c => c.Create(new ResFormModel()
+                .Calling(c => c.Create(new ResFormModel
                 {
                     RoomTypeId = TestRoom.Id,
-                    CatIds = new[] { TestCat.Id },
+                    CatIds = new[] {TestCat.Id},
                     Arrival = TestReservation.Arrival,
                     Departure = TestReservation.Departure
                 }))
@@ -154,11 +157,12 @@
                     .WithUser(u => u.InRole(UserRoleName))
                     .WithData(data => data
                         .WithEntities(entities => entities
-                            .AddRange(TestReservation, TestCatReservations[0], TestCatReservations[1], TestRoom, TestCats[0], TestCats[1]))))
-                .Calling(c => c.Create(new ResFormModel()
+                            .AddRange(TestReservation, TestCatReservations[0], TestCatReservations[1], TestRoom,
+                                TestCats[0], TestCats[1]))))
+                .Calling(c => c.Create(new ResFormModel
                 {
                     RoomTypeId = TestRoom.Id,
-                    CatIds = new[] { TestCats[0].Id, TestCats[1].Id },
+                    CatIds = new[] {TestCats[0].Id, TestCats[1].Id},
                     Arrival = TestReservation.Arrival,
                     Departure = TestReservation.Departure
                 }))
@@ -175,8 +179,7 @@
         public void GetAllShouldAndReturnViewWithModel()
             => MyController<ReservationsController>
                 .Instance(controller => controller
-                    .WithUser(c => c.InRole(UserRoleName)).
-                    WithData(data => data
+                    .WithUser(c => c.InRole(UserRoleName)).WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestActiveReservation))))
                 .Calling(c => c.All())
@@ -184,35 +187,33 @@
                 .View(view => view
                     .WithModelOfType<List<ResServiceModel>>(model => model
                         .Any(r =>
-                        r.ReservationState == ReservationState.Active)));
+                            r.ReservationState == ReservationState.Active)));
 
         [Fact]
         public void GetAllWithPendingReservationShouldBecomeActive()
-           => MyController<ReservationsController>
-               .Instance(controller => controller
-                   .WithUser(c => c.InRole(UserRoleName)).
-                   WithData(data => data
-                       .WithEntities(entities => entities
-                           .AddRange(TestActiveFromPendingReservation))))
-               .Calling(c => c.All())
-               .ShouldHave()
-               .Data(data => data
-                   .WithSet<Reservation>(reservations => reservations
-                       .Any(r =>
-                           r.ReservationState == ReservationState.Active)))
-               .AndAlso()
-               .ShouldReturn()
-               .View(view => view
-                   .WithModelOfType<List<ResServiceModel>>(model => model
-                       .Any(r =>
-                       r.ReservationState == ReservationState.Active)));
+            => MyController<ReservationsController>
+                .Instance(controller => controller
+                    .WithUser(c => c.InRole(UserRoleName)).WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestActiveFromPendingReservation))))
+                .Calling(c => c.All())
+                .ShouldHave()
+                .Data(data => data
+                    .WithSet<Reservation>(reservations => reservations
+                        .Any(r =>
+                            r.ReservationState == ReservationState.Active)))
+                .AndAlso()
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<List<ResServiceModel>>(model => model
+                        .Any(r =>
+                            r.ReservationState == ReservationState.Active)));
 
         [Fact]
         public void GetAllWithActiveReservationShouldBecomeExpired()
             => MyController<ReservationsController>
                 .Instance(controller => controller
-                    .WithUser(c => c.InRole(UserRoleName)).
-                    WithData(data => data
+                    .WithUser(c => c.InRole(UserRoleName)).WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestExpiredFromActiveReservation))))
                 .Calling(c => c.All())
@@ -225,7 +226,7 @@
                 .ShouldReturn()
                 .View(view => view
                     .WithModelOfType<List<ResServiceModel>>(model => model
-                        .Any(r => 
+                        .Any(r =>
                             r.ReservationState == ReservationState.Expired)));
     }
 }

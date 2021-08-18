@@ -12,51 +12,51 @@
     ViewData["area"] = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
 }
 
-@if (@Model.Any())
+@if (Model.Any())
 {
-    @if (@Model.Any(r => r.ReservationState == ReservationState.Active && r.IsApproved))
+    @if (Model.Any(r => r.ReservationState == ReservationState.Active && r.IsApproved))
     {
         <h2 class="text-center text-secondary my-sm-3">@ViewBag.Active</h2>
-        <hr />
+        <hr/>
         <div class="row">
-            @foreach (var res in @Model)
+            @foreach (var res in Model)
             {
                 ViewData["counter"] = counter;
                 @if (res.ReservationState == ReservationState.Active && res.IsApproved)
                 {
-                    <partial name="_ReservationPartial" for="@res" view-data="ViewData" />
+                    <partial name="_ReservationPartial" for="@res" view-data="ViewData"/>
                 }
                 counter += 1;
             }
         </div>
     }
-    @if (@Model.Any(r => r.ReservationState == ReservationState.Pending && r.IsApproved))
+    @if (Model.Any(r => r.ReservationState == ReservationState.Pending && r.IsApproved))
     {
         <h2 class="text-center text-secondary my-sm-3">@ViewBag.Pending</h2>
-        <hr />
+        <hr/>
         <div class="row">
-            @foreach (var res in @Model)
+            @foreach (var res in Model)
             {
                 ViewData["counter"] = counter;
                 @if (res.ReservationState == ReservationState.Pending && res.IsApproved)
                 {
-                    <partial name="_ReservationPartial" for="@res" view-data="ViewData" />
+                    <partial name="_ReservationPartial" for="@res" view-data="ViewData"/>
                 }
                 counter += 1;
             }
         </div>
     }
-    @if (@Model.Any(r => r.ReservationState == ReservationState.Pending && !r.IsApproved))
+    @if (Model.Any(r => r.ReservationState == ReservationState.Pending && !r.IsApproved))
     {
         <h2 class="text-center text-secondary my-sm-3">@ViewBag.AwaitingApproval</h2>
-        <hr />
+        <hr/>
         <div class="row">
-            @foreach (var res in @Model)
+            @foreach (var res in Model)
             {
                 ViewData["counter"] = counter;
                 @if (res.ReservationState == ReservationState.Pending && !res.IsApproved)
                 {
-                    <partial name="_ReservationPartial" for="@res" view-data="ViewData" />
+                    <partial name="_ReservationPartial" for="@res" view-data="ViewData"/>
                 }
                 counter += 1;
             }
@@ -66,7 +66,7 @@
 else
 {
     <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
-    <hr />
+    <hr/>
     <div class="text-center" style="margin-bottom: 1rem">
         <h5>Currently you don't have any active reservations.</h5>
     </div>

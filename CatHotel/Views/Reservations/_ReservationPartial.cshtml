@@ -25,7 +25,7 @@
             <div class="collapse" id="collapseDetails_@ViewData["counter"]">
                 <ol class="card card-body center">
                     <p class="card-text font-weight-bold center">Cats:</p>
-                    @foreach (var cat in @Model.Cats)
+                    @foreach (var cat in Model.Cats)
                     {
                         <li>@cat.Name - @cat.BreedName</li>
                     }

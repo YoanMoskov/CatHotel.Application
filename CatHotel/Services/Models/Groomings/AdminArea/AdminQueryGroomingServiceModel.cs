@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CatHotel.Services.Models.Groomings.AdminArea
+﻿namespace CatHotel.Services.Models.Groomings.AdminArea
 {
+    using System.Collections.Generic;
     using CommonArea;
 
     public class AdminQueryGroomingServiceModel

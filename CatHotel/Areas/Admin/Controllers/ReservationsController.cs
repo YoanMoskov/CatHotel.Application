@@ -33,10 +33,7 @@
 
         public IActionResult Approve(string resId)
         {
-            if (!_resService.AdminApprove(resId))
-            {
-                return BadRequest();
-            }
+            if (!_resService.AdminApprove(resId)) return BadRequest();
 
             return RedirectToAction("All");
         }

@@ -2,7 +2,6 @@ namespace CatHotel
 {
     using Data;
     using Data.Models;
-    using Infrastructure;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -18,13 +17,13 @@ namespace CatHotel
 
     public class Startup
     {
-        private IWebHostEnvironment Env { get; set; }
-
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            this.Configuration = configuration;
-            this.Env = env;
+            Configuration = configuration;
+            Env = env;
         }
+
+        private IWebHostEnvironment Env { get; }
 
         private IConfiguration Configuration { get; }
 
@@ -32,14 +31,11 @@ namespace CatHotel
         {
             var mvcBuilder = services.AddControllersWithViews();
 
-            if (Env.IsDevelopment())
-            {
-                mvcBuilder.AddRazorRuntimeCompilation();
-            }
+            if (Env.IsDevelopment()) mvcBuilder.AddRazorRuntimeCompilation();
 
             services
                 .AddDbContext<ApplicationDbContext>(options => options
-                    .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -62,10 +58,7 @@ namespace CatHotel
             services.AddAutoMapper(typeof(Startup));
 
             services
-                .AddControllersWithViews(options =>
-                {
-                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-                });
+                .AddControllersWithViews(options => { options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>(); });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

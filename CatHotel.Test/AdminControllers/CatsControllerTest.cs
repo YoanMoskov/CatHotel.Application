@@ -1,14 +1,13 @@
 ﻿namespace CatHotel.Test.AdminControllers
 {
     using System.Linq;
-    using CatHotel.Areas.Admin.Models.Enums.Cats;
-    using CatHotel.Data.Models;
     using Areas.Admin.Controllers;
     using Areas.Admin.Models.Cats;
+    using Areas.Admin.Models.Enums.Cats;
+    using CatHotel.Data.Models;
     using MyTested.AspNetCore.Mvc;
     using Services.Models.Cats.AdminArea;
     using Xunit;
-
     using static Data.Cats;
     using static Areas.Admin.AdminConstants;
 
@@ -32,7 +31,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestAvailableCat, TestBreed))))
-                .Calling(c => c.All(new AdminAllCatsQueryModel()
+                .Calling(c => c.All(new AdminAllCatsQueryModel
                 {
                     Breed = TestCat.Breed.Id.ToString(),
                     Filtering = CatFiltering.Available,
@@ -54,7 +53,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestDeletedCatCat, TestBreed))))
-                .Calling(c => c.All(new AdminAllCatsQueryModel()
+                .Calling(c => c.All(new AdminAllCatsQueryModel
                 {
                     Breed = TestCat.Breed.Id.ToString(),
                     Filtering = CatFiltering.Deleted
@@ -96,7 +95,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestCat, TestBreed2))))
-                .Calling(c => c.Edit(new AdminEditCatFormModel()
+                .Calling(c => c.Edit(new AdminEditCatFormModel
                 {
                     Name = "Edited",
                     Age = 10,
@@ -131,7 +130,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestCat, TestBreed2))))
-                .Calling(c => c.Edit(new AdminEditCatFormModel()
+                .Calling(c => c.Edit(new AdminEditCatFormModel
                 {
                     Age = 0
                 }, TestCat.Id))

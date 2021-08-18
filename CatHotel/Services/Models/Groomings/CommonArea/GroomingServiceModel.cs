@@ -1,7 +1,5 @@
 ﻿namespace CatHotel.Services.Models.Groomings.CommonArea
 {
-    using System;
-
     public class GroomingServiceModel
     {
         public string Id { get; set; }

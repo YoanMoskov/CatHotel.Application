@@ -8,7 +8,7 @@
     public static class Reservations
     {
         public static RoomType TestRoom
-            => new RoomType
+            => new()
             {
                 Id = 1,
                 Name = "TestRoomName",
@@ -17,7 +17,7 @@
             };
 
         public static Reservation TestReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -27,7 +27,7 @@
             };
 
         public static Reservation TestActiveReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -36,7 +36,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Active,
                 IsApproved = true,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -44,7 +44,7 @@
             };
 
         public static Reservation TestActiveFromPendingReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -53,7 +53,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Pending,
                 IsApproved = true,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -61,7 +61,7 @@
             };
 
         public static Reservation TestExpiredFromActiveReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -70,7 +70,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Active,
                 IsApproved = true,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -78,7 +78,7 @@
             };
 
         public static Reservation TestExpiredReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -87,7 +87,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Expired,
                 IsApproved = true,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -95,7 +95,7 @@
             };
 
         public static Reservation TestPendingReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -104,7 +104,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Pending,
                 IsApproved = true,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -112,7 +112,7 @@
             };
 
         public static Reservation TestApprovedReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -121,7 +121,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Pending,
                 IsApproved = true,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -129,7 +129,7 @@
             };
 
         public static Reservation TestPendingApprovalReservation
-            => new Reservation()
+            => new()
             {
                 Id = "1",
                 DateOfReservation = DateTime.UtcNow,
@@ -138,7 +138,7 @@
                 UserId = "TestId",
                 ReservationState = ReservationState.Pending,
                 IsApproved = false,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = 0
                 },
@@ -146,22 +146,22 @@
             };
 
         public static CatReservation TestCatReservation
-            => new CatReservation()
+            => new()
             {
                 CatId = TestCats[0].Id,
                 ReservationId = TestReservation.Id
             };
 
         public static CatReservation[] TestCatReservations
-            => new CatReservation[]
+            => new[]
             {
-                new CatReservation()
+                new()
                 {
                     CatId = TestCats[0].Id,
                     ReservationId = TestReservation.Id
                 },
 
-                new CatReservation()
+                new CatReservation
                 {
                     CatId = TestCats[1].Id,
                     ReservationId = TestReservation.Id

@@ -6,15 +6,16 @@
     public static class Cats
     {
         public static Cat TestCat
-            => new Cat
+            => new()
             {
                 Id = "1",
                 Name = "test",
                 Age = 2,
-                PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                PhotoUrl =
+                    "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
                 DateAdded = DateTime.UtcNow,
                 BreedId = 1,
-                Breed = new Breed()
+                Breed = new Breed
                 {
                     Id = 1,
                     Name = "TestBreed"
@@ -22,18 +23,37 @@
                 UserId = "TestId"
             };
 
-        public static Cat[] TestCats
-            => new Cat[]
+        public static Cat TestCat2
+            => new()
             {
-                new Cat
+                Id = "2",
+                Name = "test",
+                Age = 2,
+                PhotoUrl =
+                    "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                DateAdded = DateTime.UtcNow,
+                BreedId = 1,
+                Breed = new Breed
+                {
+                    Id = 2,
+                    Name = "TestBreed"
+                },
+                UserId = "TestId"
+            };
+
+        public static Cat[] TestCats
+            => new[]
+            {
+                new()
                 {
                     Id = "1",
                     Name = "test",
                     Age = 2,
-                    PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                    PhotoUrl =
+                        "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
                     DateAdded = DateTime.UtcNow,
                     BreedId = 1,
-                    Breed = new Breed()
+                    Breed = new Breed
                     {
                         Id = 1,
                         Name = "TestBreed"
@@ -46,10 +66,11 @@
                     Id = "2",
                     Name = "test2",
                     Age = 2,
-                    PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                    PhotoUrl =
+                        "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
                     DateAdded = DateTime.UtcNow,
                     BreedId = 2,
-                    Breed = new Breed()
+                    Breed = new Breed
                     {
                         Id = 2,
                         Name = "TestBreed2"
@@ -59,26 +80,27 @@
             };
 
         public static Breed TestBreed
-            => new Breed()
+            => new()
             {
                 Id = 1,
                 Name = "TestBreed"
             };
 
         public static Breed TestBreed2
-            => new Breed()
+            => new()
             {
                 Id = 2,
                 Name = "TestBreed2"
             };
 
         public static Cat TestAvailableCat
-            => new Cat
+            => new()
             {
                 Id = "1",
                 Name = "test",
                 Age = 2,
-                PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                PhotoUrl =
+                    "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
                 DateAdded = DateTime.UtcNow,
                 BreedId = 1,
                 UserId = "TestId",
@@ -86,12 +108,13 @@
             };
 
         public static Cat TestDeletedCatCat
-            => new Cat
+            => new()
             {
                 Id = "1",
                 Name = "test",
                 Age = 2,
-                PhotoUrl = "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
+                PhotoUrl =
+                    "https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg",
                 DateAdded = DateTime.UtcNow,
                 BreedId = 1,
                 UserId = "TestId",

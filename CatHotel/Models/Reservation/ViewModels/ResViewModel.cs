@@ -1,11 +1,10 @@
 ﻿namespace CatHotel.Models.Reservation.ViewModels
 {
     using System;
-    using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Data.Models.Enums;
-    using Services.Models.Reservations;
+    using Microsoft.AspNetCore.Mvc;
     using Services.Models.Reservations.CommonArea;
 
     public class ResViewModel
@@ -14,10 +13,12 @@
 
         public DateTime DateOfReservation { get; init; }
 
-        [BindProperty, DataType(DataType.Date)]
+        [BindProperty]
+        [DataType(DataType.Date)]
         public string Arrival { get; init; }
 
-        [BindProperty, DataType(DataType.Date)]
+        [BindProperty]
+        [DataType(DataType.Date)]
         public string Departure { get; init; }
 
         public IEnumerable<ResCatServiceModel> Cats { get; set; }

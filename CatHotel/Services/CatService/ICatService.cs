@@ -1,10 +1,9 @@
 ﻿namespace CatHotel.Services.CatService
 {
-    using System;
-    using Models.Cats.AdminArea;
-    using Models.Cats.CommonArea;
     using System.Collections.Generic;
     using Areas.Admin.Models.Enums.Cats;
+    using Models.Cats.AdminArea;
+    using Models.Cats.CommonArea;
 
     public interface ICatService
     {
@@ -17,7 +16,7 @@
             int currentPage = 1,
             CatSorting sorting = CatSorting.Newest,
             CatFiltering filtering = CatFiltering.All,
-            int catsPerPage = Int32.MaxValue);
+            int catsPerPage = int.MaxValue);
 
         bool Edit(
             int age,

@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Cat\ViewModel\**" />
+    <Compile Remove="Models\User\ViewModel\**" />
+    <Content Remove="Models\Cat\ViewModel\**" />
+    <Content Remove="Models\User\ViewModel\**" />
+    <EmbeddedResource Remove="Models\Cat\ViewModel\**" />
+    <EmbeddedResource Remove="Models\User\ViewModel\**" />
+    <None Remove="Models\Cat\ViewModel\**" />
+    <None Remove="Models\User\ViewModel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="bootstrap" Version="5.0.2" />
     <PackageReference Include="bootstrap.sass" Version="5.0.2" />
@@ -25,9 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Models\Cat\ViewModel\" />
-    <Folder Include="Models\Grooming\ViewModel\" />
-    <Folder Include="Models\User\ViewModel\" />
   </ItemGroup>
 
   <ItemGroup>

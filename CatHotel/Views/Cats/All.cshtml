@@ -1,18 +1,28 @@
 ﻿@model IEnumerable<CatServiceModel>
 
 @{
-    ViewBag.Title = "All";
+    ViewBag.Title = "Cats";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
-<hr/>
+<hr />
 
-<div class="container">
-    <div class="row">
-        <partial name="~/Views/Cats/_CatsAllPartial.cshtml"/>
+@if (Model.Any())
+{
+    <div class="container">
+        <div class="row">
+            <partial name="~/Views/Cats/_CatsAllPartial.cshtml" />
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="text-center" style="margin-bottom: 1rem">
+        <h5>Currently you haven't added any cats.</h5>
+    </div>
+}
+
 
 <p class="text-center">
     <a class="btn btn-secondary my-sm-3" asp-action="Add">Add New</a>

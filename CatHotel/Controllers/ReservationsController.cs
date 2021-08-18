@@ -1,24 +1,30 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Models.Reservation.FormModels;
-    using Services.ReservationService;
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Infrastructure.Extensions;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
+    using Models.Reservation.FormModels;
     using Services.CatService;
+    using Services.Models.Reservations.CommonArea;
+    using Services.ReservationService;
     using static WebConstants;
 
     [Authorize(Roles = UserRoleName)]
     public class ReservationsController : Controller
     {
-        private readonly IReservationService _resService;
+        private readonly IMemoryCache _cache;
         private readonly ICatService _catService;
+        private readonly IReservationService _resService;
 
-        public ReservationsController(IReservationService resService, ICatService catService)
+        public ReservationsController(IReservationService resService, ICatService catService, IMemoryCache memoryCache)
         {
-            this._resService = resService;
+            _resService = resService;
             _catService = catService;
+            _cache = memoryCache;
         }
 
         public IActionResult Create()
@@ -30,39 +36,44 @@
                 return RedirectToAction("Add", "Cats");
             }
 
-            return View(new ResFormModel()
+            var roomTypes = _cache.Get<IEnumerable<ResRoomTypeServiceModel>>(roomTypesCacheKey);
+
+            if (roomTypes == null)
+            {
+                roomTypes = _resService.RoomTypes();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+
+                _cache.Set(roomTypesCacheKey, roomTypes, cacheOptions);
+            }
+
+
+            return View(new ResFormModel
             {
                 Cats = _resService.CatsSelectList(User.GetId()),
-                RoomTypes = _resService.RoomTypes()
+                RoomTypes = roomTypes
             });
         }
 
         [HttpPost]
         public IActionResult Create(ResFormModel res)
         {
-            if (res == null)
-            {
-                return BadRequest();
-            }
+            if (res == null) return BadRequest();
 
-            if (!_resService.DoesRoomTypeExist(res.RoomTypeId))
-            {
-                return BadRequest();
-            }
+            if (!_resService.DoesRoomTypeExist(res.RoomTypeId)) return BadRequest();
 
-            if (res.CatIds != null && _resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure) != string.Empty)
-            {
-                ModelState.AddModelError("CatIds", _resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure));
-            }
+            if (res.CatIds != null && _resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure) !=
+                string.Empty)
+                ModelState.AddModelError("CatIds",
+                    _resService.AreCatsInResTimeFrame(res.CatIds, res.Arrival, res.Departure));
 
             if (!ModelState.IsValid)
-            {
-                return View(new ResFormModel()
+                return View(new ResFormModel
                 {
                     Cats = _resService.CatsSelectList(User.GetId()),
                     RoomTypes = _resService.RoomTypes()
                 });
-            }
 
             _resService.Create(res.Arrival, res.Departure, res.RoomTypeId, res.CatIds, User.GetId());
 

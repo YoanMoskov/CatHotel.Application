@@ -1,5 +1,9 @@
 ﻿namespace CatHotel.Services.ReservationService
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using Areas.Admin.Models.Enums.Reservations;
     using Data;
     using Data.Models;
@@ -7,22 +11,17 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Models.Reservations.AdminArea;
     using Models.Reservations.CommonArea;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     public class ReservationService : IReservationService
     {
-        private readonly ApplicationDbContext _data;
-
         private const ReservationState Pending = ReservationState.Pending;
         private const ReservationState Active = ReservationState.Active;
         private const ReservationState Expired = ReservationState.Expired;
+        private readonly ApplicationDbContext _data;
 
         public ReservationService(ApplicationDbContext data)
         {
-            this._data = data;
+            _data = data;
         }
 
         public void Create(DateTime arrival, DateTime departure, int roomTypeId, string[] catIds, string userId)
@@ -31,38 +30,35 @@
             var room = _data.RoomTypes
                 .FirstOrDefault(r => r.Id == roomTypeId);
 
-            if (room != null)
-            {
-                price = room.PricePerDay * (departure - arrival).Days * catIds.Count();
-            }
+            if (room != null) price = room.PricePerDay * (departure - arrival).Days * catIds.Count();
 
-            var newReservation = new Reservation()
+            var newReservation = new Reservation
             {
                 DateOfReservation = DateTime.UtcNow,
                 Arrival = arrival,
                 Departure = departure,
                 RoomTypeId = roomTypeId,
                 UserId = userId,
-                Payment = new Payment()
+                Payment = new Payment
                 {
                     TotalPrice = price,
-                    isPaid = false,
+                    isPaid = false
                 },
-                ReservationState = Pending,
+                ReservationState = Pending
             };
 
             var allCatsReservation = catIds.Select(catId
-                => new CatReservation() { CatId = catId, Reservation = newReservation }).ToList();
+                => new CatReservation {CatId = catId, Reservation = newReservation}).ToList();
 
             _data.CatsReservations.AddRange(allCatsReservation);
             _data.SaveChanges();
         }
 
         public IEnumerable<SelectListItem> CatsSelectList(string userId)
-            => this._data
+            => _data
                 .Cats
                 .Where(c => c.UserId == userId && c.IsDeleted == false)
-                .Select(c => new SelectListItem()
+                .Select(c => new SelectListItem
                 {
                     Value = c.Id,
                     Text = $"{c.Name} - {c.Breed.Name}"
@@ -77,31 +73,27 @@
             {
                 var reservations = _data.CatsReservations
                     .Where(cr => cr.CatId == catId && cr.Reservation.ReservationState != Expired)
-                    .Select(r => new ResActiveServiceModel()
+                    .Select(r => new ResActiveServiceModel
                     {
                         Arrival = r.Reservation.Arrival,
                         Departure = r.Reservation.Departure
                     });
                 foreach (var res in reservations)
-                {
-                    if (!(res.Arrival < arrival && res.Departure < departure && res.Departure < arrival && res.Arrival < departure || res.Arrival > arrival && res.Departure > departure && res.Departure > arrival && res.Arrival > departure))
-                    {
+                    if (!(res.Arrival < arrival && res.Departure < departure && res.Departure < arrival &&
+                        res.Arrival < departure || res.Arrival > arrival && res.Departure > departure &&
+                        res.Departure > arrival && res.Arrival > departure))
                         cats.Add(GetCatInActiveCatServiceModel(catId));
-                    }
-                }
             }
 
             if (cats.Count == 1)
             {
-                errorMessage.AppendLine($"The cat: {cats.First().Name} - {cats.First().BreedName} is already in a reservation in this time frame.");
+                errorMessage.AppendLine(
+                    $"The cat: {cats.First().Name} - {cats.First().BreedName} is already in a reservation in this time frame.");
             }
             else if (cats.Count > 1)
             {
                 errorMessage.AppendLine("The cats: ");
-                foreach (var cat in cats)
-                {
-                    errorMessage.Append($"{cat.Name} - {cat.BreedName}, ");
-                }
+                foreach (var cat in cats) errorMessage.Append($"{cat.Name} - {cat.BreedName}, ");
 
                 errorMessage.Append("are already in reservation in this time frame.");
             }
@@ -110,9 +102,9 @@
         }
 
         public IEnumerable<ResRoomTypeServiceModel> RoomTypes()
-            => this._data
+            => _data
                 .RoomTypes
-                .Select(rt => new ResRoomTypeServiceModel()
+                .Select(rt => new ResRoomTypeServiceModel
                 {
                     Id = rt.Id,
                     Name = rt.Name,
@@ -127,7 +119,7 @@
             var reservations = _data
                 .Reservations
                 .Where(r => r.UserId == userId)
-                .Select(r => new ResServiceModel()
+                .Select(r => new ResServiceModel
                 {
                     Id = r.Id,
                     DateOfReservation = r.DateOfReservation,
@@ -142,12 +134,8 @@
                 .ToList();
 
             foreach (var res in reservations)
-            {
                 if (res != null)
-                {
                     res.Cats = CatsInReservations(res.Id);
-                }
-            }
 
             return reservations;
         }
@@ -157,14 +145,12 @@
             int currentPage = 1,
             ResSorting sorting = ResSorting.Newest,
             ResFiltering filtering = ResFiltering.Pending,
-            int resPerPage = Int32.MaxValue)
+            int resPerPage = int.MaxValue)
         {
             IQueryable<Reservation> resQuery = _data.Reservations;
 
             if (!string.IsNullOrWhiteSpace(roomName))
-            {
                 resQuery = resQuery.Where(r => r.RoomType.Id == int.Parse(roomName));
-            }
 
             resQuery = filtering switch
             {
@@ -172,7 +158,8 @@
                 ResFiltering.Active => resQuery.Where(r => r.ReservationState == Active),
                 ResFiltering.Expired => resQuery.Where(r => r.ReservationState == Expired),
                 ResFiltering.Pending => resQuery.Where(r => r.ReservationState == Pending),
-                ResFiltering.PendingApproval or _ => resQuery.Where(r => r.IsApproved == false && r.ReservationState == Pending)
+                ResFiltering.PendingApproval or _ => resQuery.Where(r =>
+                    r.IsApproved == false && r.ReservationState == Pending)
             };
 
             resQuery = sorting switch
@@ -190,14 +177,10 @@
                 .Take(resPerPage));
 
             foreach (var res in reservations)
-            {
                 if (res != null)
-                {
                     res.Cats = CatsInReservations(res.Id);
-                }
-            }
 
-            return new AdminQueryReservationServiceModel()
+            return new AdminQueryReservationServiceModel
             {
                 TotalReservations = totalRes,
                 CurrentPage = currentPage,
@@ -233,22 +216,18 @@
         {
             var reservations = new List<Reservation>();
             if (!isAdmin)
-            {
                 reservations = _data
                     .Reservations
                     .Where(r => r.UserId == userId && r.ReservationState != Expired)
                     .ToList();
-            }
             else
-            {
                 reservations = _data.Reservations
                     .Where(r => r.ReservationState == Pending || r.ReservationState == Active)
                     .ToList();
-            }
 
             foreach (var res in reservations)
-            {
-                if (res.Arrival < DateTime.UtcNow && res.Departure > DateTime.UtcNow && res.ReservationState != Active && res.IsApproved)
+                if (res.Arrival < DateTime.UtcNow && res.Departure > DateTime.UtcNow &&
+                    res.ReservationState != Active && res.IsApproved)
                 {
                     res.ReservationState = Active;
 
@@ -260,14 +239,13 @@
 
                     _data.SaveChanges();
                 }
-            }
         }
 
         private IEnumerable<ResCatServiceModel> CatsInReservations(string resId)
             => _data
                 .CatsReservations
                 .Where(cr => cr.ReservationId == resId)
-                .Select(cr => new ResCatServiceModel()
+                .Select(cr => new ResCatServiceModel
                 {
                     Name = cr.Cat.Name,
                     BreedName = cr.Cat.Breed.Name,
@@ -277,7 +255,7 @@
 
         private IEnumerable<ResServiceModel> GetReservations(IQueryable<Reservation> resQuery)
             => resQuery
-                .Select(r => new ResServiceModel()
+                .Select(r => new ResServiceModel
                 {
                     Id = r.Id,
                     DateOfReservation = r.DateOfReservation,
@@ -293,7 +271,7 @@
         private ResActiveCatServiceModel GetCatInActiveCatServiceModel(string catId)
             => _data.Cats
                 .Where(c => c.Id == catId)
-                .Select(c => new ResActiveCatServiceModel()
+                .Select(c => new ResActiveCatServiceModel
                 {
                     Name = c.Name,
                     BreedName = c.Breed.Name

@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using Infrastructure;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Services.Models.Groomings.CommonArea;
@@ -15,7 +14,8 @@
 
         [Required]
         [Appointment]
-        [BindProperty, DataType(DataType.Date)]
+        [BindProperty]
+        [DataType(DataType.Date)]
         public DateTime Appointment { get; set; } = DateTime.UtcNow;
     }
 }

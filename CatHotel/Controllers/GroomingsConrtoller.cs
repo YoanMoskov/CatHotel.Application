@@ -1,25 +1,31 @@
 ﻿namespace CatHotel.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
     using Models.Grooming.FormModel;
     using Services.CatService;
     using Services.GroomingService;
+    using Services.Models.Groomings.CommonArea;
     using static WebConstants;
 
     [Authorize(Roles = UserRoleName)]
     public class GroomingsController : Controller
     {
+        private readonly IMemoryCache _cache;
         private readonly ICatService _catService;
         private readonly IGroomingService _groomingService;
 
         public GroomingsController(
             ICatService catService,
-            IGroomingService groomingService)
+            IGroomingService groomingService, IMemoryCache cache)
         {
             _catService = catService;
             _groomingService = groomingService;
+            _cache = cache;
         }
 
         public IActionResult Styles()
@@ -31,10 +37,23 @@
                 return RedirectToAction("Add", "Cats");
             }
 
-            return View(_groomingService.GetStyles());
+            var styles = _cache.Get<IEnumerable<GroomingStyleServiceModel>>(stylesCacheKey);
+
+            if (styles == null)
+            {
+                styles = _groomingService.GetStyles();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+
+                _cache.Set(stylesCacheKey, styles, cacheOptions);
+            }
+
+            return View(styles);
         }
 
-        public IActionResult Cats(int styleId) => View(_groomingService.GetCatsOfUser(User.GetId(), styleId));
+        public IActionResult Cats(int styleId)
+            => View(_groomingService.GetCatsOfUser(User.GetId(), styleId));
 
         public IActionResult Complete(int styleId, string catId)
             => View(new AddGroomingModel

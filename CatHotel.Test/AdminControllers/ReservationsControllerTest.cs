@@ -1,13 +1,12 @@
 ﻿namespace CatHotel.Test.AdminControllers
 {
     using System.Linq;
-    using CatHotel.Areas.Admin.Models.Enums.Reservations;
-    using CatHotel.Data.Models;
     using Areas.Admin.Controllers;
+    using Areas.Admin.Models.Enums.Reservations;
     using Areas.Admin.Models.Reservations;
+    using CatHotel.Data.Models;
     using MyTested.AspNetCore.Mvc;
     using Xunit;
-
     using static Data.Reservations;
     using static Areas.Admin.AdminConstants;
 
@@ -31,7 +30,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestPendingApprovalReservation))))
-                .Calling(c => c.All(new AdminAllReservationsQueryModel()
+                .Calling(c => c.All(new AdminAllReservationsQueryModel
                 {
                     RoomType = TestPendingApprovalReservation.RoomType.Id.ToString(),
                     Filtering = ResFiltering.PendingApproval,
@@ -41,7 +40,7 @@
                 .View(view => view
                     .WithModelOfType<AdminAllReservationsQueryModel>(q =>
                         q.RoomType == TestPendingApprovalReservation.Id &&
-                        q.Filtering == ResFiltering.PendingApproval &&  
+                        q.Filtering == ResFiltering.PendingApproval &&
                         q.Sorting == ResSorting.Newest &&
                         q.TotalReservations == 1));
 
@@ -53,7 +52,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestActiveReservation))))
-                .Calling(c => c.All(new AdminAllReservationsQueryModel()
+                .Calling(c => c.All(new AdminAllReservationsQueryModel
                 {
                     RoomType = TestActiveReservation.RoomType.Id.ToString(),
                     Filtering = ResFiltering.Active,
@@ -75,7 +74,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestExpiredReservation))))
-                .Calling(c => c.All(new AdminAllReservationsQueryModel()
+                .Calling(c => c.All(new AdminAllReservationsQueryModel
                 {
                     RoomType = TestActiveReservation.RoomType.Id.ToString(),
                     Filtering = ResFiltering.Expired
@@ -95,7 +94,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestPendingReservation))))
-                .Calling(c => c.All(new AdminAllReservationsQueryModel()
+                .Calling(c => c.All(new AdminAllReservationsQueryModel
                 {
                     RoomType = TestActiveReservation.RoomType.Id.ToString(),
                     Filtering = ResFiltering.Pending
@@ -115,7 +114,7 @@
                     .WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestApprovedReservation))))
-                .Calling(c => c.All(new AdminAllReservationsQueryModel()
+                .Calling(c => c.All(new AdminAllReservationsQueryModel
                 {
                     RoomType = TestActiveReservation.RoomType.Id.ToString(),
                     Filtering = ResFiltering.Approved
@@ -152,7 +151,7 @@
                 .ShouldHave()
                 .Data(data => data
                     .WithSet<Reservation>(reservations => reservations
-                        .Any(r => 
+                        .Any(r =>
                             r.IsApproved &&
                             r.RoomType == TestPendingApprovalReservation.RoomType &&
                             r.Id == TestPendingApprovalReservation.Id)))

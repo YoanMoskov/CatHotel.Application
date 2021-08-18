@@ -1,8 +1,8 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Models;
-    using Microsoft.AspNetCore.Mvc;
     using System.Diagnostics;
+    using Microsoft.AspNetCore.Mvc;
+    using Models;
 
     public class HomeController : Controller
     {
@@ -10,8 +10,8 @@
             => View();
 
 
-            [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
-            => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            => View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
     }
 }

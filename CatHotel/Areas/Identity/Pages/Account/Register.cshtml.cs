@@ -1,13 +1,12 @@
 ﻿namespace CatHotel.Areas.Identity.Pages.Account
 {
+    using System.Threading.Tasks;
     using Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Models.User.FormModel;
-    using System.Threading.Tasks;
-
     using static WebConstants;
 
     [AllowAnonymous]
@@ -24,8 +23,7 @@
             _signInManager = signInManager;
         }
 
-        [BindProperty]
-        public UserRegisterFormModel Input { get; init; }
+        [BindProperty] public UserRegisterFormModel Input { get; init; }
 
         public string ReturnUrl { get; private set; }
 
@@ -54,14 +52,13 @@
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, UserRoleName);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, false);
                     return LocalRedirect(returnUrl);
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+
+                foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             }
+
             return Page();
         }
     }

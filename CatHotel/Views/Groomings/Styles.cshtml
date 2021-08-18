@@ -1,25 +1,27 @@
 ﻿@model IEnumerable<GroomingStyleServiceModel>
 
-@{ ViewBag.Title = "Select Style"; }
+@{
+    ViewBag.Title = "Select Style";
+}
 
 <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
-<hr />
+<hr/>
 <div class="container">
     <div class="row">
-        @foreach (var style in @Model)
+        @foreach (var style in Model)
         {
-        <div class="col-md-4 d-flex align-items-stretch">
-            <div class="card mb-3">
-                <img class="card-img-top mx-auto card-img-resize40" style="width: 15rem; margin-top:1.5rem" src="@style.PhotoUrl" alt="Style">
-                <div class="card-body text-center d-flex flex-column align-items-center">
-                    <h5 class="card-title">@style.Name - @style.Price.ToString("f2") $</h5>
-                    <p class="mt-auto">@style.Description</p>
-                    <p class="mt-auto">
-                        <a asp-controller="Groomings" asp-action="Cats" class="btn primary-color" asp-route-styleId="@style.Id">Select</a>
-                    </p>
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card mb-3">
+                    <img class="card-img-top mx-auto card-img-resize40" style="margin-top: 1.5rem; width: 15rem;" src="@style.PhotoUrl" alt="Style">
+                    <div class="card-body text-center d-flex flex-column align-items-center">
+                        <h5 class="card-title">@style.Name - @style.Price.ToString("f2") $</h5>
+                        <p class="mt-auto">@style.Description</p>
+                        <p class="mt-auto">
+                            <a asp-controller="Groomings" asp-action="Cats" class="btn primary-color" asp-route-styleId="@style.Id">Select</a>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
 </div>
