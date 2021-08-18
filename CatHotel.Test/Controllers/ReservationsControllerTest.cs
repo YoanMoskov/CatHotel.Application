@@ -17,9 +17,30 @@
 
     public class ReservationsControllerTest
     {
-        [Theory]
+        [Fact]
+        public void GetCreateShouldReturnViewWithModel()
+            => MyController<ReservationsController>
+                .Instance(controller => controller
+                    .WithUser(c => c.InRole(UserRoleName)).WithData(data => data
+                        .WithEntities(entities => entities
+                            .AddRange(TestCat))))
+                .Calling(c => c.Create())
+                .ShouldReturn()
+                .View(view => view
+                    .WithModelOfType<ResFormModel>());
+
+        [Fact]
+        public void GetCreateWithUserWithoutCatsShouldRedirectToAction()
+            => MyController<ReservationsController>
+                .Instance(controller => controller
+                    .WithUser(c => c.InRole(UserRoleName)))
+                .Calling(c => c.Create())
+                .ShouldReturn()
+                .RedirectToAction("Add", "Cats");
+
+    [Theory]
         [InlineData(1, 2)]
-        public void PostCreateCatShouldBeForUserRoleAndReturnRedirectWithValidModel(
+        public void PostCreateResShouldReturnRedirectWithValidModel(
             double daysAddArrival,
             double daysAddDeparture)
         {
@@ -54,7 +75,7 @@
                             r.RoomTypeId == roomTypeId)))
                 .AndAlso()
                 .ShouldReturn()
-                .RedirectToAction("PendingApproval");
+                .RedirectToAction("All");
         }
 
         [Fact]
@@ -151,27 +172,29 @@
                     .WithModelOfType<ResFormModel>());
 
         [Fact]
-        public void GetActiveShouldBeForUserRoleAndReturnViewWithModel()
+        public void GetAllShouldAndReturnViewWithModel()
             => MyController<ReservationsController>
                 .Instance(controller => controller
                     .WithUser(c => c.InRole(UserRoleName)).
                     WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestActiveReservation))))
-                .Calling(c => c.Active())
+                .Calling(c => c.All())
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<List<ResServiceModel>>(model => model.Count == 1));
+                    .WithModelOfType<List<ResServiceModel>>(model => model
+                        .Any(r =>
+                        r.ReservationState == ReservationState.Active)));
 
         [Fact]
-        public void GetActiveWithPendingReservationShouldBecomeActive()
+        public void GetAllWithPendingReservationShouldBecomeActive()
            => MyController<ReservationsController>
                .Instance(controller => controller
                    .WithUser(c => c.InRole(UserRoleName)).
                    WithData(data => data
                        .WithEntities(entities => entities
                            .AddRange(TestActiveFromPendingReservation))))
-               .Calling(c => c.Active())
+               .Calling(c => c.All())
                .ShouldHave()
                .Data(data => data
                    .WithSet<Reservation>(reservations => reservations
@@ -180,17 +203,19 @@
                .AndAlso()
                .ShouldReturn()
                .View(view => view
-                   .WithModelOfType<List<ResServiceModel>>(model => model.Count == 1));
+                   .WithModelOfType<List<ResServiceModel>>(model => model
+                       .Any(r =>
+                       r.ReservationState == ReservationState.Active)));
 
         [Fact]
-        public void GetExpiredWithActiveReservationShouldBecomeExpired()
+        public void GetAllWithActiveReservationShouldBecomeExpired()
             => MyController<ReservationsController>
                 .Instance(controller => controller
                     .WithUser(c => c.InRole(UserRoleName)).
                     WithData(data => data
                         .WithEntities(entities => entities
                             .AddRange(TestExpiredFromActiveReservation))))
-                .Calling(c => c.Active())
+                .Calling(c => c.All())
                 .ShouldHave()
                 .Data(data => data
                     .WithSet<Reservation>(reservations => reservations
@@ -199,26 +224,8 @@
                 .AndAlso()
                 .ShouldReturn()
                 .View(view => view
-                    .WithModelOfType<List<ResServiceModel>>(model => model.Count == 0));
-
-        [Fact]
-        public void GetApprovedShouldBeForUserRoleAndReturnViewWithModel()
-             => MyController<ReservationsController>
-                 .Instance(controller => controller
-                     .WithUser(c => c.InRole(UserRoleName)))
-                 .Calling(c => c.Approved())
-                 .ShouldReturn()
-                 .View(view => view
-                     .WithModelOfType<List<ResServiceModel>>());
-
-        [Fact]
-        public void GetPendingApprovalShouldBeForUserRoleAndReturnViewWithModel()
-             => MyController<ReservationsController>
-                 .Instance(controller => controller
-                     .WithUser(c => c.InRole(UserRoleName)))
-                 .Calling(c => c.PendingApproval())
-                 .ShouldReturn()
-                 .View(view => view
-                     .WithModelOfType<List<ResServiceModel>>());
+                    .WithModelOfType<List<ResServiceModel>>(model => model
+                        .Any(r => 
+                            r.ReservationState == ReservationState.Expired)));
     }
 }

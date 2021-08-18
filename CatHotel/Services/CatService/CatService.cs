@@ -24,12 +24,20 @@
             this._data = data;
         }
 
-        public string Add(Cat cat, string userId)
+        public string Add(CatServiceModel cat, string userId)
         {
-            cat.UserId = userId;
-            cat.DateAdded = DateTime.UtcNow;
+            var newCat = new Cat()
+            {
+                Name = cat.Name,
+                Age = cat.Age,
+                PhotoUrl = cat.PhotoUrl,
+                DateAdded = DateTime.UtcNow,
+                AdditionalInformation = cat.AdditionalInformation,
+                BreedId = cat.BreedId,
+                UserId = userId
+            };
 
-            _data.Cats.Add(cat);
+            _data.Cats.Add(newCat);
             _data.SaveChanges();
 
             return cat.Id;
@@ -156,6 +164,10 @@
 
         public bool DoesBreedExist(int breedId)
             => this._data.Breeds.Any(b => b.Id == breedId);
+
+        public bool DoesCatExist(string catId)
+            => _data.Cats
+                .Any(c => c.Id == catId);
 
         public bool UserHasCats(string UserId)
             => _data.Cats.Any(c => c.UserId == UserId);

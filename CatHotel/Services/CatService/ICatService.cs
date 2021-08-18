@@ -1,7 +1,6 @@
 ﻿namespace CatHotel.Services.CatService
 {
     using System;
-    using Data.Models;
     using Models.Cats.AdminArea;
     using Models.Cats.CommonArea;
     using System.Collections.Generic;
@@ -9,7 +8,7 @@
 
     public interface ICatService
     {
-        string Add(Cat cat, string userId);
+        string Add(CatServiceModel cat, string userId);
 
         List<CatServiceModel> All(string userId);
 
@@ -43,6 +42,8 @@
         AdminCatEditServiceModel AdminGet(string catId);
 
         bool DoesBreedExist(int breedId);
+
+        bool DoesCatExist(string catId);
 
         bool UserHasCats(string UserId);
 

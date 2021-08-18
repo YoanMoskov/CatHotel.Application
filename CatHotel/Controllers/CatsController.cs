@@ -4,6 +4,7 @@
     using AutoMapper;
     using Data.Models;
     using Infrastructure;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Cat.FormModel;
@@ -45,10 +46,8 @@
                 return View(cat);
             }
 
-            var catForm = _mapper.Map<Cat>(cat);
-
             _catService.Add(
-                catForm,
+                _mapper.Map<CatServiceModel>(cat),
                 User.GetId());
 
             return RedirectToAction("All");

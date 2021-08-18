@@ -58,9 +58,7 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Create">Create</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Active">Active</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="Approved">Approved</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="PendingApproval">Pending Approval</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Reservations" asp-action="All">All</a></li>
                                 </ul>
                             </div>
                         }
@@ -68,7 +66,7 @@
                     <li class="nav-item">
                         @if (area == AdminConstants.AdminAreaName)
                         {
-                            <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="" asp-action="All">Cats</a>
+                            <a type="button" class="btn btn-toolbar" asp-area="@AdminConstants.AdminAreaName" asp-controller="Groomings" asp-action="All">Groomings</a>
                         }
                         else if (User.Identity.IsAuthenticated)
                         {
@@ -77,7 +75,8 @@
                                     Groomings
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a class="dropdown-item" asp-controller="Groomings" asp-action="Styles">Choose Style</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Groomings" asp-action="Styles">Create</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Groomings" asp-action="All">All</a></li>
                                 </ul>
                             </div>
                         }

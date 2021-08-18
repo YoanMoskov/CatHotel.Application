@@ -6,8 +6,8 @@
 <hr />
 <div class="container">
     <div class="row text-center">
-        <div class="col-sm-6">
-            <div class="card">
+        <div class="col-sm-6 d-flex">
+            <div class="card w-100">
                 <img class="card-img-top mx-auto card-img-resize" style="margin-top: 1.5rem; width: 30rem;" src="@Model.Cat.PhotoUrl" alt="Cat picture">
                 <div class="card-body text-center d-flex flex-column align-items-center">
                     <h5 class="card-title">@Model.Cat.Name</h5>
@@ -16,8 +16,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="card">
+        <div class="col-sm-6 d-flex">
+            <div class="card w-100">
                 <img class="card-img-top mx-auto card-img-resize40" style="margin-top: 1.5rem; width: 15rem;" src="@Model.Style.PhotoUrl" alt="Style">
                 <div class="card-body text-center d-flex flex-column align-items-center">
                     <h5 class="card-title">@Model.Style.Name - @Model.Style.Price.ToString("f2") $</h5>

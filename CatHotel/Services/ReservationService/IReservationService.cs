@@ -17,7 +17,7 @@
             string[] catIds,
             string userId);
 
-        IEnumerable<ResServiceModel> AllWithState(string userId, ReservationState resState, bool isApproved);
+        IEnumerable<ResServiceModel> All(string userId);
 
         AdminQueryReservationServiceModel AdminAll(
             string roomName = null,

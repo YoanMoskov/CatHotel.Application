@@ -1,0 +1,106 @@
+﻿@using CatHotel.Areas.Admin.Models.Groomings
+@model CatHotel.Areas.Admin.Models.Groomings.AdminAllGroomingsQueryModel
+
+@{
+    ViewBag.Title = "Groomings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var counter = 0;
+
+    ViewData["area"] = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
+    ViewData["counter"] = counter;
+}
+<h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
+<hr/>
+<form method="get">
+    <div class="d-flex justify-content-center">
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label asp-for="StyleId"></label>
+                <select asp-for="StyleId" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var room in Model.Styles)
+                    {
+                        <option value="@room.Id">@room.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="10" selected>Newest</option>
+                    <option value="20">Oldest</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label asp-for="Filtering"></label>
+                <select asp-for="Filtering" class="form-control">
+                    <option value="20" selected>Pending Approval</option>
+                    <option value="10">Approved</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <p class="text-center my-md-4 align-self-center" style="margin-left: 15px">
+        <input class="btn primary-color" type="submit" value="Search"/>
+    </p>
+</form>
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double) Model.TotalGroomings / AdminAllGroomingsQueryModel.GroomsPerPage);
+}
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <a class="btn primary-color @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="Groomings"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-style-id="@Model.StyleId"
+           asp-route-sorting="@((int) Model.Sorting)">
+            <<
+        </a>
+    </div>
+
+    @{
+        var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+                                     !Model.Grooms.Any();
+    }
+
+    <div class="col-md-6">
+        <a class="btn primary-color float-sm-right @(shouldButtonBeDisabled ? "disabled" : string.Empty)" style="margin-top: 10px"
+           asp-controller="Groomings"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-style-id="@Model.StyleId"
+           asp-route-sorting="@((int) Model.Sorting)">
+            >>
+        </a>
+    </div>
+</div>
+
+@if (!Model.Grooms.Any())
+{
+    <h2 class="text-center">No reservations found by the given criteria!</h2>
+}
+else
+{
+    <div class="row">
+        @foreach (var groom in Model.Grooms)
+        {
+            ViewData["counter"] = counter;
+            <partial name="~/Views/Groomings/_GroomingPartial.cshtml" for="@groom" view-data="ViewData"/>
+            counter += 1;
+        }
+    </div>
+}

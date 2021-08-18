@@ -6,6 +6,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Infrastructure.Extensions;
     using Services.Models.Reservations.CommonArea;
 
     public class ResFormModel

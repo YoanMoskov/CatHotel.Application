@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Models\Cat\ViewModel\" />
+    <Folder Include="Models\Grooming\ViewModel\" />
     <Folder Include="Models\User\ViewModel\" />
   </ItemGroup>
 

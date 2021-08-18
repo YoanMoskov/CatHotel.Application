@@ -1,4 +1,6 @@
 ﻿@model ResServiceModel
+
+
 <div class="col-md-4">
     <div class="card mb-3 text-center">
         <img class="card-img-top mx-auto card-img-resize" src="~/images/038-pet-bed.png" alt="Reservation picture">
@@ -7,7 +9,7 @@
             <p class="card-text">Arrival: @Model.Arrival</p>
             <p class="card-text">Departure: @Model.Departure</p>
             <p class="card-text">Room Type: @Model.RoomTypeName</p>
-            @if (@ViewData["area"] == AdminConstants.AdminAreaName)
+            @if (ViewData["area"] == AdminConstants.AdminAreaName)
             {
                 <p class="card-text">State: @Model.ReservationState</p>
             }

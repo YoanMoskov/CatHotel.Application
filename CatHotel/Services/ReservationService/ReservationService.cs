@@ -120,13 +120,13 @@
                 })
                 .ToList();
 
-        public IEnumerable<ResServiceModel> AllWithState(string userId, ReservationState resState, bool isApproved)
+        public IEnumerable<ResServiceModel> All(string userId)
         {
             FilterReservations(false, userId);
 
             var reservations = _data
                 .Reservations
-                .Where(r => r.UserId == userId && r.ReservationState == resState && r.IsApproved == isApproved)
+                .Where(r => r.UserId == userId)
                 .Select(r => new ResServiceModel()
                 {
                     Id = r.Id,

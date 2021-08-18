@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Infrastructure
+﻿namespace CatHotel.Infrastructure.Extensions
 {
     using System;
     using System.ComponentModel.DataAnnotations;

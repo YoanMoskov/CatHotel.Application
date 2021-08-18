@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatHotel.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210817093435_AddedStyleToGrooming")]
-    partial class AddedStyleToGrooming
+    [Migration("20210818105043_InitialCreate2")]
+    partial class InitialCreate2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,21 +80,6 @@ namespace CatHotel.Data.Migrations
                     b.ToTable("Cats");
                 });
 
-            modelBuilder.Entity("CatHotel.Data.Models.CatGrooming", b =>
-                {
-                    b.Property<string>("CatId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("GroomingId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CatId", "GroomingId");
-
-                    b.HasIndex("GroomingId");
-
-                    b.ToTable("CatsGroomings");
-                });
-
             modelBuilder.Entity("CatHotel.Data.Models.CatReservation", b =>
                 {
                     b.Property<string>("CatId")
@@ -115,15 +100,35 @@ namespace CatHotel.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PaymentId")
+                    b.Property<DateTime>("Appointment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CatId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Style")
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("StyleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("CatId");
+
+                    b.HasIndex("StyleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Groomings");
                 });
@@ -231,6 +236,32 @@ namespace CatHotel.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomTypes");
+                });
+
+            modelBuilder.Entity("CatHotel.Data.Models.Style", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("MONEY");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Styles");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.User", b =>
@@ -465,25 +496,6 @@ namespace CatHotel.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CatHotel.Data.Models.CatGrooming", b =>
-                {
-                    b.HasOne("CatHotel.Data.Models.Cat", "Cat")
-                        .WithMany("CatGroomings")
-                        .HasForeignKey("CatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CatHotel.Data.Models.Grooming", "Grooming")
-                        .WithMany("CatGroomings")
-                        .HasForeignKey("GroomingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cat");
-
-                    b.Navigation("Grooming");
-                });
-
             modelBuilder.Entity("CatHotel.Data.Models.CatReservation", b =>
                 {
                     b.HasOne("CatHotel.Data.Models.Cat", "Cat")
@@ -505,11 +517,27 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
                 {
-                    b.HasOne("CatHotel.Data.Models.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId");
+                    b.HasOne("CatHotel.Data.Models.Cat", "Cat")
+                        .WithMany("Groomings")
+                        .HasForeignKey("CatId");
 
-                    b.Navigation("Payment");
+                    b.HasOne("CatHotel.Data.Models.Style", "Style")
+                        .WithMany()
+                        .HasForeignKey("StyleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CatHotel.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cat");
+
+                    b.Navigation("Style");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>
@@ -603,14 +631,9 @@ namespace CatHotel.Data.Migrations
 
             modelBuilder.Entity("CatHotel.Data.Models.Cat", b =>
                 {
-                    b.Navigation("CatGroomings");
-
                     b.Navigation("CatsReservations");
-                });
 
-            modelBuilder.Entity("CatHotel.Data.Models.Grooming", b =>
-                {
-                    b.Navigation("CatGroomings");
+                    b.Navigation("Groomings");
                 });
 
             modelBuilder.Entity("CatHotel.Data.Models.Reservation", b =>

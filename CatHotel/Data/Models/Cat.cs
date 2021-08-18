@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using Enums;
     using static DataConstants.Cat;
 
     public class Cat
@@ -40,9 +39,8 @@
 
         public bool IsDeleted { get; set; }
 
+        public ICollection<Grooming> Groomings { get; set; } = new List<Grooming>();
+
         public ICollection<CatReservation> CatsReservations { get; set; } = new List<CatReservation>();
-
-        public ICollection<CatGrooming> CatsGroomings { get; set; } = new List<CatGrooming>();
-
     }
 }

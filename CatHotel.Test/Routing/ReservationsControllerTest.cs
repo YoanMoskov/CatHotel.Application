@@ -23,24 +23,10 @@
                 .To<ReservationsController>(c => c.Create());
 
         [Fact]
-        public void ActiveRouteShouldBeMapped()
+        public void AllRouteShouldBeMapped()
             => MyRouting
                 .Configuration()
-                .ShouldMap("/Reservations/Active")
-                .To<ReservationsController>(c => c.Active());
-
-        [Fact]
-        public void ApprovedRouteShouldBeMapped()
-            => MyRouting
-                .Configuration()
-                .ShouldMap("/Reservations/Approved")
-                .To<ReservationsController>(c => c.Approved());
-
-        [Fact]
-        public void PendingApprovalRouteShouldBeMapped()
-            => MyRouting
-                .Configuration()
-                .ShouldMap("/Reservations/PendingApproval")
-                .To<ReservationsController>(c => c.PendingApproval());
+                .ShouldMap("/Reservations/All")
+                .To<ReservationsController>(c => c.All());
     }
 }

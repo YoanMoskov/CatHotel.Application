@@ -1,6 +1,6 @@
-﻿namespace CatHotel.Models.Grooming.FormModel
+﻿namespace CatHotel.Services.Models.Groomings.CommonArea
 {
-    public class GroomingStyleModel
+    public class GroomingStyleServiceModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

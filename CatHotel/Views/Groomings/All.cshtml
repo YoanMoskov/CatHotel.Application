@@ -1,0 +1,56 @@
+﻿@model IEnumerable<GroomingServiceModel>
+
+@{
+    ViewBag.Title = "Groomings";
+    ViewBag.ApprovedTitle = "Approved";
+    ViewBag.PendingTitle = "Pending Approval";
+
+    ViewData["area"] = User.IsInRole(AdminConstants.AdminRoleName) ? AdminConstants.AdminAreaName : string.Empty;
+}
+@if (Model.Any())
+{
+    @if (Model.Any(g => g.IsApproved))
+    {
+        <h2 class="text-center text-secondary my-sm-3">@ViewBag.ApprovedTitle</h2>
+        <hr/>
+        <div class="container">
+            <div class="row">
+                @foreach (var groom in Model)
+                {
+                    if (groom.IsApproved)
+                    {
+                        <partial name="_GroomingPartial" for="@groom" view-data="ViewData"/>
+                    }
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <h2 class="text-center text-secondary my-sm-3">@ViewBag.PendingTitle</h2>
+        <hr/>
+        <div class="container">
+            <div class="row">
+                @foreach (var groom in Model)
+                {
+                    if (!groom.IsApproved)
+                    {
+                        <partial name="_GroomingPartial" for="@groom" view-data="ViewData"/>
+                    }
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    <h2 class="text-center text-secondary my-sm-3">@ViewBag.Title</h2>
+    <hr/>
+    <div class="text-center" style="margin-bottom: 1rem">
+        <h5>Currently you don't have any pending or approved groomings.</h5>
+    </div>
+}
+
+<p class="text-center">
+    <a asp-action="Styles" class="btn btn-secondary">Create New</a>
+</p>

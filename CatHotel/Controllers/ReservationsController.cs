@@ -1,12 +1,11 @@
 ﻿namespace CatHotel.Controllers
 {
-    using Data.Models.Enums;
-    using Infrastructure;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Reservation.FormModels;
     using Services.ReservationService;
     using System.Linq;
+    using Infrastructure.Extensions;
     using Services.CatService;
     using static WebConstants;
 
@@ -67,32 +66,14 @@
 
             _resService.Create(res.Arrival, res.Departure, res.RoomTypeId, res.CatIds, User.GetId());
 
-            return RedirectToAction("PendingApproval");
+            return RedirectToAction("All");
         }
 
-        public IActionResult Active()
+        public IActionResult All()
         {
             var resCollection =
                 _resService
-                    .AllWithState(User.GetId(), ReservationState.Active, true)
-                    .ToList();
-            return View(resCollection);
-        }
-
-        public IActionResult Approved()
-        {
-            var resCollection =
-                _resService
-                    .AllWithState(User.GetId(), ReservationState.Pending, true)
-                    .ToList();
-            return View(resCollection);
-        }
-
-        public IActionResult PendingApproval()
-        {
-            var resCollection =
-                _resService
-                    .AllWithState(User.GetId(), ReservationState.Pending, false)
+                    .All(User.GetId())
                     .ToList();
             return View(resCollection);
         }

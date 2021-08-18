@@ -1,4 +1,4 @@
-﻿namespace CatHotel.Infrastructure
+﻿namespace CatHotel.Infrastructure.Extensions
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Routing;

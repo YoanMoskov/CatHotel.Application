@@ -3,14 +3,15 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Infrastructure;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
-    using ViewModel;
+    using Services.Models.Groomings.CommonArea;
 
     public class AddGroomingModel
     {
-        public GroomingStyleModel Style { get; set; }
+        public GroomingStyleServiceModel Style { get; set; }
 
-        public GroomingCatViewModel Cat { get; set; }
+        public GroomingCatServiceModel Cat { get; set; }
 
         [Required]
         [Appointment]

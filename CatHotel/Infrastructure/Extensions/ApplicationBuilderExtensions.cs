@@ -1,15 +1,14 @@
-﻿namespace CatHotel.Infrastructure
+﻿namespace CatHotel.Infrastructure.Extensions
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     using static Areas.Admin.AdminConstants;
     using static Data.DataConstants.Style;
     using static WebConstants;

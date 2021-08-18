@@ -1,0 +1,17 @@
+﻿@model GroomingServiceModel
+
+<div class="col-md-4 d-flex align-items-stretch">
+    <div class="card mb-3">
+        <img class="card-img-top mx-auto card-img-resize" style="margin-top: 1.5rem; width: 30rem;" src="~/images/009-pet-brush.png" alt="Groom picture">
+        <div class="card-body text-center d-flex flex-column align-items-center">
+            <h5 class="card-title">Grooming Details</h5>
+            <p class="mt-auto">Cat: @Model.CatName - @Model.BreedName</p>
+            <p class="mt-auto">Style: @Model.StyleName</p>
+            <p class="mt-auto">Appointment date: @Model.Appointment</p>
+        </div>
+        @if (ViewData["area"] == AdminConstants.AdminAreaName && Model.IsApproved == false)
+        {
+            <a class="btn primary-color" asp-area="@AdminConstants.AdminAreaName" asp-controller="Groomings" asp-action="Approve" asp-route-groomId="@Model.Id">Approve</a>
+        }
+    </div>
+</div>

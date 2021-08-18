@@ -91,6 +91,22 @@ namespace CatHotel.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Styles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "MONEY", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Styles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -197,22 +213,34 @@ namespace CatHotel.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Grooming",
+                name: "Cats",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DescribePreferredStyle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    PhotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAdded = table.Column<DateTime>(type: "DATE", nullable: false),
+                    AdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BreedId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Grooming", x => x.Id);
+                    table.PrimaryKey("PK_Cats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Grooming_Payments_PaymentId",
-                        column: x => x.PaymentId,
-                        principalTable: "Payments",
+                        name: "FK_Cats_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cats_Breeds_BreedId",
+                        column: x => x.BreedId,
+                        principalTable: "Breeds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -253,42 +281,61 @@ namespace CatHotel.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cats",
+                name: "Groomings",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    PhotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "DATE", nullable: false),
-                    AdditionalInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CatSize = table.Column<int>(type: "int", nullable: false),
-                    BreedId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    GroomingId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CatId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StyleId = table.Column<int>(type: "int", nullable: false),
+                    Appointment = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cats", x => x.Id);
+                    table.PrimaryKey("PK_Groomings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cats_AspNetUsers_UserId",
+                        name: "FK_Groomings_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cats_Breeds_BreedId",
-                        column: x => x.BreedId,
-                        principalTable: "Breeds",
+                        name: "FK_Groomings_Cats_CatId",
+                        column: x => x.CatId,
+                        principalTable: "Cats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Groomings_Styles_StyleId",
+                        column: x => x.StyleId,
+                        principalTable: "Styles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CatsReservations",
+                columns: table => new
+                {
+                    CatId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ReservationId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CatsReservations", x => new { x.CatId, x.ReservationId });
+                    table.ForeignKey(
+                        name: "FK_CatsReservations_Cats_CatId",
+                        column: x => x.CatId,
+                        principalTable: "Cats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cats_Grooming_GroomingId",
-                        column: x => x.GroomingId,
-                        principalTable: "Grooming",
+                        name: "FK_CatsReservations_Reservations_ReservationId",
+                        column: x => x.ReservationId,
+                        principalTable: "Reservations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -314,30 +361,6 @@ namespace CatHotel.Data.Migrations
                         name: "FK_Rooms_RoomTypes_RoomTypeId",
                         column: x => x.RoomTypeId,
                         principalTable: "RoomTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CatsReservations",
-                columns: table => new
-                {
-                    CatId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ReservationId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CatsReservations", x => new { x.CatId, x.ReservationId });
-                    table.ForeignKey(
-                        name: "FK_CatsReservations_Cats_CatId",
-                        column: x => x.CatId,
-                        principalTable: "Cats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CatsReservations_Reservations_ReservationId",
-                        column: x => x.ReservationId,
-                        principalTable: "Reservations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -387,11 +410,6 @@ namespace CatHotel.Data.Migrations
                 column: "BreedId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cats_GroomingId",
-                table: "Cats",
-                column: "GroomingId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cats_UserId",
                 table: "Cats",
                 column: "UserId");
@@ -402,9 +420,19 @@ namespace CatHotel.Data.Migrations
                 column: "ReservationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grooming_PaymentId",
-                table: "Grooming",
-                column: "PaymentId");
+                name: "IX_Groomings_CatId",
+                table: "Groomings",
+                column: "CatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groomings_StyleId",
+                table: "Groomings",
+                column: "StyleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groomings_UserId",
+                table: "Groomings",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_PaymentId",
@@ -453,6 +481,9 @@ namespace CatHotel.Data.Migrations
                 name: "CatsReservations");
 
             migrationBuilder.DropTable(
+                name: "Groomings");
+
+            migrationBuilder.DropTable(
                 name: "Rooms");
 
             migrationBuilder.DropTable(
@@ -462,22 +493,22 @@ namespace CatHotel.Data.Migrations
                 name: "Cats");
 
             migrationBuilder.DropTable(
+                name: "Styles");
+
+            migrationBuilder.DropTable(
                 name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "Breeds");
 
             migrationBuilder.DropTable(
-                name: "Grooming");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "RoomTypes");
+                name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "RoomTypes");
         }
     }
 }

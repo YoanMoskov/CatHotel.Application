@@ -27,8 +27,6 @@
 
         public DbSet<Grooming> Groomings { get; set; }
 
-        public DbSet<CatGrooming> CatsGroomings { get; set; }
-
         public DbSet<Style> Styles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -42,9 +40,6 @@
             base.OnModelCreating(builder);
             builder.Entity<CatReservation>()
                 .HasKey(k => new {k.CatId, k.ReservationId});
-
-            builder.Entity<CatGrooming>()
-                .HasKey(k => new {k.CatId, k.GroomingId});
         }
     }
 }

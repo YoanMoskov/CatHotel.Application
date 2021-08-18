@@ -3,6 +3,7 @@ namespace CatHotel
     using Data;
     using Data.Models;
     using Infrastructure;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,7 @@ namespace CatHotel
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Services.CatService;
+    using Services.GroomingService;
     using Services.ReservationService;
 
     public class Startup
@@ -54,7 +56,8 @@ namespace CatHotel
 
             services
                 .AddTransient<ICatService, CatService>()
-                .AddTransient<IReservationService, ReservationService>();
+                .AddTransient<IReservationService, ReservationService>()
+                .AddTransient<IGroomingService, GroomingService>();
 
             services.AddAutoMapper(typeof(Startup));
 

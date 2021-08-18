@@ -15,6 +15,8 @@
 
         public string BreedName { get; init; }
 
+        public int BreedId { get; init; }
+
         [DisplayName("Additional Information")]
         public string AdditionalInformation { get; init; }
     }
