@@ -89,15 +89,6 @@
                     .WithModelOfType<List<CatServiceModel>>());
 
         [Fact]
-        public void AllShouldBeRedirectingIfUserHasNoCats()
-            => MyController<CatsController>
-                .Instance(controller => controller
-                    .WithUser(u => u.InRole(UserRoleName)))
-                .Calling(c => c.All())
-                .ShouldReturn()
-                .RedirectToAction("Add");
-
-        [Fact]
         public void EditShouldBeForUserRoleAndReturnViewWithModel()
             => MyController<CatsController>
                 .Instance(controller => controller
